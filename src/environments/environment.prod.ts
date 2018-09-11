@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  backEndURL : 'https://pronolegaforum.herokuapp.com'
 };
