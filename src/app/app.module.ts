@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IndexPageComponent } from './index-page/index-page.component';
 import { PronosticiService } from './pronostici.service';
+import { Utils } from '../models/utils';
 
 
 
@@ -29,7 +30,7 @@ import { PronosticiService } from './pronostici.service';
       customClass: 'modal-content'
     })
   ],
-  providers: [PronosticiService],
+  providers: [Utils, PronosticiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
