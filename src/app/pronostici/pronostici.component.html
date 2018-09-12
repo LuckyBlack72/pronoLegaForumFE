@@ -1,0 +1,19 @@
+<div class="w-100 h-100 m-0 py-5">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <table>
+          <tr *ngFor="let competizione of competizioni">
+            <td>
+                <button type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="FillPronostici(competizione.numero_pronostico, competizione.competizione)">
+                    {{competizione.competizione}} 
+                </button>
+            </td>
+          </tr>
+        </table>
+      </div>   
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+</div>

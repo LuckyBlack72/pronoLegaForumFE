@@ -7,16 +7,18 @@ import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { IndexPageComponent } from './index-page/index-page.component';
+
 import { PronosticiService } from './pronostici.service';
 import { Utils } from '../models/utils';
 
-
+import { IndexPageComponent } from './index-page/index-page.component';
+import { PronosticiComponent } from './pronostici/pronostici.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    IndexPageComponent
+    IndexPageComponent,
+    PronosticiComponent
   ],
   imports: [
     BrowserModule,
