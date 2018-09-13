@@ -28,7 +28,8 @@ export class PronosticiComponent implements OnInit {
 
   fillPronostici(numero_pronostici: number, idCompetizione: number) {
 
-    console.log(numero_pronostici + ' - ' + idCompetizione);
+    this.valoriPronosticiToShow = [];
+    this.numberPronostici = [];
 
     for (let x = 0; x < this.valoriPronostici.length; x++) {
       console.log(this.valoriPronostici[x]);
