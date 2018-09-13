@@ -1,19 +1,46 @@
-<div class="w-100 h-100 m-0 py-5">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-9">
+      <div class="btn-group btn-group-lg">
+        <button *ngFor="let competizione of competizioni" type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="fillPronostici(competizione.numero_pronostici, competizione.id)">
+            {{competizione.competizione}} 
+        </button>          
+      </div> 
+    </div>   
+    <div class="col-md-2"></div>
+  </div>
+
+  <div *ngIf="showProno" class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
         <table>
-          <tr *ngFor="let competizione of competizioni">
+          <tr *ngFor="let e of numberPronostici">
             <td>
-                <button type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="FillPronostici(competizione.numero_pronostico, competizione.competizione)">
+              {{e}}
+            </td>
+            <td>
+              <select (change)="setPronosticiToSave($event.target.value, e)">
+                <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno">{{ valoriProno }}</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-4"></div>
+  </div>
+
+</div>
+
+<!--
+        <table>
+          <tr>
+            <td *ngFor="let competizione of competizioni">
+                <button type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="FillPronostici(competizione.numero_pronostici, competizione.competizione)">
                     {{competizione.competizione}} 
                 </button>
             </td>
           </tr>
         </table>
-      </div>   
-      <div class="col-md-2"></div>
-    </div>
-  </div>
-</div>
+-->

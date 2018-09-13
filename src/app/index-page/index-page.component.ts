@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 import { PronosticiService } from '../pronostici.service';
+import { DataService } from '../dataservice.service';
 
 @Component({
   selector: 'app-index-page',
@@ -16,9 +17,12 @@ export class IndexPageComponent implements OnInit {
   loading = false;
   @ViewChild('f') form: any;
 
-  constructor(private router: Router, private pronosticiService: PronosticiService) { }
+  constructor(private router: Router, private pronosticiService: PronosticiService, public dataService: DataService) { }
 
   ngOnInit() {
+
+    this.dataService.nickname = '';
+
   }
 
   onSubmit() {
@@ -28,15 +32,10 @@ export class IndexPageComponent implements OnInit {
       this.pronosticiService.checkPassword(this.nicknameV, this.passwordV)
           .subscribe(
               data => {
-                  // this.router.navigate([this.returnUrl]);
+                  this.dataService.nickname = this.nicknameV;
                   this.loading = false;
                   this.form.reset();
-                  Swal({
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    title: 'Dati Corretti',
-                    type: 'success'
-                  });
+                  this.router.navigate(['/pronostici']) ;
               },
               error => {
                   this.loading = false;

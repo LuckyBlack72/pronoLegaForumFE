@@ -16,13 +16,14 @@ export interface AnagraficaCompetizioni {
   anni_competizione: number[];
   punti_esatti: number;
   punti_lista: number;
+  numero_pronostici: number;
 }
 
 export interface ValoriPronostici {
   id: number;
   stagione: number;
-  idCompetizione: number;
-  valoriPronostici: string[];
+  id_competizione: number;
+  valori_pronostici: string[];
 }
 
 export interface FiltroValoriPronostici {
