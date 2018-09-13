@@ -1,21 +1,39 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-9">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
       <div class="btn-group btn-group-lg">
         <button *ngFor="let competizione of competizioni" type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="fillPronostici(competizione.numero_pronostici, competizione.id)">
             {{competizione.competizione}} 
+        </button>          
+        <button type="button" class="btn btn-success w-100 h-100 btn-lg active" (click)="salvaPronostici()">
+          Salva 
         </button>          
       </div> 
     </div>   
     <div class="col-md-2"></div>
   </div>
-
+  <br>
   <div *ngIf="showProno" class="row">
       <div class="col-md-4"></div>
-      <div class="col-md-4">
+      <div [ngClass]="{'col-md-2':pronosticiGt10, 'col-md-4':!pronosticiGt10 }">
         <table>
           <tr *ngFor="let e of numberPronostici">
+            <td>
+              {{e}}
+            </td>
+            <td>
+              <select (change)="setPronosticiToSave($event.target.value, e)">
+                <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno">{{ valoriProno }}</option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div *ngIf="pronosticiGt10" class="col-md-2">
+        <table>
+          <tr *ngFor="let e of numberPronosticiGt10">
             <td>
               {{e}}
             </td>

@@ -17,6 +17,8 @@ export class PronosticiComponent implements OnInit {
   valoriPronostici: ValoriPronostici[];
   showProno: boolean;
   numberPronostici: number[] = [];
+  numberPronosticiGt10: number[] = [];
+  pronosticiGt10: boolean;
   valoriPronosticiToShow: string[] = [];
   valoriPronosticiToSave: Pronostici[];
   nickname: string;
@@ -30,9 +32,10 @@ export class PronosticiComponent implements OnInit {
 
     this.valoriPronosticiToShow = [];
     this.numberPronostici = [];
+    this.numberPronosticiGt10 = [];
+    this.pronosticiGt10 = false;
 
     for (let x = 0; x < this.valoriPronostici.length; x++) {
-      console.log(this.valoriPronostici[x]);
       if (this.valoriPronostici[x].id_competizione == idCompetizione ) {
         for (let y = 0; y < this.valoriPronostici[x].valori_pronostici.length; y++) {
           this.valoriPronosticiToShow.push(this.valoriPronostici[x].valori_pronostici[y]);
@@ -40,10 +43,25 @@ export class PronosticiComponent implements OnInit {
       }
     }
 
-    for (let i = 1; i <= numero_pronostici; i++) {
-      this.numberPronostici.push(i);
+    if (numero_pronostici > 10) {
+      for (let i = 1; i <= 10; i++) {
+        this.numberPronostici.push(i);
+      }
+      for (let i = 11; i <= numero_pronostici; i++) {
+        this.numberPronosticiGt10.push(i);
+      }
+    } else {
+      for (let i = 1; i <= numero_pronostici; i++) {
+        this.numberPronostici.push(i);
+      }
     }
+
+    numero_pronostici > 10 ? this.pronosticiGt10 = true : this.pronosticiGt10 = false;
     this.showProno = true;
+
+  }
+
+  salvaPronostici()  {
 
   }
 
