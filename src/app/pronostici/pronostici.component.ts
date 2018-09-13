@@ -55,7 +55,6 @@ export class PronosticiComponent implements OnInit {
     this.showProno = false;
 
     this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
-    console.log(this.valoriPronostici);
 
   }
 
