@@ -52,4 +52,11 @@ export class PronosticiService {
 
   }
 
+  savePronostici ( dataToSave: Pronostici ): Observable<string> {
+
+    return this.http.post<string>(environment.backEndURL + '/savePronostici', dataToSave);
+
+  }
+
+
 }
