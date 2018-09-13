@@ -18,7 +18,7 @@ export class PronosticiComponent implements OnInit {
   showProno: boolean;
   numberPronostici: number[] = [];
   valoriPronosticiToShow: string[] = [];
-  valoriPronosticiToSave: Pronostici;
+  valoriPronosticiToSave: Pronostici[];
   nickname: string;
 
   setPronosticiToSave(value: string, index: number) {
