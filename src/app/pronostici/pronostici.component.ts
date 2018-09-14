@@ -39,6 +39,7 @@ export class PronosticiComponent implements OnInit {
   valoriPronosticiSaved: Pronostici[];
   nickname: string;
   idPartecipante: number;
+  idCompToselect: number;
 
   setPronosticiToSave(value: string, index: number, idCompetizione: number) {
 
@@ -59,9 +60,11 @@ export class PronosticiComponent implements OnInit {
     this.numberPronostici = [];
     this.numberPronosticiGt10 = [];
     this.pronosticiGt10 = false;
+    this.idCompToselect = 0;
 
     for (let x = 0; x < this.valoriPronostici.length; x++) {
       if (this.valoriPronostici[x].id_competizione == idCompetizione ) {
+        this.idCompToselect = this.valoriPronostici[x].id_competizione;
         for (let y = 0; y < this.valoriPronostici[x].valori_pronostici.length; y++) {
           this.valoriPronosticiToShow.push(
                                             {
@@ -130,27 +133,31 @@ export class PronosticiComponent implements OnInit {
     this.valoriPronosticiToSave = this.activatedRoute.snapshot.data.pronosticiSaved;
     // ---------------------------
 
-    // setto l'array con i pronostici da salvare in modo che poi basti solo inserire il pronostico
-    const pronostico: Pronostici = {
-                                      id_partecipanti: this.idPartecipante,
-                                      stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
-                                      id_competizione: 0,
-                                      pronostici: []
-                                  };
+    this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
+    this.idPartecipante = this.dataService.idPartecipante; // mi prendo il valore di id dal servizio
 
-    for (let i = 0; i < this.competizioni.length; i++) {
-      pronostico.id_competizione = this.competizioni[i].id;
-      pronostico.pronostici = [];
-      for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
-        pronostico.pronostici.push(' ');
+    // setto l'array con i pronostici da salvare in modo che poi basti solo inserire il pronostico
+    if (this.valoriPronosticiSaved.length === 0) {
+
+
+
+      for (let i = 0; i < this.competizioni.length; i++) {
+        const prono = [];
+        for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
+          prono.push('XXX');
+        }
+        const pronostico: Pronostici = {
+          id_partecipanti: this.idPartecipante,
+          stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+          id_competizione: this.competizioni[i].id,
+          pronostici: prono
+        };
+        this.valoriPronosticiToSave.push(pronostico);
       }
-      this.valoriPronosticiToSave.push(pronostico);
+
     }
 
     this.showProno = false;
-
-    this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
-    this.idPartecipante = this.dataService.idPartecipante; // mi prendo il valore di id dal servizio
 
   }
 
@@ -160,8 +167,9 @@ export class PronosticiComponent implements OnInit {
     let duplicates: number[] = [];
 
     for (let i = 0; i < this.valoriPronosticiToSave.length ; i++) {
+      duplicates = [];
       for (let x = 0; x <= this.valoriPronosticiToSave[i].pronostici.length; x++) {
-        if (this.valoriPronosticiToSave[i].pronostici[x] !== ' ') {
+        if (this.valoriPronosticiToSave[i].pronostici[x] !== 'XXX') {
           if (duplicates[this.valoriPronosticiToSave[i].pronostici[x]] === undefined) {
             duplicates[this.valoriPronosticiToSave[i].pronostici[x]] = 1;
           } else {
@@ -182,6 +190,21 @@ export class PronosticiComponent implements OnInit {
     }
 
     return retVal;
+  }
+
+  getIndexCompetizione(idCompetizione: number): number {
+
+    let retVal = 0;
+
+    for (let i = 0; i < this.valoriPronosticiToSave.length; i++) {
+      if (this.valoriPronosticiToSave[i].id_competizione == idCompetizione) {
+        retVal = i;
+        break;
+      }
+    }
+
+    return retVal;
+
   }
 
 }

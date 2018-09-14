@@ -16,6 +16,7 @@ import { Utils } from '../models/utils';
 
 import { IndexPageComponent } from './index-page/index-page.component';
 import { PronosticiComponent } from './pronostici/pronostici.component';
+import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 
 
 @NgModule({
@@ -36,7 +37,7 @@ import { PronosticiComponent } from './pronostici/pronostici.component';
       customClass: 'modal-content'
     })
   ],
-  providers: [Utils, CompetizioniResolver, ValoriPronosticiResolver, PronosticiService, DataService],
+  providers: [Utils, CompetizioniResolver, ValoriPronosticiResolver, PronosticiResolver, PronosticiService, DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
