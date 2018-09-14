@@ -17,6 +17,7 @@ export interface AnagraficaCompetizioni {
   punti_esatti: number;
   punti_lista: number;
   numero_pronostici: number;
+  pronostici_inseriti?: number;
 }
 
 export interface ValoriPronostici {

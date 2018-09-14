@@ -41,6 +41,7 @@ export class PronosticiComponent implements OnInit {
   idPartecipante: number;
   idCompToselect: number;
 
+  /* al momento non serve
   setPronosticiToSave(value: string, index: number, idCompetizione: number) {
 
     if (value !== 'XXX') {
@@ -53,6 +54,39 @@ export class PronosticiComponent implements OnInit {
     }
 
   }
+*/
+
+setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
+
+  if (value === 'XXX') { // sto togliendo un prono
+    for (let i = 0; i < this.competizioni.length; i++) {
+      if (this.competizioni[i].id === idCompetizione) {
+        this.competizioni[i].pronostici_inseriti--;
+        break;
+      }
+    }
+  } else { // sto aggiungendo / modificando un prono
+    for (let i = 0; i < this.valoriPronosticiToSave.length; i++) {
+      if (this.valoriPronosticiToSave[i].id_competizione === idCompetizione) {
+        let totPieni = 0;
+        for (let y = 0; y < this.valoriPronosticiToSave[i].pronostici.length; y++) {
+          if (this.valoriPronosticiToSave[i].pronostici[y] !== 'XXX') {
+            totPieni++;
+          }
+        }
+        for (let x = 0; x < this.competizioni.length; x++) {
+          if (this.competizioni[x].id === idCompetizione) {
+            this.competizioni[x].pronostici_inseriti = totPieni;
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+}
+
 
   fillPronostici(numero_pronostici: number, idCompetizione: number) {
 
@@ -124,43 +158,6 @@ export class PronosticiComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-
-    // prendo i dati dai resolver
-    this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
-    this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
-    this.valoriPronosticiSaved = this.activatedRoute.snapshot.data.pronosticiSaved;
-    this.valoriPronosticiToSave = this.activatedRoute.snapshot.data.pronosticiSaved;
-    // ---------------------------
-
-    this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
-    this.idPartecipante = this.dataService.idPartecipante; // mi prendo il valore di id dal servizio
-
-    // setto l'array con i pronostici da salvare in modo che poi basti solo inserire il pronostico
-    if (this.valoriPronosticiSaved.length === 0) {
-
-
-
-      for (let i = 0; i < this.competizioni.length; i++) {
-        const prono = [];
-        for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
-          prono.push('XXX');
-        }
-        const pronostico: Pronostici = {
-          id_partecipanti: this.idPartecipante,
-          stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
-          id_competizione: this.competizioni[i].id,
-          pronostici: prono
-        };
-        this.valoriPronosticiToSave.push(pronostico);
-      }
-
-    }
-
-    this.showProno = false;
-
-  }
-
   checkPronoToSave(): CheckDuplicateProno {
 
     let retVal: CheckDuplicateProno = { Competizione: ' ', check: true };
@@ -206,5 +203,54 @@ export class PronosticiComponent implements OnInit {
     return retVal;
 
   }
+
+  ngOnInit() {
+
+    // prendo i dati dai resolver
+    this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
+    this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
+    this.valoriPronosticiSaved = this.activatedRoute.snapshot.data.pronosticiSaved;
+    this.valoriPronosticiToSave = this.activatedRoute.snapshot.data.pronosticiSaved;
+    // ---------------------------
+
+    this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
+    this.idPartecipante = this.dataService.idPartecipante; // mi prendo il valore di id dal servizio
+
+    // setto l'array con i pronostici da salvare in modo che poi basti solo inserire il pronostico
+    if (this.valoriPronosticiSaved.length === 0) {
+      for (let i = 0; i < this.competizioni.length; i++) {
+        const prono = [];
+        for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
+          prono.push('XXX');
+        }
+        const pronostico: Pronostici = {
+          id_partecipanti: this.idPartecipante,
+          stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+          id_competizione: this.competizioni[i].id,
+          pronostici: prono
+        };
+        this.valoriPronosticiToSave.push(pronostico);
+      }
+
+    }
+
+    for (let i = 0; i < this.competizioni.length; i++) {
+      for (let x = 0; x < this.valoriPronosticiToSave.length ; x++) {
+        if (this.competizioni[i].id === this.valoriPronosticiToSave[x].id_competizione) {
+          let totPieni = 0;
+          for (let y = 0; y < this.valoriPronosticiToSave[x].pronostici.length; y++) {
+            if (this.valoriPronosticiToSave[x].pronostici[y] !== 'XXX') {
+              totPieni++;
+            }
+          }
+          this.competizioni[i].pronostici_inseriti = totPieni;
+        }
+      }
+    }
+
+    this.showProno = false;
+
+  }
+
 
 }
