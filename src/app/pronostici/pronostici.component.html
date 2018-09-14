@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <div class="divButton btn-group btn-group-lg">
+      <div class="divButton rounded btn-group btn-group-lg mx-auto">
         <button *ngFor="let competizione of competizioni" type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="fillPronostici(competizione.numero_pronostici, competizione.id)">
             {{competizione.competizione}} 
             <span
@@ -14,15 +14,19 @@
             </span>
         </button>          
         <button type="button" class="btn btn-success w-100 h-100 btn-lg active" (click)="salvaPronostici()">
-          Salva 
+            <i class="fa fa-floppy-o"></i>  
         </button>          
+        <button type="button" class="btn btn-danger w-100 h-100 btn-lg active" (click)="logout()">
+            <i class="fa fa-unlink"></i> 
+        </button>          
+
       </div> 
     </div>   
   </div>
   <br>
   <div *ngIf="showProno" class="row">
       <div class="col-md-4"></div>
-      <div [ngClass]="{'col-md-2':pronosticiGt10, 'col-md-4':!pronosticiGt10 }">
+      <div class="mx-auto" [ngClass]="{'col-md-2':pronosticiGt10, 'col-md-4':!pronosticiGt10 }">
         <table>
           <tr *ngFor="let e of numberPronostici">
             <td>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../pronostici.service';
@@ -20,9 +20,12 @@ import Swal from 'sweetalert2';
   styleUrls: ['./pronostici.component.css']
 })
 export class PronosticiComponent implements OnInit {
+  
+
 
   constructor(
               private activatedRoute: ActivatedRoute,
+              private router: Router,
               private utils: Utils,
               private pronosticiService: PronosticiService,
               public dataService: DataService
@@ -202,6 +205,12 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
     return retVal;
 
+  }
+
+  logout() {
+    this.nickname = ''; // resetto
+    this.idPartecipante = 0; // resetto
+    this.router.navigate(['/index-page']) ;
   }
 
   ngOnInit() {
