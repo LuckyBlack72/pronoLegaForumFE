@@ -18,11 +18,11 @@ export class PronosticiService {
 
   constructor ( private http: HttpClient ) { }
 
-  checkPassword ( nick: string, pwd: string ): Observable<string> {
+  checkPassword ( nick: string, pwd: string ): Observable<number> {
 
     const postData = {nickname: nick , password : pwd };
 
-    return this.http.post<string>(environment.backEndURL + '/checkPassword', postData);
+    return this.http.post<number>(environment.backEndURL + '/checkPassword', postData);
 
   }
 
@@ -52,9 +52,11 @@ export class PronosticiService {
 
   }
 
-  savePronostici ( dataToSave: Pronostici ): Observable<string> {
+  savePronostici ( dataToSave: Pronostici[] ): Observable<string> {
 
-    return this.http.post<string>(environment.backEndURL + '/savePronostici', dataToSave);
+    const postData = { pronostici: dataToSave };
+
+    return this.http.post<string>(environment.backEndURL + '/savePronostici', postData);
 
   }
 

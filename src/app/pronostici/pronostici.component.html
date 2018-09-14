@@ -38,9 +38,9 @@
               {{e}}
             </td>
             <td>
-              <select (change)="setPronosticiToSave($event.target.value, e)">
+              <select (change)="setPronosticiToSave($event.target.value, e, valoriprono.idCompetizione)">
                 <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
-                <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno">{{ valoriProno }}</option>
+                <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
               </select>
             </td>
           </tr>

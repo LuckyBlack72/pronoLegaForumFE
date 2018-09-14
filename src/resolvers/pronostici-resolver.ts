@@ -3,18 +3,29 @@ import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/rou
 import {Observable} from 'rxjs/Observable';
 import { Utils } from '../models/utils';
 import { PronosticiService } from '../app/pronostici.service';
-import { AnagraficaCompetizioni } from '../models/models';
+import { Pronostici, FiltroPronostici } from '../models/models';
+import { DataService } from '../app/dataservice.service';
 
 @Injectable()
-export class CompetizioniResolver implements Resolve<AnagraficaCompetizioni[]> {
+export class PronosticiResolver implements Resolve<Pronostici[]> {
 
-    constructor(private pronosticiService: PronosticiService, private utils: Utils) {
+    constructor(
+                private pronosticiService: PronosticiService,
+                private utils: Utils,
+                public dataService: DataService
+            ) {
     }
 
     resolve(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
-    ): Observable<AnagraficaCompetizioni[]> {
-        return this.pronosticiService.getAnagraficaCompetizioni(parseInt(this.utils.getStagione().substring(0, 4), 10));
+    ): Observable<Pronostici[]> {
+
+        const searchParameters: FiltroPronostici = {
+                                                    stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                                                    idPartecipanti: this.dataService.idPartecipante
+                                                    };
+        return this.pronosticiService.getPronostici(searchParameters);
+
     }
 }

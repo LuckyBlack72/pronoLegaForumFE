@@ -22,6 +22,7 @@ export class IndexPageComponent implements OnInit {
   ngOnInit() {
 
     this.dataService.nickname = '';
+    this.dataService.idPartecipante = 0;
 
   }
 
@@ -33,6 +34,7 @@ export class IndexPageComponent implements OnInit {
           .subscribe(
               data => {
                   this.dataService.nickname = this.nicknameV;
+                  this.dataService.idPartecipante = data;
                   this.loading = false;
                   this.form.reset();
                   this.router.navigate(['/pronostici']) ;

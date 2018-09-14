@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IndexPageComponent } from './index-page/index-page.component';
 import { PronosticiComponent } from './pronostici/pronostici.component';
-import { CompetizioniResolver } from '../resolvers/pronostici-resolver';
+import { CompetizioniResolver } from '../resolvers/competizioni-resolver';
 import { ValoriPronosticiResolver } from '../resolvers/valoripronostici-resolver';
+import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
     component: PronosticiComponent,
     resolve: {
               listaCompetizioni: CompetizioniResolver,
-              valoriPronostici: ValoriPronosticiResolver
+              valoriPronostici: ValoriPronosticiResolver,
+              pronosticiSaved: PronosticiResolver
             }
   }
 ];

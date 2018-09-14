@@ -1,5 +1,5 @@
 export interface AnagraficaPartecipanti {
-  id: number;
+  id?: number;
   nickname: string;
   email_address: string;
   password_value: string;
@@ -10,7 +10,7 @@ export interface FiltroAnagraficaPartecipanti {
 }
 
 export interface AnagraficaCompetizioni {
-  id: number;
+  id?: number;
   competizione: string;
   nome_pronostico: string;
   anni_competizione: number[];
@@ -20,7 +20,7 @@ export interface AnagraficaCompetizioni {
 }
 
 export interface ValoriPronostici {
-  id: number;
+  id?: number;
   stagione: number;
   id_competizione: number;
   valori_pronostici: string[];
@@ -32,7 +32,7 @@ export interface FiltroValoriPronostici {
 }
 
 export interface Pronostici {
-  id: number;
+  id?: number;
   id_partecipanti: number;
   stagione: number;
   id_competizione: number;
@@ -42,5 +42,17 @@ export interface Pronostici {
 export interface FiltroPronostici {
   stagione?: number;
   idPartecipanti?: number;
+  nickname?: string;
   idCompetizione?: number;
 }
+
+export interface ValoriPronosticiComboFiller {
+  idCompetizione: number;
+  valuePronostico: string;
+}
+
+export interface CheckDuplicateProno {
+  Competizione: string;
+  check: boolean;
+}
+

@@ -10,7 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { PronosticiService } from './pronostici.service';
 import { DataService } from './dataservice.service';
-import { CompetizioniResolver } from '../resolvers/pronostici-resolver';
+import { CompetizioniResolver } from '../resolvers/competizioni-resolver';
 import { ValoriPronosticiResolver } from '../resolvers/valoripronostici-resolver';
 import { Utils } from '../models/utils';
 
