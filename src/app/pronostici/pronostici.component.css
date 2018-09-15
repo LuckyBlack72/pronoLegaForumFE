@@ -9,28 +9,28 @@
  }
 
  .divTableFull {
-    border-left: 1px solid blue;
-    border-right: 1px solid blue;
-    border-top: 1px solid blue;
-    border-bottom: 1px solid blue;
+    border-left: 1px transparent;
+    border-right: 1px transparent;
+    border-top: 1px transparent;
+    border-bottom: 1px transparent;
     padding: 10px;
     margin: auto;
 }
 
 .divTableLeft {
-    border-left: 1px solid blue;
+    border-left: 1px transparent;
     border-right: 1px transparent;
-    border-top: 1px solid blue;
-    border-bottom: 1px solid blue;
+    border-top: 1px transparent;
+    border-bottom: 1px transparent;
     padding: 10px;
     margin: auto;
 }
 
 .divTableRight {
     border-left: 1px transparent;
-    border-right: 1px solid blue;
-    border-top: 1px solid blue;
-    border-bottom: 1px solid blue;
+    border-right: 1px transparent;
+    border-top: 1px transparent;
+    border-bottom: 1px transparent;
     padding: 10px;
     margin: auto;
 }
