@@ -25,9 +25,11 @@
   </div>
   <br>
   <div *ngIf="showProno" class="row">
-      <div class="col-md-4"></div>
-      <div class="mx-auto" [ngClass]="{'col-md-2':pronosticiGt10, 'col-md-4':!pronosticiGt10 }">
-        <table>
+      <div class="col-md-4">
+        <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
+      </div>
+      <div class="mx-auto" [ngClass]="{'col-md-2 divTableLeft':pronosticiGt10, 'col-md-4 divTableFull':!pronosticiGt10 }">
+        <table class="tableCenter">
           <tr *ngFor="let e of numberPronostici">
             <td>
               {{e}}
@@ -44,8 +46,8 @@
           </tr>
         </table>
       </div>
-      <div *ngIf="pronosticiGt10" class="col-md-2">
-        <table>
+      <div *ngIf="pronosticiGt10" class="col-md-2 divTableRight mx-auto">
+        <table class="tableCenter">
           <tr *ngFor="let e of numberPronosticiGt10">
             <td>
               {{e}}
@@ -61,7 +63,9 @@
           </tr>
         </table>
       </div>
-      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
+      </div>
   </div>
 
 </div>

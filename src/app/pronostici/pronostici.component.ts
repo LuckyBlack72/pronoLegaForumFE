@@ -20,8 +20,6 @@ import Swal from 'sweetalert2';
   styleUrls: ['./pronostici.component.css']
 })
 export class PronosticiComponent implements OnInit {
-  
-
 
   constructor(
               private activatedRoute: ActivatedRoute,
@@ -43,6 +41,7 @@ export class PronosticiComponent implements OnInit {
   nickname: string;
   idPartecipante: number;
   idCompToselect: number;
+  logo: string;
 
   /* al momento non serve
   setPronosticiToSave(value: string, index: number, idCompetizione: number) {
@@ -98,6 +97,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.numberPronosticiGt10 = [];
     this.pronosticiGt10 = false;
     this.idCompToselect = 0;
+    this.logo = '';
 
     for (let x = 0; x < this.valoriPronostici.length; x++) {
       if (this.valoriPronostici[x].id_competizione == idCompetizione ) {
@@ -125,6 +125,15 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
         this.numberPronostici.push(i);
       }
     }
+
+    for (let z = 0; z < this.competizioni.length; z++) {
+      if (idCompetizione === this.competizioni[z].id) {
+        this.logo = this.competizioni[z].logo;
+        break;
+      }
+    }
+
+    console.log(this.logo);
 
     numero_pronostici > 10 ? this.pronosticiGt10 = true : this.pronosticiGt10 = false;
     this.showProno = true;
