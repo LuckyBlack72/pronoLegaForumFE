@@ -17,13 +17,15 @@ import { Utils } from '../models/utils';
 import { IndexPageComponent } from './index-page/index-page.component';
 import { PronosticiComponent } from './pronostici/pronostici.component';
 import { PronosticiResolver } from '../resolvers/pronostici-resolver';
+import { RegistrazioneComponent } from './registrazione/registrazione.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     IndexPageComponent,
-    PronosticiComponent
+    PronosticiComponent,
+    RegistrazioneComponent
   ],
   imports: [
     BrowserModule,

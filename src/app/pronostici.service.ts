@@ -60,5 +60,13 @@ export class PronosticiService {
 
   }
 
+  saveAnagraficaPartecipanti ( dataToSave: AnagraficaPartecipanti ): Observable<string> {
+
+    const postData = { anagraficaPartecipanti: dataToSave };
+
+    return this.http.post<string>(environment.backEndURL + '/saveAnagraficaPartecipanti', postData);
+
+  }
+
 
 }

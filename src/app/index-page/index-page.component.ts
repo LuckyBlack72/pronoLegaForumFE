@@ -53,4 +53,10 @@ export class IndexPageComponent implements OnInit {
 
   }
 
+  gotoRegister() {
+
+    this.router.navigate(['/registrazione']) ;
+
+  }
+
 }

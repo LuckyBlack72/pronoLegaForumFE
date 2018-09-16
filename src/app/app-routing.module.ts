@@ -5,6 +5,7 @@ import { PronosticiComponent } from './pronostici/pronostici.component';
 import { CompetizioniResolver } from '../resolvers/competizioni-resolver';
 import { ValoriPronosticiResolver } from '../resolvers/valoripronostici-resolver';
 import { PronosticiResolver } from '../resolvers/pronostici-resolver';
+import { RegistrazioneComponent } from './registrazione/registrazione.component';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -22,7 +23,10 @@ const routes: Routes = [
               valoriPronostici: ValoriPronosticiResolver,
               pronosticiSaved: PronosticiResolver
             }
-  }
+  },
+  { path: 'registrazione',
+  component: RegistrazioneComponent
+},
 ];
 
 @NgModule({
