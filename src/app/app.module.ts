@@ -18,6 +18,7 @@ import { IndexPageComponent } from './index-page/index-page.component';
 import { PronosticiComponent } from './pronostici/pronostici.component';
 import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
+import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
 
 
 @NgModule({
@@ -39,7 +40,16 @@ import { RegistrazioneComponent } from './registrazione/registrazione.component'
       customClass: 'modal-content'
     })
   ],
-  providers: [Utils, CompetizioniResolver, ValoriPronosticiResolver, PronosticiResolver, PronosticiService, DataService],
+  // tslint:disable-next-line:max-line-length
+  providers: [
+              Utils,
+              CompetizioniResolver,
+              ValoriPronosticiResolver,
+              PronosticiResolver,
+              PronosticiService,
+              DataService,
+              DatePronosticiResolver
+            ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

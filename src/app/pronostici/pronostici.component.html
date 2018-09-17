@@ -1,5 +1,16 @@
 <div class="container-fluid">
   <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <div class="d-flex justify-content-between mb-1">
+          <div class="p-2">
+            Benvenuto : <span class="badge badge-pill text-center badge-success">{{nickname}}</span>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+  <div class="row">
     <div class="col-md-12">
       <div class="divButton rounded btn-group btn-group-lg mx-auto">
         <button *ngFor="let competizione of competizioni" type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="fillPronostici(competizione.numero_pronostici, competizione.id)">
@@ -46,6 +57,7 @@
                 <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
                         (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
                         style="height:25px"
+                        [disabled]="pronoClosed"
                 >
                   <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
                   <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
@@ -72,6 +84,7 @@
                   <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
                           (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
                           style="height:25px"
+                          [disabled]="pronoClosed"
                   >
                     <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
                     <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>

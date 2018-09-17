@@ -6,6 +6,7 @@ import { CompetizioniResolver } from '../resolvers/competizioni-resolver';
 import { ValoriPronosticiResolver } from '../resolvers/valoripronostici-resolver';
 import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
+import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -14,7 +15,10 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   { path: 'index-page',
-    component: IndexPageComponent
+    component: IndexPageComponent,
+    resolve: {
+      datePronostici: DatePronosticiResolver,
+    }
   },
   { path: 'pronostici',
     component: PronosticiComponent,

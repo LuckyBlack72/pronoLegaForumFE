@@ -14,11 +14,13 @@ import {
 import { Utils } from '../../models/utils';
 
 import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-pronostici',
   templateUrl: './pronostici.component.html',
   styleUrls: ['./pronostici.component.css']
 })
+
 export class PronosticiComponent implements OnInit {
 
   constructor(
@@ -42,6 +44,7 @@ export class PronosticiComponent implements OnInit {
   idPartecipante: number;
   idCompToselect: number;
   logo: string;
+  pronoClosed: boolean;
 
   /* al momento non serve
   setPronosticiToSave(value: string, index: number, idCompetizione: number) {
@@ -100,7 +103,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.logo = '';
 
     for (let x = 0; x < this.valoriPronostici.length; x++) {
-      if (this.valoriPronostici[x].id_competizione == idCompetizione ) {
+      if (this.valoriPronostici[x].id_competizione === idCompetizione ) {
         this.idCompToselect = this.valoriPronostici[x].id_competizione;
         for (let y = 0; y < this.valoriPronostici[x].valori_pronostici.length; y++) {
           this.valoriPronosticiToShow.push(
@@ -142,7 +145,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   salvaPronostici()  {
 
-    let check = this.checkPronoToSave();
+    const check = this.checkPronoToSave();
 
     if (check.check) {
       this.pronosticiService.savePronostici(this.valoriPronosticiToSave).subscribe(
@@ -163,7 +166,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
       Swal({
         allowOutsideClick: false,
         allowEscapeKey: false,
-        title: 'Ci sono valori duplicati in ' + check.Competizione + ' , correggerli prima di salvarli',
+        title: 'Ci sono valori duplicati in ' + check.competizione + ' , correggerli prima di salvarli',
         type: 'error'
       });
     }
@@ -172,7 +175,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   checkPronoToSave(): CheckDuplicateProno {
 
-    let retVal: CheckDuplicateProno = { Competizione: ' ', check: true };
+    const retVal: CheckDuplicateProno = { competizione: ' ', check: true };
     let duplicates: number[] = [];
 
     for (let i = 0; i < this.valoriPronosticiToSave.length ; i++) {
@@ -183,8 +186,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
             duplicates[this.valoriPronosticiToSave[i].pronostici[x]] = 1;
           } else {
             for (let z = 0; z < this.competizioni.length; z++) {
-              if (this.valoriPronosticiToSave[i].id_competizione == this.competizioni[z].id) {
-                retVal.Competizione = this.competizioni[z].competizione;
+              if (this.valoriPronosticiToSave[i].id_competizione === this.competizioni[z].id) {
+                retVal.competizione = this.competizioni[z].competizione;
                 break;
               }
             }
@@ -206,7 +209,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     let retVal = 0;
 
     for (let i = 0; i < this.valoriPronosticiToSave.length; i++) {
-      if (this.valoriPronosticiToSave[i].id_competizione == idCompetizione) {
+      if (this.valoriPronosticiToSave[i].id_competizione === idCompetizione) {
         retVal = i;
         break;
       }
@@ -220,6 +223,23 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.nickname = ''; // resetto
     this.idPartecipante = 0; // resetto
     this.router.navigate(['/index-page']) ;
+  }
+
+  checkDateProno(dateToCheck: string): boolean {
+
+    console.log(dateToCheck);
+
+    let retVal = false;
+    if (dateToCheck === '') {
+      retVal = false;
+    } else {
+      const dataChiusura = new Date(dateToCheck);
+      const oggi = new Date();
+      if ( oggi.getTime() > dataChiusura.getTime() ) {
+        retVal = true;
+      }
+    }
+    return retVal;
   }
 
   ngOnInit() {
@@ -267,6 +287,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     }
 
     this.showProno = false;
+    this.pronoClosed = this.checkDateProno(this.dataService.data_chiusura);
 
   }
 

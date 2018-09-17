@@ -54,7 +54,14 @@ export interface ValoriPronosticiComboFiller {
 }
 
 export interface CheckDuplicateProno {
-  Competizione?: string;
+  competizione?: string;
   check?: boolean;
 }
-
+export interface DatePronostici {
+  stagione?: string;
+  data_apertura?: string;
+  data_chiusura?: string;
+}
+export interface FiltroDatePronostici {
+  stagione?: number;
+}

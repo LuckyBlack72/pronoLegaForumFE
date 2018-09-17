@@ -11,7 +11,9 @@ import { ValoriPronostici,
         AnagraficaPartecipanti,
         FiltroAnagraficaPartecipanti,
         Pronostici,
-        FiltroPronostici } from '../models/models';
+        FiltroPronostici,
+        DatePronostici,
+        FiltroDatePronostici} from '../models/models';
 
 @Injectable()
 export class PronosticiService {
@@ -68,5 +70,10 @@ export class PronosticiService {
 
   }
 
+  getDatePronostici ( searchParameters: FiltroDatePronostici ): Observable<DatePronostici> {
+
+    return this.http.post<DatePronostici>(environment.backEndURL + '/getDatePronostici', searchParameters);
+
+  }
 
 }
