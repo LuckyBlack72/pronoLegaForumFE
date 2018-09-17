@@ -25,10 +25,10 @@
   </div>
   <br>
   <div *ngIf="showProno" class="row">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
       </div>
-      <div class="mx-auto" [ngClass]="{'col-md-2 divTableLeft':pronosticiGt10, 'col-md-4 divTableFull':!pronosticiGt10 }">
+      <div class="mx-auto" [ngClass]="{'col-md-3 divTableLeft':pronosticiGt10, 'col-md-6 divTableFull':!pronosticiGt10 }">
         <table class="table table-bordered tableCenter" [ngClass]="{'table-sm':pronosticiGt10}">
           <thead class="table-warning">
             <tr>
@@ -55,7 +55,7 @@
           </tbody>  
         </table>
       </div>
-      <div *ngIf="pronosticiGt10" class="col-md-2 divTableRight mx-auto">
+      <div *ngIf="pronosticiGt10" class="col-md-3 divTableRight mx-auto">
           <table class="table table-sm table-bordered tableCenter">
             <thead class="table-warning">
               <tr>
@@ -81,7 +81,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
       </div>
   </div>
