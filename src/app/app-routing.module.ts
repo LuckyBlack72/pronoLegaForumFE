@@ -7,6 +7,7 @@ import { ValoriPronosticiResolver } from '../resolvers/valoripronostici-resolver
 import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
 import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
+import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -29,8 +30,11 @@ const routes: Routes = [
             }
   },
   { path: 'registrazione',
-  component: RegistrazioneComponent
-},
+    component: RegistrazioneComponent
+  },
+  { path: 'menu-utente',
+    component: MenuUtenteComponent
+  }
 ];
 
 @NgModule({

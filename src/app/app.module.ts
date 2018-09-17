@@ -20,6 +20,8 @@ import { PronosticiComponent } from './pronostici/pronostici.component';
 import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
 import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
+import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
+import { UtilService } from './util.service';
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
     AppComponent,
     IndexPageComponent,
     PronosticiComponent,
-    RegistrazioneComponent
+    RegistrazioneComponent,
+    MenuUtenteComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +53,8 @@ import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
               PronosticiResolver,
               PronosticiService,
               DataService,
-              DatePronosticiResolver
+              DatePronosticiResolver,
+              UtilService
             ],
   bootstrap: [AppComponent]
 })

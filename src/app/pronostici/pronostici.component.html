@@ -5,6 +5,9 @@
       <div class="d-flex justify-content-between mb-1">
           <div class="p-2">
             <strong>Benvenuto :</strong> <span class="badge badge-pill text-center badge-success">{{nickname}}</span>
+            <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
+              <i class="fa fa-sign-out"></i> 
+            </button>  
           </div>
           <div class="p-2">
               <strong>Sarà possibile inserire i pronostici per : </strong>
@@ -13,7 +16,6 @@
                 <countdown-timer (zeroTrigger)="disableProno()" [end]="dataChiusuraProno"></countdown-timer>
               </span>
           </div>
-<!--          <countdown-timer style="font-size:30px;color:white;background-color:red;padding:30px;font-family:Roboto;" [end]="'2017-12-01 00:00:00'"></countdown-timer> -->
         </div>
     </div>
     <div class="col-md-1"></div>
@@ -35,8 +37,8 @@
         <button type="button" class="btn btn-success w-100 h-100 btn-lg active" title="Salva i Dati" (click)="salvaPronostici()">
             <i class="fa fa-floppy-o"></i>  
         </button>          
-        <button type="button" class="btn btn-danger w-100 h-100 btn-lg active" title="Esci" (click)="logout()">
-            <i class="fa fa-sign-out"></i> 
+        <button type="button" class="btn btn-danger w-100 h-100 btn-lg active" title="Torna Indietro" (click)="back()">
+          <i class="fa fa-arrow-circle-left"></i>
         </button>          
 
       </div> 

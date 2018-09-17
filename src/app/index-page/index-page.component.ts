@@ -47,7 +47,7 @@ export class IndexPageComponent implements OnInit {
                   this.dataService.idPartecipante = data;
                   this.loading = false;
                   this.form.reset();
-                  this.router.navigate(['/pronostici']) ;
+                  this.router.navigate(['/menu-utente']) ;
               },
               error => {
                   this.loading = false;

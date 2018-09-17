@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../pronostici.service';
+import { UtilService } from '../util.service';
 
 import {
         AnagraficaCompetizioni,
@@ -14,6 +15,7 @@ import {
 import { Utils } from '../../models/utils';
 
 import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-pronostici',
@@ -28,7 +30,8 @@ export class PronosticiComponent implements OnInit {
               private router: Router,
               private utils: Utils,
               private pronosticiService: PronosticiService,
-              public dataService: DataService
+              public dataService: DataService,
+              private utilService: UtilService
             ) { }
 
   competizioni: AnagraficaCompetizioni[];
@@ -221,30 +224,21 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
   }
 
   logout() {
-    this.nickname = ''; // resetto
-    this.idPartecipante = 0; // resetto
-    this.router.navigate(['/index-page']) ;
+
+    this.utilService.logout();
+
   }
 
-  checkDateProno(dateToCheck: string): boolean {
+  back() {
 
-    console.log(dateToCheck);
+    this.router.navigate(['/menu-utente']);
 
-    let retVal = false;
-    if (dateToCheck === '') {
-      retVal = false;
-    } else {
-      const dataChiusura = new Date(dateToCheck);
-      const oggi = new Date();
-      if ( oggi.getTime() > dataChiusura.getTime() ) {
-        retVal = true;
-      }
-    }
-    return retVal;
   }
 
   disableProno() {
+
     this.pronoClosed = true;
+
   }
 
   ngOnInit() {
@@ -292,7 +286,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     }
 
     this.showProno = false;
-    this.pronoClosed = this.checkDateProno(this.dataService.data_chiusura);
+    this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
     this.dataChiusuraProno = this.dataService.data_chiusura;
 
   }

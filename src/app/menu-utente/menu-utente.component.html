@@ -1,0 +1,47 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <div class="d-flex justify-content-between mb-1">
+          <div class="p-2">
+            <strong>Benvenuto :</strong> 
+            <span class="badge badge-pill text-center badge-success">{{nickname}}</span>
+            <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
+              <i class="fa fa-sign-out"></i> 
+            </button>  
+          </div>
+          <div class="p-2">
+              <strong>Sarà possibile inserire i pronostici per : </strong>
+              <span class="badge badge-pill text-center" 
+              [ngClass]="{'badge-success': !pronoClosed, 'badge-danger': pronoClosed }">
+                <countdown-timer [end]="dataChiusuraProno"></countdown-timer>
+              </span>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+  
+  <div class="row m-2 h-25">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 py-2">
+      <button type="button" class="btn btn-success w-100 h-100 btn-lg btn-block active" (click)="navigatePage('p')">
+          <h2>Pronostici</h2>
+      </button>  
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+
+  <div class="row m-2 h-25">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 py-2">
+      <button type="button" class="btn btn-warning w-100 h-100 btn-lg btn-block active" (click)="navigatePage('c')">
+          <h2>Classifica</h2>
+      </button>  
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+
+</div>
+
