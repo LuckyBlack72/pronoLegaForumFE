@@ -13,11 +13,11 @@
               {{competizione.pronostici_inseriti}} / {{competizione.numero_pronostici}}
             </span>
         </button>          
-        <button type="button" class="btn btn-success w-100 h-100 btn-lg active" (click)="salvaPronostici()">
+        <button type="button" class="btn btn-success w-100 h-100 btn-lg active" title="Salva i Dati" (click)="salvaPronostici()">
             <i class="fa fa-floppy-o"></i>  
         </button>          
-        <button type="button" class="btn btn-danger w-100 h-100 btn-lg active" (click)="logout()">
-            <i class="fa fa-unlink"></i> 
+        <button type="button" class="btn btn-danger w-100 h-100 btn-lg active" title="Esci" (click)="logout()">
+            <i class="fa fa-sign-out"></i> 
         </button>          
 
       </div> 
@@ -87,6 +87,7 @@
   </div>
 
 </div>
+
 
 <!--
         <table>
