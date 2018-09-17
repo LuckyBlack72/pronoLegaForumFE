@@ -45,6 +45,7 @@ export class PronosticiComponent implements OnInit {
   idCompToselect: number;
   logo: string;
   pronoClosed: boolean;
+  dataChiusuraProno: string;
 
   /* al momento non serve
   setPronosticiToSave(value: string, index: number, idCompetizione: number) {
@@ -242,6 +243,10 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     return retVal;
   }
 
+  disableProno() {
+    this.pronoClosed = true;
+  }
+
   ngOnInit() {
 
     // prendo i dati dai resolver
@@ -288,6 +293,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
     this.showProno = false;
     this.pronoClosed = this.checkDateProno(this.dataService.data_chiusura);
+    this.dataChiusuraProno = this.dataService.data_chiusura;
 
   }
 

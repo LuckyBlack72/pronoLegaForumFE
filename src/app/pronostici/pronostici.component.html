@@ -4,8 +4,16 @@
     <div class="col-md-10">
       <div class="d-flex justify-content-between mb-1">
           <div class="p-2">
-            Benvenuto : <span class="badge badge-pill text-center badge-success">{{nickname}}</span>
+            <strong>Benvenuto :</strong> <span class="badge badge-pill text-center badge-success">{{nickname}}</span>
           </div>
+          <div class="p-2">
+              <strong>Sarà possibile inserire i pronostici per : </strong>
+              <span class="badge badge-pill text-center" 
+              [ngClass]="{'badge-success': !pronoClosed, 'badge-danger': pronoClosed }">
+                <countdown-timer (zeroTrigger)="disableProno()" [end]="dataChiusuraProno"></countdown-timer>
+              </span>
+          </div>
+<!--          <countdown-timer style="font-size:30px;color:white;background-color:red;padding:30px;font-family:Roboto;" [end]="'2017-12-01 00:00:00'"></countdown-timer> -->
         </div>
     </div>
     <div class="col-md-1"></div>

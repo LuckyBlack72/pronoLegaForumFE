@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+import { CountdownTimerModule } from 'ngx-countdown-timer';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -38,7 +39,8 @@ import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
       allowOutsideClick: false,
       allowEscapeKey: false,
       customClass: 'modal-content'
-    })
+    }),
+    CountdownTimerModule.forRoot()
   ],
   // tslint:disable-next-line:max-line-length
   providers: [
