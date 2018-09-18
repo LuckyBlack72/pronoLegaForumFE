@@ -5,10 +5,13 @@
       <div class="d-flex justify-content-between mb-1">
           <div class="p-2">
             <strong>Benvenuto :</strong> <span class="badge badge-pill text-center badge-success">{{nickname}}</span>
+            <button type="button" class="btn btn-warning btn-sm active" title="Torna Indietro" (click)="back()">
+              <i class="fa fa-arrow-circle-left"></i>
+            </button>          
             <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
               <i class="fa fa-sign-out"></i> 
             </button>  
-          </div>
+            </div>
           <div class="p-2">
               <strong>Sarà possibile inserire i pronostici per : </strong>
               <span class="badge badge-pill text-center" 
@@ -34,11 +37,13 @@
               {{competizione.pronostici_inseriti}} / {{competizione.numero_pronostici}}
             </span>
         </button>          
-        <button type="button" class="btn btn-success w-100 h-100 btn-lg active" title="Salva i Dati" (click)="salvaPronostici()">
+        <button 
+            type="button" 
+            class="btn btn-success w-100 h-100 btn-lg active" 
+            title="Salva i Dati" 
+            (click)="salvaPronostici()"
+            [disabled]="!showProno">
             <i class="fa fa-floppy-o"></i>  
-        </button>          
-        <button type="button" class="btn btn-danger w-100 h-100 btn-lg active" title="Torna Indietro" (click)="back()">
-          <i class="fa fa-arrow-circle-left"></i>
         </button>          
 
       </div> 

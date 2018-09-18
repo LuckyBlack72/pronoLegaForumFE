@@ -49,4 +49,10 @@ export class UtilService {
 
   }
 
+  back() {
+
+    this.router.navigate(['/menu-utente']);
+
+  }
+
 }

@@ -58,6 +58,12 @@ export class ClassificaComponent implements OnInit {
 
   }
 
+  back() {
+
+    this.utilService.back();
+
+  }
+
   getClassifica(stagione: number) {
 
     const searchParameter: FiltroPronostici = { stagione: stagione};

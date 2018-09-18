@@ -231,7 +231,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   back() {
 
-    this.router.navigate(['/menu-utente']);
+    this.utilService.back();
 
   }
 
