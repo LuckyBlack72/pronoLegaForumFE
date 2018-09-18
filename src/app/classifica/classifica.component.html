@@ -22,19 +22,25 @@
     </div>
     <div class="col-md-1"></div>
   </div>
-  
+    
   <div class="row">
-    <div class="col-md-1"></div> 
-    <div class="col-md-4">
-      <button  id="button-pronostici" (click)="navigatePage('p')" title="pronostici"></button>
-    </div> 
-    <div class="col-md-2"></div> 
-    <div class="col-md-4">
-        <button id="button-classifica" (click)="navigatePage('c')" title="classifica"></button>
-    </div> 
-    <div class="col-md-1"></div> 
+    <div class="col-md-12">
+      <div class="d-flex justify-content-center mb-1">        
+        <div class="form-group">
+          <h4><label for="st" class="badge badge-info">Stagione</label></h4>
+          <select #st id="st" (change)="getClassifica($event.target.value)" style="height:25px">
+            <option class="form-control" value="XXX">Seleziona una Stagione</option> <!-- not selected / blank option -->
+            <option class="form-control" *ngFor="let stagione of listaStagioni" [value]="stagione.stagione">{{ stagione.stagione }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
   </div>
-
+  
+  <div class="row" *ngIf="showClassifica">
+    <div class="col-md-12">
+    </div>
+  </div>
+  
 </div>
-
-
+  

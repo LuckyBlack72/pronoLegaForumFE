@@ -13,7 +13,9 @@ import { ValoriPronostici,
         Pronostici,
         FiltroPronostici,
         DatePronostici,
-        FiltroDatePronostici} from '../models/models';
+        FiltroStagione,
+        Stagioni,
+        ValoriPronosticiClassifica} from '../models/models';
 
 @Injectable()
 export class PronosticiService {
@@ -70,10 +72,24 @@ export class PronosticiService {
 
   }
 
-  getDatePronostici ( searchParameters: FiltroDatePronostici ): Observable<DatePronostici> {
+  getDatePronostici ( searchParameters: FiltroStagione ): Observable<DatePronostici> {
 
     return this.http.post<DatePronostici>(environment.backEndURL + '/pronostici/getDatePronostici', searchParameters);
 
   }
+
+  getStagioni (): Observable<Stagioni[]> {
+
+    return this.http.post<Stagioni[]>(environment.backEndURL + '/classifica/getStagioni', {});
+
+  }
+
+  getValoriPronosticiCalcoloClassifica ( searchParameters: FiltroValoriPronostici ): Observable<ValoriPronosticiClassifica[]> {
+
+    return this.http.post<ValoriPronosticiClassifica[]>
+    (environment.backEndURL + '/pronostici/getValoriPronosticiCalcoloClassifica', searchParameters);
+
+  }
+
 
 }

@@ -21,7 +21,25 @@ export class UtilService {
       }
     }
     return retVal;
+
   }
+
+  checkDateClassifica(dateToCheck: string): boolean {
+
+    let retVal = true;
+    if (dateToCheck === '') {
+      retVal = true;
+    } else {
+      const dataCalcoloClassifica = new Date(dateToCheck);
+      const oggi = new Date();
+      if ( dataCalcoloClassifica.getTime()  > oggi.getTime() ) {
+        retVal = false;
+      }
+    }
+    return retVal; // true la classifica si può calcolare, false no
+
+  }
+
 
   logout(): void {
 

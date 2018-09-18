@@ -28,6 +28,16 @@ export interface ValoriPronostici {
   valori_pronostici?: string[];
 }
 
+export interface ValoriPronosticiClassifica {
+  id?: number;
+  stagione?: number;
+  id_competizione?: number;
+  valori_pronostici_classifica?: string[];
+  punti_esatti?: number;
+  punti_lista?: number;
+}
+
+
 export interface FiltroValoriPronostici {
   stagione?: number;
   idCompetizione?: number;
@@ -36,8 +46,10 @@ export interface FiltroValoriPronostici {
 export interface Pronostici {
   id?: number;
   id_partecipanti?: number;
+  nickname?: string;
   stagione?: number;
   id_competizione?: number;
+  competizione?: string;
   pronostici?: string[];
 }
 
@@ -61,7 +73,20 @@ export interface DatePronostici {
   stagione?: string;
   data_apertura?: string;
   data_chiusura?: string;
+  data_calcolo_classifica?: string;
 }
-export interface FiltroDatePronostici {
+export interface FiltroStagione {
   stagione?: number;
+}
+export interface Stagioni {
+  stagione?: number;
+}
+
+export interface PuntiCompetizione {
+  competizione: string;
+  punti: number;
+}
+export interface DatiClassifica {
+  nickname: string;
+  punti: PuntiCompetizione[];
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Utils } from '../../models/utils';
-import { PronosticiService } from '../pronostici.service';
+import { Router } from '@angular/router';
+
 import { DataService } from '../dataservice.service';
 import { UtilService } from '../util.service';
 
@@ -13,10 +12,7 @@ import { UtilService } from '../util.service';
 export class MenuUtenteComponent implements OnInit {
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private utils: Utils,
-    private pronosticiService: PronosticiService,
     public dataService: DataService,
     private utilService: UtilService
   ) { }

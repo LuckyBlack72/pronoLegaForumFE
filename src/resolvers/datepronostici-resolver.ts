@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 import { Utils } from '../models/utils';
 import { PronosticiService } from '../app/pronostici.service';
-import { DatePronostici, FiltroDatePronostici } from '../models/models';
+import { DatePronostici, FiltroStagione } from '../models/models';
 
 @Injectable()
 export class DatePronosticiResolver implements Resolve<DatePronostici> {
@@ -16,7 +16,7 @@ export class DatePronosticiResolver implements Resolve<DatePronostici> {
         state: RouterStateSnapshot
     ): Observable<DatePronostici> {
 
-        const searchParameters: FiltroDatePronostici = {stagione: parseInt(this.utils.getStagione().substring(0, 4), 10)};
+        const searchParameters: FiltroStagione = {stagione: parseInt(this.utils.getStagione().substring(0, 4), 10)};
         return this.pronosticiService.getDatePronostici(searchParameters);
     }
 }

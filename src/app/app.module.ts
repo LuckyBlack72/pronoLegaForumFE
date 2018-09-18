@@ -11,18 +11,21 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { PronosticiService } from './pronostici.service';
 import { DataService } from './dataservice.service';
+import { UtilService } from './util.service';
+
+import { Utils } from '../models/utils';
+
 import { CompetizioniResolver } from '../resolvers/competizioni-resolver';
 import { ValoriPronosticiResolver } from '../resolvers/valoripronostici-resolver';
-import { Utils } from '../models/utils';
+import { PronosticiResolver } from '../resolvers/pronostici-resolver';
+import { StagioniResolver } from '../resolvers/stagioni-resolver';
+import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
 
 import { IndexPageComponent } from './index-page/index-page.component';
 import { PronosticiComponent } from './pronostici/pronostici.component';
-import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
-import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
 import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
-import { UtilService } from './util.service';
-
+import { ClassificaComponent } from './classifica/classifica.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,8 @@ import { UtilService } from './util.service';
     IndexPageComponent,
     PronosticiComponent,
     RegistrazioneComponent,
-    MenuUtenteComponent
+    MenuUtenteComponent,
+    ClassificaComponent
   ],
   imports: [
     BrowserModule,
@@ -48,13 +52,14 @@ import { UtilService } from './util.service';
   // tslint:disable-next-line:max-line-length
   providers: [
               Utils,
+              PronosticiService,
+              UtilService,
+              DataService,
               CompetizioniResolver,
               ValoriPronosticiResolver,
               PronosticiResolver,
-              PronosticiService,
-              DataService,
               DatePronosticiResolver,
-              UtilService
+              StagioniResolver
             ],
   bootstrap: [AppComponent]
 })

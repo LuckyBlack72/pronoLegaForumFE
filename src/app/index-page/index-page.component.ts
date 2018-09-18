@@ -31,6 +31,7 @@ export class IndexPageComponent implements OnInit {
     this.datePronostici = this.activatedRoute.snapshot.data.datePronostici;
     this.dataService.data_apertura = this.datePronostici[0].data_apertura;
     this.dataService.data_chiusura = this.datePronostici[0].data_chiusura;
+    this.dataService.data_calcolo_classifica = this.datePronostici[0].data_calcolo_classifica;
     this.dataService.nickname = '';
     this.dataService.idPartecipante = 0;
 
