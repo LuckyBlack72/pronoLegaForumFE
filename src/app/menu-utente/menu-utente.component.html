@@ -23,25 +23,18 @@
     <div class="col-md-1"></div>
   </div>
   
-  <div class="row m-2 h-25">
-    <div class="col-md-4"></div>
-    <div class="col-md-4 py-2">
-      <button type="button" class="btn btn-success w-100 h-100 btn-lg btn-block active" (click)="navigatePage('p')">
-          <h2>Pronostici</h2>
-      </button>  
-    </div>
-    <div class="col-md-4"></div>
-  </div>
-
-  <div class="row m-2 h-25">
-    <div class="col-md-4"></div>
-    <div class="col-md-4 py-2">
-      <button type="button" class="btn btn-warning w-100 h-100 btn-lg btn-block active" (click)="navigatePage('c')">
-          <h2>Classifica</h2>
-      </button>  
-    </div>
-    <div class="col-md-4"></div>
+  <div class="row">
+    <div class="col-md-1"></div> 
+    <div class="col-md-4">
+      <button  id="button-pronostici" (click)="navigatePage('p')" title="pronostici"></button>
+    </div> 
+    <div class="col-md-2"></div> 
+    <div class="col-md-4">
+        <button  id="button-classifica" (click)="navigatePage('c')" title="classifica"></button>
+    </div> 
+    <div class="col-md-1"></div> 
   </div>
 
 </div>
+
 
