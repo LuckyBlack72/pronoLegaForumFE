@@ -24,13 +24,13 @@ export class PronosticiService {
 
     const postData = {nickname: nick , password : pwd };
 
-    return this.http.post<number>(environment.backEndURL + '/checkPassword', postData);
+    return this.http.post<number>(environment.backEndURL + '/partecipanti/checkPassword', postData);
 
   }
 
   getValoriPronostici ( searchParameters: FiltroValoriPronostici ): Observable<ValoriPronostici[]> {
 
-    return this.http.post<ValoriPronostici[]>(environment.backEndURL + '/getValoriPronostici', searchParameters);
+    return this.http.post<ValoriPronostici[]>(environment.backEndURL + '/pronostici/getValoriPronostici', searchParameters);
 
   }
 
@@ -38,19 +38,19 @@ export class PronosticiService {
 
     const postData = { stagione: stagione };
 
-    return this.http.post<AnagraficaCompetizioni[]>(environment.backEndURL + '/getAnagraficaCompetizioni', postData);
+    return this.http.post<AnagraficaCompetizioni[]>(environment.backEndURL + '/classifica/getAnagraficaCompetizioni', postData);
 
   }
 
   getAnagraficaPartecipanti ( searchParameters: FiltroAnagraficaPartecipanti ): Observable<AnagraficaPartecipanti[]> {
 
-    return this.http.post<AnagraficaPartecipanti[]>(environment.backEndURL + '/getAnagraficaPartecipanti', searchParameters);
+    return this.http.post<AnagraficaPartecipanti[]>(environment.backEndURL + '/partecipanti/getAnagraficaPartecipanti', searchParameters);
 
   }
 
   getPronostici ( searchParameters: FiltroPronostici ): Observable<Pronostici[]> {
 
-    return this.http.post<Pronostici[]>(environment.backEndURL + '/getPronostici', searchParameters);
+    return this.http.post<Pronostici[]>(environment.backEndURL + '/pronostici/getPronostici', searchParameters);
 
   }
 
@@ -58,7 +58,7 @@ export class PronosticiService {
 
     const postData = { pronostici: dataToSave };
 
-    return this.http.post<string>(environment.backEndURL + '/savePronostici', postData);
+    return this.http.post<string>(environment.backEndURL + '/pronostici/savePronostici', postData);
 
   }
 
@@ -66,13 +66,13 @@ export class PronosticiService {
 
     const postData = { anagraficaPartecipanti: dataToSave };
 
-    return this.http.post<string>(environment.backEndURL + '/saveAnagraficaPartecipanti', postData);
+    return this.http.post<string>(environment.backEndURL + '/partecipanti/saveAnagraficaPartecipanti', postData);
 
   }
 
   getDatePronostici ( searchParameters: FiltroDatePronostici ): Observable<DatePronostici> {
 
-    return this.http.post<DatePronostici>(environment.backEndURL + '/getDatePronostici', searchParameters);
+    return this.http.post<DatePronostici>(environment.backEndURL + '/pronostici/getDatePronostici', searchParameters);
 
   }
 
