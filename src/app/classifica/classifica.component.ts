@@ -70,12 +70,15 @@ export class ClassificaComponent implements OnInit {
 
   getClassifica(stagione: number) {
 
+    console.log(stagione);
+
     const searchParameter: FiltroPronostici = { stagione: stagione};
     const searchParameterCl: FiltroValoriPronostici = { stagione: stagione};
     const calcoloClassifica = this.utilService.checkDateClassifica(this.dataService.data_calcolo_classifica);
 
-    if (calcoloClassifica) {
+    if (calcoloClassifica && stagione != 0) {
 
+      this.clearDatiClassifica();
       this.pronosticiService.getPronostici(searchParameter).subscribe(
         pronosticiUtenti => {
           this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameterCl).subscribe(
@@ -84,39 +87,61 @@ export class ClassificaComponent implements OnInit {
               this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
               const sort: Sort = { active: 'Totale', direction: 'desc'};
               this.datiperDataSourceClassificaSorted = this.sortData(sort);
-              this.dataSourceClassifica.data = this.datiperDataSourceClassifica;
+              this.dataSourceClassifica.data = this.datiperDataSourceClassificaSorted;
+              this.displayedColumns.push('Nickname');
               for (let x = 0; x < this.datiPerClassifica[0].punti.length; x++) {
                 this.displayedColumns.push(this.datiPerClassifica[0].punti[x].competizione);
               }
               this.showClassifica = true;
             }
             ,
-            errorCl => Swal({
+            errorCl => {
+                        this.stCmb.nativeElement.selectedIndex = 0;
+                        this.showClassifica = false;
+                        Swal({
                               allowOutsideClick: false,
                               allowEscapeKey: false,
                               title: 'Errore applicativo',
                               type: 'error'
-                            })
+                            });
+
+                        }
           );
         }
         ,
-        error => Swal({
-                        allowOutsideClick: false,
-                        allowEscapeKey: false,
-                        title: 'Errore applicativo',
-                        type: 'error'
-                      })
+        error => {
+
+                    this.stCmb.nativeElement.selectedIndex = 0;
+                    this.showClassifica = false;
+                    Swal({
+                          allowOutsideClick: false,
+                          allowEscapeKey: false,
+                          title: 'Errore applicativo',
+                          type: 'error'
+                        });
+
+                  }
       );
 
     } else {
+
+      if (!calcoloClassifica) { // si può calcolare la classifica ma non ho selezionato stagioni
+
+        this.stCmb.nativeElement.selectedIndex = 0;
+        this.showClassifica = false;
+
         Swal({
           allowOutsideClick: false,
           allowEscapeKey: false,
           title: 'Stagione ancora in corso',
           type: 'error'
         });
-        this.stCmb.nativeElement.selectedIndex = 0;
+
+      } else {
+
         this.showClassifica = false;
+
+      }
     }
 
   }
@@ -126,12 +151,24 @@ export class ClassificaComponent implements OnInit {
     const retVal: DatiClassifica[] = [];
     let puntiCompetizioneArray: PuntiCompetizione[] = [];
 
-    let nickname = '';
+    let nickname = pronostici[0].nickname;
     let puntiCompetizione = 0;
     let totalePartecipante = 0;
 
     for (let i = 0; i < pronostici.length; i++) {
-      if (pronostici[i].nickname !== nickname && nickname !== '' ) {
+
+      if (pronostici[i].nickname === nickname) {
+
+        puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[i], valoriClassifica);
+        puntiCompetizioneArray.push({
+                                      competizione: pronostici[i].competizione,
+                                      punti: puntiCompetizione
+                                    });
+        totalePartecipante += puntiCompetizione;
+        puntiCompetizione = 0;
+
+      } else {
+
         puntiCompetizioneArray.push({
                                       competizione: 'Totale',
                                       punti: totalePartecipante
@@ -143,19 +180,28 @@ export class ClassificaComponent implements OnInit {
         puntiCompetizioneArray = [];
         totalePartecipante = 0;
         nickname = pronostici[i].nickname;
-      } else {
-        if (nickname === '' ) {
-          nickname = pronostici[i].nickname;
-        }
+        puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[i], valoriClassifica);
+        puntiCompetizioneArray.push({
+                                      competizione: pronostici[i].competizione,
+                                      punti: puntiCompetizione
+                                    });
+        totalePartecipante += puntiCompetizione;
+        puntiCompetizione = 0;
+
       }
-      puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[i], valoriClassifica);
-      puntiCompetizioneArray.push({
-                                    competizione: pronostici[i].competizione,
-                                    punti: puntiCompetizione
-                                  });
-      totalePartecipante += puntiCompetizione;
-      puntiCompetizione = 0;
     }
+
+    // i dati dell'ultimo partecipante
+    puntiCompetizioneArray.push({
+                                  competizione: 'Totale',
+                                  punti: totalePartecipante
+                              });
+    retVal.push({
+                  nickname: nickname,
+                  punti: puntiCompetizioneArray
+    });
+
+    console.log(retVal);
 
     return retVal;
 
@@ -192,7 +238,7 @@ export class ClassificaComponent implements OnInit {
     let element: {[x: string]: any} = {};
     const retVal: any[] = [];
     for (let i = 0; i < dataToTransform.length; i++) {
-      element['nickname'] = dataToTransform[i].nickname;
+      element['Nickname'] = dataToTransform[i].nickname;
       for (let x = 0; x < dataToTransform[i].punti.length; x++) {
         element[dataToTransform[i].punti[x].competizione] =
         dataToTransform[i].punti[x].punti;
@@ -208,18 +254,28 @@ export class ClassificaComponent implements OnInit {
   sortData(sort: Sort): any[] {
     const data = this.datiperDataSourceClassifica.slice();
 
-    if (!sort.active || sort.direction === '') {
+    if (!sort.active || sort.direction === '' || data.length < 2) {
       return data;
     }
 
-    this.datiperDataSourceClassificaSorted = data.sort((a, b) => {
+    return data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       return this.compare(a[sort.active], b[sort.active], isAsc);
     });
+
   }
 
   compare (a: any, b: any , isAsc: any): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  clearDatiClassifica(): void {
+
+    this.datiPerClassifica = [];
+    this.datiperDataSourceClassifica = [];
+    this.datiperDataSourceClassificaSorted = [];
+    this.displayedColumns = [];
+
   }
 
 }
