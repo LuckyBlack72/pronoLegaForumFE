@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {MatTableDataSource, Sort} from '@angular/material';
+
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
-
-import { Utils } from '../../models/utils';
 
 import { PronosticiService } from '../pronostici.service';
 import { DataService } from '../dataservice.service';
@@ -41,6 +41,10 @@ export class ClassificaComponent implements OnInit {
   nickname: string;
   listaStagioni: Stagioni[];
   datiPerClassifica: DatiClassifica[];
+  dataSourceClassifica = new MatTableDataSource();
+  datiperDataSourceClassifica: any[];
+  datiperDataSourceClassificaSorted: any[];
+  displayedColumns = [];
 
   ngOnInit() {
 
@@ -77,6 +81,13 @@ export class ClassificaComponent implements OnInit {
           this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameterCl).subscribe(
             valoriClassifica => {
               this.datiPerClassifica = this.calcoloClassifica(pronosticiUtenti, valoriClassifica);
+              this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
+              const sort: Sort = { active: 'Totale', direction: 'desc'};
+              this.datiperDataSourceClassificaSorted = this.sortData(sort);
+              this.dataSourceClassifica.data = this.datiperDataSourceClassifica;
+              for (let x = 0; x < this.datiPerClassifica[0].punti.length; x++) {
+                this.displayedColumns.push(this.datiPerClassifica[0].punti[x].competizione);
+              }
               this.showClassifica = true;
             }
             ,
@@ -174,6 +185,41 @@ export class ClassificaComponent implements OnInit {
 
     return retVal;
 
+  }
+
+  buildDataSource(dataToTransform: DatiClassifica[]): any[] {
+
+    let element: {[x: string]: any} = {};
+    const retVal: any[] = [];
+    for (let i = 0; i < dataToTransform.length; i++) {
+      element['nickname'] = dataToTransform[i].nickname;
+      for (let x = 0; x < dataToTransform[i].punti.length; x++) {
+        element[dataToTransform[i].punti[x].competizione] =
+        dataToTransform[i].punti[x].punti;
+      }
+      retVal.push(element);
+      element = {};
+    }
+
+    return retVal;
+
+  }
+
+  sortData(sort: Sort): any[] {
+    const data = this.datiperDataSourceClassifica.slice();
+
+    if (!sort.active || sort.direction === '') {
+      return data;
+    }
+
+    this.datiperDataSourceClassificaSorted = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      return this.compare(a[sort.active], b[sort.active], isAsc);
+    });
+  }
+
+  compare (a: any, b: any , isAsc: any): number {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
 }

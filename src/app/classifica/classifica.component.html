@@ -42,6 +42,21 @@
   
   <div class="row" *ngIf="showClassifica">
     <div class="col-md-12">
+
+      <mat-table #table matSort (matSortChange)="sortData($event)" [dataSource]="dataSourceClassifica">
+
+        <ng-container *ngFor="let columnName of displayedColumns" 
+                      matColumnDef="columnName" >
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{columnName}}</mat-header-cell>
+          <mat-cell *matCellDef="let element">  </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        
+      </mat-table>
+
     </div>
   </div>
   

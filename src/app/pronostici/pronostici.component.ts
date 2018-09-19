@@ -269,6 +269,31 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
         this.valoriPronosticiToSave.push(pronostico);
       }
 
+    } else if (this.valoriPronosticiSaved.length !== this.competizioni.length) {
+      let fnd = false;
+      for (let i = 0; i < this.competizioni.length; i++) {
+        for (let x = 0; x < this.valoriPronosticiSaved.length; x++) {
+          if (this.competizioni[i].id === this.valoriPronosticiSaved[x].id_competizione) {
+            fnd = true;
+            break;
+          }
+        }
+        if ( fnd ) {
+          fnd = false;
+        } else {
+          const prono = [];
+          for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
+            prono.push('XXX');
+          }
+          const pronostico: Pronostici = {
+            id_partecipanti: this.idPartecipante,
+            stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+            id_competizione: this.competizioni[i].id,
+            pronostici: prono
+          };
+          this.valoriPronosticiToSave.push(pronostico);
+        }
+      }
     }
 
     for (let i = 0; i < this.competizioni.length; i++) {
