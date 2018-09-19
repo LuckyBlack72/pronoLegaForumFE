@@ -117,14 +117,20 @@ export class ClassificaComponent implements OnInit {
 
     let nickname = '';
     let puntiCompetizione = 0;
+    let totalePartecipante = 0;
 
     for (let i = 0; i < pronostici.length; i++) {
       if (pronostici[i].nickname !== nickname && nickname !== '' ) {
+        puntiCompetizioneArray.push({
+                                      competizione: 'Totale',
+                                      punti: totalePartecipante
+                                    });
         retVal.push({
                       nickname: nickname,
                       punti: puntiCompetizioneArray
                     });
         puntiCompetizioneArray = [];
+        totalePartecipante = 0;
         nickname = pronostici[i].nickname;
       } else {
         if (nickname === '' ) {
@@ -136,6 +142,7 @@ export class ClassificaComponent implements OnInit {
                                     competizione: pronostici[i].competizione,
                                     punti: puntiCompetizione
                                   });
+      totalePartecipante += puntiCompetizione;
       puntiCompetizione = 0;
     }
 
