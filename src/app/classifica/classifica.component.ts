@@ -32,7 +32,6 @@ export class ClassificaComponent implements OnInit {
     private utilService: UtilService
   ) { }
 
-  
   @ViewChild('st') stCmb: ElementRef;
 
   sort: Sort;
