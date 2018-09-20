@@ -8,6 +8,8 @@ import { PronosticiService } from '../pronostici.service';
 import { DataService } from '../dataservice.service';
 import { UtilService } from '../util.service';
 
+import { environment } from '../../environments/environment';
+
 import {
           Stagioni,
           FiltroPronostici,
@@ -74,7 +76,9 @@ export class ClassificaComponent implements OnInit {
 
     const searchParameter: FiltroPronostici = { stagione: stagione};
     const searchParameterCl: FiltroValoriPronostici = { stagione: stagione};
-    const calcoloClassifica = this.utilService.checkDateClassifica(this.dataService.data_calcolo_classifica);
+    const calcoloClassifica = environment.production
+                              ? this.utilService.checkDateClassifica(this.dataService.data_calcolo_classifica)
+                              : true;
 
     if (calcoloClassifica && stagione != 0) {
 
@@ -212,6 +216,7 @@ export class ClassificaComponent implements OnInit {
     let retVal = 0;
 
     for (let i = 0; i < valoriClassifica.length; i++) {
+      
       if (pronostici.id_competizione === valoriClassifica[i].id_competizione ) {
         for (let x = 0; x < pronostici.pronostici.length; x++) {
           for (let y = 0 ; y < valoriClassifica[i].valori_pronostici_classifica.length; y++) {
@@ -219,8 +224,16 @@ export class ClassificaComponent implements OnInit {
               if ( x === y ) { // stessa posizione
                 retVal += valoriClassifica[i].punti_esatti;
               } else { // posizioni differenti
-                retVal += valoriClassifica[i].punti_lista;
-              }
+                if ( valoriClassifica[i].tipo_competizione === 'CMP' ) { // campionati
+                  retVal += valoriClassifica[i].punti_lista;
+                } else { // coppe
+                  if ( x > 1 && y > 1 ) { // nelle coppe 3 e 4 sono esatti anche se invertiti
+                      retVal += valoriClassifica[i].punti_esatti;
+                    } else {
+                      retVal += valoriClassifica[i].punti_lista;
+                    }
+                  }
+                }
               break;
             }
           }

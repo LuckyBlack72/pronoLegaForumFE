@@ -19,6 +19,7 @@ export interface AnagraficaCompetizioni {
   numero_pronostici?: number;
   pronostici_inseriti?: number;
   logo?: string;
+  tipo_competizione?: string;
 }
 
 export interface ValoriPronostici {
@@ -35,6 +36,7 @@ export interface ValoriPronosticiClassifica {
   valori_pronostici_classifica?: string[];
   punti_esatti?: number;
   punti_lista?: number;
+  tipo_competizione?: string;
 }
 
 
