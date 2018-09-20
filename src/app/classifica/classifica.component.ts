@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import {MatTableDataSource, Sort} from '@angular/material';
+import { MatTableDataSource, Sort } from '@angular/material';
 
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -32,9 +32,10 @@ export class ClassificaComponent implements OnInit {
     private utilService: UtilService
   ) { }
 
-
+  
   @ViewChild('st') stCmb: ElementRef;
 
+  sort: Sort;
   pronoClosed: boolean;
   showClassifica: boolean;
   dataChiusuraProno: string;
@@ -74,7 +75,7 @@ export class ClassificaComponent implements OnInit {
 
     const searchParameter: FiltroPronostici = { stagione: stagione};
     const searchParameterCl: FiltroValoriPronostici = { stagione: stagione};
-    const calcoloClassifica = this.utilService.checkDateClassifica(this.dataService.data_calcolo_classifica);
+    const calcoloClassifica = true; // this.utilService.checkDateClassifica(this.dataService.data_calcolo_classifica);
 
     if (calcoloClassifica && stagione != 0) {
 
@@ -85,8 +86,8 @@ export class ClassificaComponent implements OnInit {
             valoriClassifica => {
               this.datiPerClassifica = this.calcoloClassifica(pronosticiUtenti, valoriClassifica);
               this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
-              const sort: Sort = { active: 'Totale', direction: 'desc'};
-              this.datiperDataSourceClassificaSorted = this.sortData(sort);
+              this.sort = { active: 'Totale', direction: 'desc'};
+              this.datiperDataSourceClassificaSorted = this.sortData(this.sort);
               this.dataSourceClassifica.data = this.datiperDataSourceClassificaSorted;
               this.displayedColumns.push('Nickname');
               for (let x = 0; x < this.datiPerClassifica[0].punti.length; x++) {
