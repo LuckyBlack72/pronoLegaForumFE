@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../pronostici.service';
@@ -10,7 +10,9 @@ import {
         ValoriPronostici,
         Pronostici,
         ValoriPronosticiComboFiller,
-        CheckDuplicateProno
+        CheckDuplicateProno,
+        ValoriPronosticiClassifica,
+        FiltroPronostici
       } from '../../models/models';
 import { Utils } from '../../models/utils';
 
@@ -30,7 +32,6 @@ export class PronosticiComponent implements OnInit, OnDestroy {
 
   constructor(
               private activatedRoute: ActivatedRoute,
-              private router: Router,
               private utils: Utils,
               private pronosticiService: PronosticiService,
               public dataService: DataService,
@@ -58,6 +59,10 @@ export class PronosticiComponent implements OnInit, OnDestroy {
   admin: boolean;
 
   subscriptionHotKey: Subscription;
+
+  calcoloClassificaCompetizioniSaved: ValoriPronosticiClassifica[];
+  calcoloClassificaCompetizioniSavedToPronostici: Pronostici[];
+
 
   /* al momento non serve
   setPronosticiToSave(value: string, index: number, idCompetizione: number) {
@@ -148,8 +153,6 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
         break;
       }
     }
-
-    console.log(this.logo);
 
     numero_pronostici > 10 ? this.pronosticiGt10 = true : this.pronosticiGt10 = false;
     this.showProno = true;
@@ -294,14 +297,74 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
   handleCommand(command: Command) {
     switch (command.name) {
       case 'PronosticiComponent.SetAdmin':
-        this.setAdmin(true);
-        this.enableProno();
+        this.setAdminEnvironment();
         break;
       case 'PronosticiComponent.UnsetAdmin':
         this.setAdmin(false);
         this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
         break;
       }
+  }
+
+  setAdminEnvironment(): void {
+    const searchParameter: FiltroPronostici = { stagione: parseInt(this.utils.getStagione().substring(0, 4), 10) };
+    this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameter).subscribe(
+      data => {
+                this.calcoloClassificaCompetizioniSaved = data;
+
+                if (this.calcoloClassificaCompetizioniSaved.length === 0) {
+                  for (let i = 0; i < this.competizioni.length; i++) {
+                    const prono = [];
+                    for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
+                      prono.push('XXX');
+                    }
+                    const pronostico: Pronostici = {
+                      id_partecipanti: 0,
+                      stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                      id_competizione: this.competizioni[i].id,
+                      pronostici: prono
+                    };
+                    this.calcoloClassificaCompetizioniSavedToPronostici.push(pronostico);
+                  }
+
+                } else if (this.calcoloClassificaCompetizioniSaved.length !== this.competizioni.length) {
+                  let fnd = false;
+                  for (let i = 0; i < this.competizioni.length; i++) {
+                    for (let x = 0; x < this.calcoloClassificaCompetizioniSaved.length; x++) {
+                      if (this.competizioni[i].id === this.calcoloClassificaCompetizioniSaved[x].id_competizione) {
+                        fnd = true;
+                        break;
+                      }
+                    }
+                    if ( fnd ) {
+                      fnd = false;
+                    } else {
+                      const prono = [];
+                      for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
+                        prono.push('XXX');
+                      }
+                      const pronostico: Pronostici = {
+                        id_partecipanti: 0,
+                        stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                        id_competizione: this.competizioni[i].id,
+                        pronostici: prono
+                      };
+                      this.calcoloClassificaCompetizioniSavedToPronostici.push(pronostico);
+                    }
+                  }
+                }
+
+                this.setAdmin(true);
+                this.enableProno();
+      },
+      error => Swal({
+                      allowOutsideClick: false,
+                      allowEscapeKey: false,
+                      title: 'Errore nel Salvataggio Dati',
+                      type: 'error'
+                    })
+    );
+
   }
 
   ngOnDestroy() {

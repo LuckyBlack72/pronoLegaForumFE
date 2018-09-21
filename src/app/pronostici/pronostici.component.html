@@ -78,15 +78,25 @@
                   <span class="badge badge-pill text-center badge-success">{{e}}</span>
               </td>
               <td>
-                <!-- <select  Original -->
-                <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
-                        (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
-                        style="height:25px"
-                        [disabled]="pronoClosed"
-                >
-                  <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
-                  <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
-                </select>
+                <div *ngIf="!admin">
+                  <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                          (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
+                          style="height:25px"
+                          [disabled]="pronoClosed"
+                  >
+                    <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                    <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                  </select>
+                </div>
+                <div *ngIf="admin">
+                  <select [(ngModel)]="calcoloClassificaCompetizioniToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                          (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
+                          style="height:25px"
+                  >
+                    <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                    <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                  </select>
+                </div>
               </td>
             </tr>
           </tbody>  
@@ -106,14 +116,25 @@
                   <span class="badge badge-pill text-center badge-success">{{e}}</span>
                 </td>
                 <td>
-                  <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
-                          (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
-                          style="height:25px"
-                          [disabled]="pronoClosed"
-                  >
-                    <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
-                    <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
-                  </select>
+                  <div *ngIf="!admin">
+                    <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                            (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
+                            style="height:25px"
+                            [disabled]="pronoClosed"
+                    >
+                      <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                      <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                    </select>
+                  </div>
+                  <div *ngIf="admin">
+                    <select [(ngModel)]="calcoloClassificaCompetizioniToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                            (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
+                            style="height:25px"
+                    >
+                      <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                      <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                    </select>
+                  </div>
                 </td>
             </tr>
           </tbody>
