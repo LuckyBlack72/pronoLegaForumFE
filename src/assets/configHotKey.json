@@ -1,0 +1,7 @@
+{
+  "hotkeys": {
+    "ctrl+up": [ "PronosticiComponent.SetAdmin" ],
+    "ctrl+down": [ "PronosticiComponent.UnsetAdmin" ]
+  }
+
+}

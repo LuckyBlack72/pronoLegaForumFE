@@ -1,5 +1,6 @@
 <div class="container-fluid">
   <div class="row">
+    <hotkeys-cheatsheet title="Comandi Nascosti"></hotkeys-cheatsheet>
     <div class="col-md-1"></div>
     <div class="col-md-10">
       <div class="d-flex justify-content-between mb-1">
@@ -11,7 +12,8 @@
             <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
               <i class="fa fa-sign-out"></i> 
             </button>  
-            </div>
+            <span *ngIf="admin" class="badge badge-pill text-center badge-danger">Admin Mode</span>
+          </div>
           <div class="p-2">
               <strong>Sarà possibile inserire i pronostici per : </strong>
               <span class="badge badge-pill text-center" 
@@ -41,7 +43,7 @@
             type="button" 
             class="btn btn-success w-100 h-100 btn-lg active" 
             title="Salva i Dati" 
-            (click)="salvaPronostici()"
+            (click)="salvaPronosticiClassifica()"
             [disabled]="!showProno">
             <i class="fa fa-floppy-o"></i>  
         </button>          

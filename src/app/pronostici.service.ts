@@ -64,6 +64,14 @@ export class PronosticiService {
 
   }
 
+  saveClassificaCompetizioni ( dataToSave: Pronostici[] ): Observable<string> {
+
+    const postData = { classificaCompetizioni: dataToSave };
+
+    return this.http.post<string>(environment.backEndURL + '/classifica/saveClassificaCompetizioni', postData);
+
+  }
+
   saveAnagraficaPartecipanti ( dataToSave: AnagraficaPartecipanti ): Observable<string> {
 
     const postData = { anagraficaPartecipanti: dataToSave };

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { DataService } from '../dataservice.service';
@@ -16,6 +16,9 @@ import { Utils } from '../../models/utils';
 
 import Swal from 'sweetalert2';
 
+import { Command, CommandService } from '../command.service';
+import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-pronostici',
@@ -23,7 +26,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./pronostici.component.css']
 })
 
-export class PronosticiComponent implements OnInit {
+export class PronosticiComponent implements OnInit, OnDestroy {
 
   constructor(
               private activatedRoute: ActivatedRoute,
@@ -31,8 +34,11 @@ export class PronosticiComponent implements OnInit {
               private utils: Utils,
               private pronosticiService: PronosticiService,
               public dataService: DataService,
-              private utilService: UtilService
-            ) { }
+              private utilService: UtilService,
+              private commandService: CommandService
+            ) {
+    this.subscriptionHotKey = this.commandService.commands.subscribe(c => this.handleCommand(c));
+  }
 
   competizioni: AnagraficaCompetizioni[];
   valoriPronostici: ValoriPronostici[];
@@ -49,6 +55,9 @@ export class PronosticiComponent implements OnInit {
   logo: string;
   pronoClosed: boolean;
   dataChiusuraProno: string;
+  admin: boolean;
+
+  subscriptionHotKey: Subscription;
 
   /* al momento non serve
   setPronosticiToSave(value: string, index: number, idCompetizione: number) {
@@ -147,32 +156,57 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   }
 
-  salvaPronostici()  {
+  salvaPronosticiClassifica()  {
 
     const check = this.checkPronoToSave();
 
     if (check.check) {
-      this.pronosticiService.savePronostici(this.valoriPronosticiToSave).subscribe(
-        data => Swal({
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          title: 'Dati Salvati con Successo',
-          type: 'success'
-        }),
-        error => Swal({
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          title: 'Errore nel Salvataggio Dati',
-          type: 'error'
-        })
-      );
+
+      if (this.admin) { // admin salva la classifica
+
+          this.pronosticiService.saveClassificaCompetizioni(this.valoriPronosticiToSave).subscribe(
+          data => Swal({
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            title: 'Dati Salvati con Successo',
+            type: 'success'
+          }),
+          error => Swal({
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            title: 'Errore nel Salvataggio Dati',
+            type: 'error'
+          })
+        );
+
+      } else {
+
+        this.pronosticiService.savePronostici(this.valoriPronosticiToSave).subscribe(
+          data => Swal({
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            title: 'Dati Salvati con Successo',
+            type: 'success'
+          }),
+          error => Swal({
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            title: 'Errore nel Salvataggio Dati',
+            type: 'error'
+          })
+        );
+
+      }
+
     } else {
+
       Swal({
         allowOutsideClick: false,
         allowEscapeKey: false,
         title: 'Ci sono valori duplicati in ' + check.competizione + ' , correggerli prima di salvarli',
         type: 'error'
       });
+
     }
 
   }
@@ -241,9 +275,38 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   }
 
+  enableProno() {
+
+    this.pronoClosed = false;
+
+  }
+
   exportExcelPronostici(): void {
 
     this.utilService.exportPronosticiExcel(this.valoriPronosticiToSave, this.dataService.nickname);
+
+  }
+
+  setAdmin(setUnset: boolean): void {
+    this.admin = setUnset;
+  }
+
+  handleCommand(command: Command) {
+    switch (command.name) {
+      case 'PronosticiComponent.SetAdmin':
+        this.setAdmin(true);
+        this.enableProno();
+        break;
+      case 'PronosticiComponent.UnsetAdmin':
+        this.setAdmin(false);
+        this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
+        break;
+      }
+  }
+
+  ngOnDestroy() {
+
+    this.subscriptionHotKey.unsubscribe();
 
   }
 

@@ -29,6 +29,11 @@ import { RegistrazioneComponent } from './registrazione/registrazione.component'
 import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
 import { ClassificaComponent } from './classifica/classifica.component';
 
+// Hotkeys
+import { HotkeyModule } from 'angular2-hotkeys';
+import { CommandService } from './command.service';
+// HotKeys
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +56,8 @@ import { ClassificaComponent } from './classifica/classifica.component';
       allowEscapeKey: false,
       customClass: 'modal-content'
     }),
-    CountdownTimerModule.forRoot()
+    CountdownTimerModule.forRoot(),
+    HotkeyModule.forRoot()
   ],
   // tslint:disable-next-line:max-line-length
   providers: [
@@ -63,7 +69,8 @@ import { ClassificaComponent } from './classifica/classifica.component';
               ValoriPronosticiResolver,
               PronosticiResolver,
               DatePronosticiResolver,
-              StagioniResolver
+              StagioniResolver,
+              CommandService
             ],
   bootstrap: [AppComponent]
 })
