@@ -92,3 +92,7 @@ export interface DatiClassifica {
   nickname: string;
   punti: PuntiCompetizione[];
 }
+
+export interface ExcelRow {
+  [x: string]: string;
+}

@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+import * as XLSX from 'xlsx';
+
 import { DataService } from './dataservice.service';
+import { Pronostici, ExcelRow } from '../models/models';
 
 @Injectable()
 export class UtilService {
@@ -54,5 +57,32 @@ export class UtilService {
     this.router.navigate(['/menu-utente']);
 
   }
+
+  exportPronosticiExcel(pronostici: Pronostici[], utente: string) {
+
+    const workbook = XLSX.utils.book_new();
+    let excelRows: ExcelRow[] = [];
+    let element: {[x: string]: string} = {};
+
+    for (let i = 0; i < pronostici.length; i++) {
+      for (let x = 0; x < pronostici[i].pronostici.length; x++) {
+        element[pronostici[i].competizione] = pronostici[i].pronostici[x].replace('XXX', ' ');
+        excelRows.push(element);
+        element = {};
+      }
+      XLSX.utils.book_append_sheet(
+                                    workbook,
+                                    XLSX.utils.json_to_sheet(excelRows),
+                                    pronostici[i].competizione
+      );
+      excelRows = [];
+    }
+
+    XLSX.writeFile(workbook,
+                   'Pronostici' + '_' + pronostici[0].stagione + '_' + utente + '.xlsx'
+                  ); // scrive il file e di conseguenza te lo fa salvare
+
+  }
+
 
 }

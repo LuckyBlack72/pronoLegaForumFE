@@ -216,7 +216,6 @@ export class ClassificaComponent implements OnInit {
     let retVal = 0;
 
     for (let i = 0; i < valoriClassifica.length; i++) {
-      
       if (pronostici.id_competizione === valoriClassifica[i].id_competizione ) {
         for (let x = 0; x < pronostici.pronostici.length; x++) {
           for (let y = 0 ; y < valoriClassifica[i].valori_pronostici_classifica.length; y++) {

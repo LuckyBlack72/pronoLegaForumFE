@@ -32,6 +32,7 @@
     "ngx-countdown-timer": "^0.1.9",
     "rxjs": "^6.3.2",
     "sweetalert2": "^7.26.29",
+    "xlsx": "^0.14.0",
     "zone.js": "^0.8.19"
   },
   "devDependencies": {

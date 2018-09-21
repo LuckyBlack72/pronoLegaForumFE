@@ -241,6 +241,13 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   }
 
+  exportExcelPronostici(): void {
+
+    this.utilService.exportPronosticiExcel(this.valoriPronosticiToSave, this.dataService.nickname);
+
+  }
+
+
   ngOnInit() {
 
     // prendo i dati dai resolver
@@ -315,6 +322,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.dataChiusuraProno = this.dataService.data_chiusura;
 
   }
+
+
 
 
 }
