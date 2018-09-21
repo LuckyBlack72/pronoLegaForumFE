@@ -44,7 +44,17 @@
     <div class="col-md-1"></div>
     <div class="col-md-10">
 
-      <mat-table #table matSort (mdSortChange)="sortData($event)" [dataSource]="dataSourceClassifica">
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
+      </mat-form-field>
+
+      <mat-table 
+        #table matSort 
+        [dataSource]="dataSourceClassifica"
+        matSortActive="Totale" 
+        matSortDirection="desc" 
+        matSortDisableClear        
+      >
 
         <ng-container *ngFor="let columnName of displayedColumns" matColumnDef="{{columnName}}" >
           <mat-header-cell *matHeaderCellDef mat-sort-header>{{columnName}}</mat-header-cell>
@@ -56,6 +66,11 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         
       </mat-table>
+      
+      <mat-paginator 
+        [pageSizeOptions]="[5, 10, 20, 50]" 
+        showFirstLastButtons
+      ></mat-paginator>
 
     </div>
   </div>

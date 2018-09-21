@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatTableDataSource, Sort } from '@angular/material';
+import { MatPaginator, MatTableDataSource, Sort, MatSort } from '@angular/material';
 
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -36,16 +36,31 @@ export class ClassificaComponent implements OnInit {
 
   @ViewChild('st') stCmb: ElementRef;
 
-  sort: Sort;
+  paginator: MatPaginator;
+  sort: MatSort;
+
+  @ViewChild(MatSort)
+  set iniSort(sort: MatSort) {
+    this.sort = sort;
+    this.dataSourceClassifica.sort = this.sort;
+  }
+
+  @ViewChild(MatPaginator)
+  set iniPaginator(paginator: MatPaginator) {
+    this.paginator = paginator;
+    this.dataSourceClassifica.paginator = this.paginator;
+  }
+
+  // fsort: Sort;
   pronoClosed: boolean;
   showClassifica: boolean;
   dataChiusuraProno: string;
   nickname: string;
   listaStagioni: Stagioni[];
   datiPerClassifica: DatiClassifica[];
-  dataSourceClassifica = new MatTableDataSource();
+  dataSourceClassifica = new MatTableDataSource([]);
   datiperDataSourceClassifica: any[];
-  datiperDataSourceClassificaSorted: any[];
+  // datiperDataSourceClassificaSorted: any[];
   displayedColumns = [];
 
   ngOnInit() {
@@ -89,9 +104,9 @@ export class ClassificaComponent implements OnInit {
             valoriClassifica => {
               this.datiPerClassifica = this.calcoloClassifica(pronosticiUtenti, valoriClassifica);
               this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
-              this.sort = { active: 'Totale', direction: 'desc'};
-              this.datiperDataSourceClassificaSorted = this.sortData(this.sort);
-              this.dataSourceClassifica.data = this.datiperDataSourceClassificaSorted;
+              // this.fsort = { active: 'Totale', direction: 'desc'};
+              // this.datiperDataSourceClassificaSorted = this.sortData(this.fsort);
+              this.dataSourceClassifica.data = this.datiperDataSourceClassifica;
               this.displayedColumns.push('Nickname');
               for (let x = 0; x < this.datiPerClassifica[0].punti.length; x++) {
                 this.displayedColumns.push(this.datiPerClassifica[0].punti[x].competizione);
@@ -263,6 +278,11 @@ export class ClassificaComponent implements OnInit {
 
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSourceClassifica.filter = filterValue.trim().toLowerCase();
+  }
+
+  /* non serve usando matSort
   sortData(sort: Sort): any[] {
     const data = this.datiperDataSourceClassifica.slice();
 
@@ -280,12 +300,13 @@ export class ClassificaComponent implements OnInit {
   compare (a: any, b: any , isAsc: any): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
+  */
 
   clearDatiClassifica(): void {
 
     this.datiPerClassifica = [];
     this.datiperDataSourceClassifica = [];
-    this.datiperDataSourceClassificaSorted = [];
+    // this.datiperDataSourceClassificaSorted = [];
     this.displayedColumns = [];
 
   }
