@@ -56,9 +56,9 @@ export class PronosticiService {
 
   }
 
-  savePronostici ( dataToSave: Pronostici[], nickname: string ): Observable<string> {
+  savePronostici ( dataToSave: Pronostici[], nickname: string, id_partecipanti: number ): Observable<string> {
 
-    const postData = { pronostici: dataToSave, nickname: nickname };
+    const postData = { pronostici: dataToSave, id_partecipanti: id_partecipanti, nickname: nickname };
 
     return this.http.post<string>(environment.backEndURL + '/pronostici/savePronostici', postData);
 

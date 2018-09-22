@@ -184,7 +184,9 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
       } else {
 
-        this.pronosticiService.savePronostici(this.valoriPronosticiToSave, this.dataService.nickname ).subscribe(
+        this.pronosticiService.savePronostici(this.valoriPronosticiToSave,
+                                              this.dataService.nickname,
+                                              this.dataService.idPartecipante ).subscribe(
           data => Swal({
             allowOutsideClick: false,
             allowEscapeKey: false,
