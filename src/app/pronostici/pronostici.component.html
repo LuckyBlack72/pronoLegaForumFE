@@ -89,7 +89,7 @@
                   </select>
                 </div>
                 <div *ngIf="admin">
-                  <select [(ngModel)]="calcoloClassificaCompetizioniToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                  <select [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
                           (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
                           style="height:25px"
                   >
@@ -127,7 +127,7 @@
                     </select>
                   </div>
                   <div *ngIf="admin">
-                    <select [(ngModel)]="calcoloClassificaCompetizioniToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                    <select [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
                             (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
                             style="height:25px"
                     >

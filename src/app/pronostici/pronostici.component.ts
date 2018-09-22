@@ -61,7 +61,7 @@ export class PronosticiComponent implements OnInit, OnDestroy {
   subscriptionHotKey: Subscription;
 
   calcoloClassificaCompetizioniSaved: ValoriPronosticiClassifica[];
-  calcoloClassificaCompetizioniSavedToPronostici: Pronostici[];
+  cCCToSaveToPronostici: Pronostici[];
 
 
   /* al momento non serve
@@ -311,56 +311,33 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameter).subscribe(
       data => {
                 this.calcoloClassificaCompetizioniSaved = data;
-
-                if (this.calcoloClassificaCompetizioniSaved.length === 0) {
-                  for (let i = 0; i < this.competizioni.length; i++) {
-                    const prono = [];
-                    for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
-                      prono.push('XXX');
-                    }
-                    const pronostico: Pronostici = {
-                      id_partecipanti: 0,
-                      stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
-                      id_competizione: this.competizioni[i].id,
-                      pronostici: prono
-                    };
-                    this.calcoloClassificaCompetizioniSavedToPronostici.push(pronostico);
-                  }
-
-                } else if (this.calcoloClassificaCompetizioniSaved.length !== this.competizioni.length) {
-                  let fnd = false;
-                  for (let i = 0; i < this.competizioni.length; i++) {
-                    for (let x = 0; x < this.calcoloClassificaCompetizioniSaved.length; x++) {
-                      if (this.competizioni[i].id === this.calcoloClassificaCompetizioniSaved[x].id_competizione) {
-                        fnd = true;
-                        break;
+                for ( let i = 0; i < this.calcoloClassificaCompetizioniSaved.length; i++ ) {
+                  if ( !this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica ) {
+                    for ( let x = 0; x < this.competizioni.length; x++ ) {
+                      if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
+                        const prono = [];
+                        for (let y = 1; y <= this.competizioni[x].numero_pronostici; y++) {
+                          prono.push('XXX');
+                        }
+                        const pronostico: Pronostici = {
+                          id_partecipanti: 0,
+                          stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                          id_competizione: this.competizioni[x].id,
+                          pronostici: prono
+                        };
+                        this.cCCToSaveToPronostici.push(pronostico);
                       }
                     }
-                    if ( fnd ) {
-                      fnd = false;
-                    } else {
-                      const prono = [];
-                      for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
-                        prono.push('XXX');
-                      }
-                      const pronostico: Pronostici = {
-                        id_partecipanti: 0,
-                        stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
-                        id_competizione: this.competizioni[i].id,
-                        pronostici: prono
-                      };
-                      this.calcoloClassificaCompetizioniSavedToPronostici.push(pronostico);
-                    }
+                    break;
                   }
                 }
-
                 this.setAdmin(true);
                 this.enableProno();
       },
       error => Swal({
                       allowOutsideClick: false,
                       allowEscapeKey: false,
-                      title: 'Errore nel Salvataggio Dati',
+                      title: 'Errore nel Caricamento Dati',
                       type: 'error'
                     })
     );
@@ -381,6 +358,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
     this.valoriPronosticiSaved = this.activatedRoute.snapshot.data.pronosticiSaved;
     this.valoriPronosticiToSave = this.activatedRoute.snapshot.data.pronosticiSaved;
+    this.cCCToSaveToPronostici = [];
     // ---------------------------
 
     this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
@@ -441,6 +419,23 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
           this.competizioni[i].pronostici_inseriti = totPieni;
         }
       }
+    }
+
+    if (this.cCCToSaveToPronostici.length === 0) {
+      for (let i = 0; i < this.competizioni.length; i++) {
+        const prono = [];
+        for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
+          prono.push('XXX');
+        }
+        const pronostico: Pronostici = {
+          id_partecipanti: 0,
+          stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+          id_competizione: this.competizioni[i].id,
+          pronostici: prono
+        };
+        this.cCCToSaveToPronostici.push(pronostico);
+      }
+
     }
 
     this.showProno = false;
