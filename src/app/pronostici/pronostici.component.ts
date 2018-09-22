@@ -167,7 +167,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
       if (this.admin) { // admin salva la classifica
 
-          this.pronosticiService.saveClassificaCompetizioni(this.valoriPronosticiToSave).subscribe(
+          this.pronosticiService.saveClassificaCompetizioni(this.cCCToSaveToPronostici).subscribe(
           data => Swal({
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -302,6 +302,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
       case 'PronosticiComponent.UnsetAdmin':
         this.setAdmin(false);
         this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
+        this.showProno = false;
         break;
       }
   }
@@ -311,9 +312,12 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameter).subscribe(
       data => {
                 this.calcoloClassificaCompetizioniSaved = data;
+                this.cCCToSaveToPronostici = [];
+
                 for ( let i = 0; i < this.calcoloClassificaCompetizioniSaved.length; i++ ) {
-                  if ( !this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica ) {
-                    for ( let x = 0; x < this.competizioni.length; x++ ) {
+                  if ( !this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica ||
+                       this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica.length === 0 ) {
+                        for ( let x = 0; x < this.competizioni.length; x++ ) {
                       if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
                         const prono = [];
                         for (let y = 1; y <= this.competizioni[x].numero_pronostici; y++) {
@@ -326,13 +330,36 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
                           pronostici: prono
                         };
                         this.cCCToSaveToPronostici.push(pronostico);
+                        break;
+                      }
+
+                    }
+
+                  } else { // dati presenti
+
+                    for ( let x = 0; x < this.competizioni.length; x++ ) {
+                      if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
+                        const prono = [];
+                        for (let y = 0; y < this.competizioni[x].numero_pronostici; y++) {
+                          prono.push(this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica[y]);
+                        }
+                        const pronostico: Pronostici = {
+                          id_partecipanti: 0,
+                          stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                          id_competizione: this.competizioni[x].id,
+                          pronostici: prono
+                        };
+                        this.cCCToSaveToPronostici.push(pronostico);
+                        break;
                       }
                     }
-                    break;
+
                   }
                 }
+
                 this.setAdmin(true);
                 this.enableProno();
+                this.showProno = false;
       },
       error => Swal({
                       allowOutsideClick: false,
@@ -419,23 +446,6 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
           this.competizioni[i].pronostici_inseriti = totPieni;
         }
       }
-    }
-
-    if (this.cCCToSaveToPronostici.length === 0) {
-      for (let i = 0; i < this.competizioni.length; i++) {
-        const prono = [];
-        for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
-          prono.push('XXX');
-        }
-        const pronostico: Pronostici = {
-          id_partecipanti: 0,
-          stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
-          id_competizione: this.competizioni[i].id,
-          pronostici: prono
-        };
-        this.cCCToSaveToPronostici.push(pronostico);
-      }
-
     }
 
     this.showProno = false;

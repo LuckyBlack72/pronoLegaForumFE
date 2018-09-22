@@ -31,6 +31,7 @@
         <button *ngFor="let competizione of competizioni" type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="fillPronostici(competizione.numero_pronostici, competizione.id)">
             {{competizione.competizione}} 
             <span
+              *ngIf="!admin"
               class="badge badge-pill text-center"
               [ngClass]="{
                           'badge-success': (competizione.numero_pronostici - competizione.pronostici_inseriti) == 0, 
@@ -48,6 +49,7 @@
             <i class="fa fa-floppy-o"></i>  
         </button>          
         <button 
+            [disabled]="admin"
             type="button" 
             class="btn btn-secondary w-100 h-100 btn-lg active" 
             title="Salva i Dati" 
@@ -90,8 +92,7 @@
                 </div>
                 <div *ngIf="admin">
                   <select [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
-                          (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
-                          style="height:25px"
+                    style="height:25px"
                   >
                     <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
                     <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
@@ -128,7 +129,6 @@
                   </div>
                   <div *ngIf="admin">
                     <select [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
-                            (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
                             style="height:25px"
                     >
                       <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
