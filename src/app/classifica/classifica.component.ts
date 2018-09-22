@@ -92,7 +92,7 @@ export class ClassificaComponent implements OnInit {
     const searchParameter: FiltroPronostici = { stagione: stagione};
     const searchParameterCl: FiltroValoriPronostici = { stagione: stagione};
     const calcoloClassifica = environment.production
-                              ? this.utilService.checkDateClassifica(this.dataService.data_calcolo_classifica)
+                              ? true // this.utilService.checkDateClassifica(this.dataService.data_calcolo_classifica)
                               : true;
 
     if (calcoloClassifica && stagione != 0) {
