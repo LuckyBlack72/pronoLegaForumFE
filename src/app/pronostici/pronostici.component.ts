@@ -5,6 +5,8 @@ import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../pronostici.service';
 import { UtilService } from '../util.service';
 
+import { Observable } from 'rxjs';
+
 import {
         AnagraficaCompetizioni,
         ValoriPronostici,
@@ -57,6 +59,7 @@ export class PronosticiComponent implements OnInit, OnDestroy {
   pronoClosed: boolean;
   dataChiusuraProno: string;
   admin: boolean;
+  adminPassword: boolean;
 
   subscriptionHotKey: Subscription;
 
@@ -299,77 +302,127 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
   handleCommand(command: Command) {
     switch (command.name) {
       case 'PronosticiComponent.SetAdmin':
-        this.setAdminEnvironment();
+        this.checkAdminPassword();
         break;
       case 'PronosticiComponent.UnsetAdmin':
-        this.setAdmin(false);
-        this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
-        this.showProno = false;
+        this.unsetAdminEnvironment();
         break;
       }
   }
 
-  setAdminEnvironment(): void {
-    const searchParameter: FiltroPronostici = { stagione: parseInt(this.utils.getStagione().substring(0, 4), 10) };
-    this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameter).subscribe(
-      data => {
-                this.calcoloClassificaCompetizioniSaved = data;
-                this.cCCToSaveToPronostici = [];
+  unsetAdminEnvironment(): void {
 
-                for ( let i = 0; i < this.calcoloClassificaCompetizioniSaved.length; i++ ) {
-                  if ( !this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica ||
-                       this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica.length === 0 ) {
-                        for ( let x = 0; x < this.competizioni.length; x++ ) {
-                      if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
-                        const prono = [];
-                        for (let y = 1; y <= this.competizioni[x].numero_pronostici; y++) {
-                          prono.push('XXX');
-                        }
-                        const pronostico: Pronostici = {
-                          id_partecipanti: 0,
-                          stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
-                          id_competizione: this.competizioni[x].id,
-                          pronostici: prono
-                        };
-                        this.cCCToSaveToPronostici.push(pronostico);
-                        break;
-                      }
+    this.setAdmin(false);
+    this.adminPassword = false;
+    this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
+    this.showProno = false;
 
-                    }
+  }
 
-                  } else { // dati presenti
+  async checkAdminPassword() {
 
-                    for ( let x = 0; x < this.competizioni.length; x++ ) {
-                      if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
-                        const prono = [];
-                        for (let y = 0; y < this.competizioni[x].numero_pronostici; y++) {
-                          prono.push(this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica[y]);
-                        }
-                        const pronostico: Pronostici = {
-                          id_partecipanti: 0,
-                          stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
-                          id_competizione: this.competizioni[x].id,
-                          pronostici: prono
-                        };
-                        this.cCCToSaveToPronostici.push(pronostico);
-                        break;
-                      }
-                    }
-
-                  }
-                }
-
-                this.setAdmin(true);
-                this.enableProno();
-                this.showProno = false;
+    const {value: password} = await Swal({
+      title: 'Administrator Login',
+      input: 'password',
+      inputPlaceholder: 'Enter Administrator password',
+      inputAttributes: {
+        autocapitalize: 'off',
+        autocorrect: 'off'
       },
-      error => Swal({
-                      allowOutsideClick: false,
-                      allowEscapeKey: false,
-                      title: 'Errore nel Caricamento Dati',
-                      type: 'error'
-                    })
-    );
+      showCancelButton: true
+    });
+
+    if (password) {
+      this.pronosticiService.checkAdminPassword(password).subscribe(
+        data => {
+          this.adminPassword = true;
+          this.setAdminEnvironment();
+        }
+        ,
+        error => Swal({
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          title: 'Password Errata',
+          type: 'error'
+        })
+      );
+    }
+
+  }
+
+ setAdminEnvironment(): void {
+
+    if (this.adminPassword) {
+      const searchParameter: FiltroPronostici = { stagione: parseInt(this.utils.getStagione().substring(0, 4), 10) };
+      this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameter).subscribe(
+        data => {
+                  this.calcoloClassificaCompetizioniSaved = data;
+                  this.cCCToSaveToPronostici = [];
+
+                  for ( let i = 0; i < this.calcoloClassificaCompetizioniSaved.length; i++ ) {
+                    if ( !this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica ||
+                         this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica.length === 0 ) {
+                          for ( let x = 0; x < this.competizioni.length; x++ ) {
+                        if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
+                          const prono = [];
+                          for (let y = 1; y <= this.competizioni[x].numero_pronostici; y++) {
+                            prono.push('XXX');
+                          }
+                          const pronostico: Pronostici = {
+                            id_partecipanti: 0,
+                            stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                            id_competizione: this.competizioni[x].id,
+                            pronostici: prono
+                          };
+                          this.cCCToSaveToPronostici.push(pronostico);
+                          break;
+                        }
+
+                      }
+
+                    } else { // dati presenti
+
+                      for ( let x = 0; x < this.competizioni.length; x++ ) {
+                        if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
+                          const prono = [];
+                          for (let y = 0; y < this.competizioni[x].numero_pronostici; y++) {
+                            prono.push(this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica[y]);
+                          }
+                          const pronostico: Pronostici = {
+                            id_partecipanti: 0,
+                            stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                            id_competizione: this.competizioni[x].id,
+                            pronostici: prono
+                          };
+                          this.cCCToSaveToPronostici.push(pronostico);
+                          break;
+                        }
+                      }
+
+                    }
+                  }
+
+                  this.setAdmin(true);
+                  this.enableProno();
+                  this.showProno = false;
+        },
+        error => Swal({
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        title: 'Errore nel Caricamento Dati',
+                        type: 'error'
+                      })
+      );
+
+    } else {
+      this.adminPassword = false;
+      Swal({
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        title: 'Password Administrator Errata',
+        type: 'error'
+      });
+    }
 
   }
 

@@ -30,6 +30,14 @@ export class PronosticiService {
 
   }
 
+  checkAdminPassword ( pwd: string ): Observable<string> {
+
+    const postData = { password: pwd };
+
+    return this.http.post<string>(environment.backEndURL + '/partecipanti/checkAdminPassword', postData);
+
+  }
+
   getValoriPronostici ( searchParameters: FiltroValoriPronostici ): Observable<ValoriPronostici[]> {
 
     return this.http.post<ValoriPronostici[]>(environment.backEndURL + '/pronostici/getValoriPronostici', searchParameters);
