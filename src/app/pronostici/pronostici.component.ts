@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Observable, Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
+
 import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../pronostici.service';
 import { UtilService } from '../util.service';
-
-import { Observable } from 'rxjs';
+import { Command, CommandService } from '../command.service';
 
 import {
         AnagraficaCompetizioni,
@@ -17,12 +19,6 @@ import {
         FiltroPronostici
       } from '../../models/models';
 import { Utils } from '../../models/utils';
-
-import Swal from 'sweetalert2';
-
-import { Command, CommandService } from '../command.service';
-import { Subscription } from 'rxjs';
-
 
 @Component({
   selector: 'app-pronostici',
