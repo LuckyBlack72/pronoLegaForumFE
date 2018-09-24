@@ -35,6 +35,7 @@ export class ClassificaComponent implements OnInit {
   ) { }
 
   @ViewChild('st') stCmb: ElementRef;
+  @ViewChild('table') tabClassifica: ElementRef;
 
   paginator: MatPaginator;
   sort: MatSort;
@@ -308,6 +309,12 @@ export class ClassificaComponent implements OnInit {
     this.datiperDataSourceClassifica = [];
     // this.datiperDataSourceClassificaSorted = [];
     this.displayedColumns = [];
+
+  }
+
+  exportClassificaExcel(): void {
+
+    this.utilService.exportClassificaExcel(this.datiperDataSourceClassifica);
 
   }
 

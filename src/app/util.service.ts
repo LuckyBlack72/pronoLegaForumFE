@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { Sort } from '@angular/material';
 
 import * as XLSX from 'xlsx';
 
 import { DataService } from './dataservice.service';
 import { Pronostici, ExcelRow } from '../models/models';
+import { Utils } from '../models/utils';
 
 @Injectable()
 export class UtilService {
 
-  constructor( private router: Router, public dataService: DataService ) { }
+  constructor( private router: Router, public dataService: DataService, private utils: Utils ) { }
 
   checkDateProno(dateToCheck: string): boolean {
 
@@ -82,6 +84,51 @@ export class UtilService {
                    'Pronostici' + '_' + pronostici[0].stagione + '_' + utente + '.xlsx'
                   ); // scrive il file e di conseguenza te lo fa salvare
 
+  }
+
+
+  exportClassificaExcel(datiClassifica: any[]) {
+
+    const fsort: Sort = { active: 'Totale', direction: 'desc'};
+    const datiClassificaSorted: any[] = this.sortData(fsort, datiClassifica);
+
+    const workbook = XLSX.utils.book_new();
+    const now = new Date();
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      XLSX.utils.json_to_sheet(datiClassificaSorted),
+      'Classifica'
+    );
+
+    XLSX.writeFile(workbook,
+                   'Classifica' +
+                   '_' +
+                   this.utils.getStagione().substring(0, 4) +
+                   '_' +
+                    now.getDate() + '-' + now.getMonth() + '-' + now.getFullYear() +
+                    '.xlsx'
+                  ); // scrive il file e di conseguenza te lo fa salvare
+
+  }
+
+
+  private sortData(sort: Sort, datiToSort: any[]): any[] {
+    const data = datiToSort.slice();
+
+    if (!sort.active || sort.direction === '' || data.length < 2) {
+      return data;
+    }
+
+    return data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      return this.compare(a[sort.active], b[sort.active], isAsc);
+    });
+
+  }
+
+  private compare (a: any, b: any , isAsc: any): number {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
 

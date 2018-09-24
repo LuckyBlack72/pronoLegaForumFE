@@ -35,6 +35,15 @@
             <option class="form-control" value="0">Seleziona una Stagione</option> <!-- not selected / blank option -->
             <option class="form-control" *ngFor="let stagione of listaStagioni" [value]="stagione.stagione">{{ stagione.stagione }}</option>
           </select>
+          <button 
+          *ngIf="showClassifica"
+          type="button" 
+          class="btn btn-secondary btn-sm active" 
+          title="Export Excel Classifica" 
+          (click)="exportClassificaExcel()"
+          >
+            <i class="fa fa-file-excel-o"></i>  
+          </button>  
         </div>
       </div>
     </div>
@@ -47,7 +56,7 @@
       <mat-form-field>
         <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
       </mat-form-field>
-
+      
       <mat-table 
         #table matSort 
         [dataSource]="dataSourceClassifica"
@@ -68,7 +77,7 @@
       </mat-table>
       
       <mat-paginator 
-        [pageSizeOptions]="[5, 10, 20, 50]" 
+        [pageSizeOptions]="[10, 20, 50]" 
         showFirstLastButtons
       ></mat-paginator>
 

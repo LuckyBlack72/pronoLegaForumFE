@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 
 import { DataService } from '../dataservice.service';
