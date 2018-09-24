@@ -17,15 +17,7 @@ export class MenuUtenteComponent implements OnInit {
     private utilService: UtilService
   ) { }
 
-  pronoClosed: boolean;
-  dataChiusuraProno: string;
-  nickname: string;
-
   ngOnInit() {
-
-    this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
-    this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
-    this.dataChiusuraProno = this.dataService.data_chiusura;
 
   }
 
@@ -34,10 +26,12 @@ export class MenuUtenteComponent implements OnInit {
     switch (page) {
 
       case 'p' :
+        this.dataService.menu_utente_page = true;
         this.router.navigate(['/pronostici']);
         break;
 
       case 'c' :
+        this.dataService.menu_utente_page = true;
         this.router.navigate(['/classifica']);
         break;
 

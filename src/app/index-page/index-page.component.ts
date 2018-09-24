@@ -48,6 +48,7 @@ export class IndexPageComponent implements OnInit {
                   this.dataService.idPartecipante = data;
                   this.loading = false;
                   this.form.reset();
+                  this.dataService.menu_utente_page = false;
                   this.router.navigate(['/menu-utente']) ;
               },
               error => {

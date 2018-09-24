@@ -53,9 +53,7 @@ export class ClassificaComponent implements OnInit {
   }
 
   // fsort: Sort;
-  pronoClosed: boolean;
   showClassifica: boolean;
-  dataChiusuraProno: string;
   nickname: string;
   listaStagioni: Stagioni[];
   datiPerClassifica: DatiClassifica[];
@@ -68,8 +66,6 @@ export class ClassificaComponent implements OnInit {
 
     this.listaStagioni = this.activatedRoute.snapshot.data.listaStagioni;
     this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
-    this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
-    this.dataChiusuraProno = this.dataService.data_chiusura;
     this.showClassifica = false;
 
   }

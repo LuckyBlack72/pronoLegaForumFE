@@ -28,6 +28,8 @@ import { PronosticiComponent } from './pronostici/pronostici.component';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
 import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
 import { ClassificaComponent } from './classifica/classifica.component';
+import { PageheaderComponent } from './pageheader/pageheader.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 // Hotkeys
 import { HotkeyModule } from 'angular2-hotkeys';
@@ -37,11 +39,14 @@ import { CommandService } from './command.service';
 @NgModule({
   declarations: [
     AppComponent,
+    PageheaderComponent,
     IndexPageComponent,
     PronosticiComponent,
     RegistrazioneComponent,
     MenuUtenteComponent,
-    ClassificaComponent
+    ClassificaComponent,
+    PageheaderComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,

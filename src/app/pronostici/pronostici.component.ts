@@ -53,7 +53,6 @@ export class PronosticiComponent implements OnInit, OnDestroy {
   idCompToselect: number;
   logo: string;
   pronoClosed: boolean;
-  dataChiusuraProno: string;
   admin: boolean;
   adminPassword: boolean;
 
@@ -501,7 +500,6 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
     this.showProno = false;
     this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
-    this.dataChiusuraProno = this.dataService.data_chiusura;
 
   }
 

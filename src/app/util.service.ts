@@ -50,12 +50,14 @@ export class UtilService {
 
     this.dataService.nickname = ''; // resetto
     this.dataService.idPartecipante = 0; // resetto
+    this.dataService.menu_utente_page = false;
     this.router.navigate(['/index-page']) ;
 
   }
 
   back() {
 
+    this.dataService.menu_utente_page = false;
     this.router.navigate(['/menu-utente']);
 
   }

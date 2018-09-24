@@ -1,33 +1,22 @@
+<app-toolbar></app-toolbar>
+
 <div class="container-fluid">
-  <div class="row">
-    <hotkeys-cheatsheet title="Comandi Nascosti"></hotkeys-cheatsheet>
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
-      <div class="d-flex justify-content-between mb-1">
-          <div class="p-2">
-            <strong>Benvenuto :</strong> <span class="badge badge-pill text-center badge-success">{{nickname}}</span>
-            <button type="button" class="btn btn-warning btn-sm active" title="Torna Indietro" (click)="back()">
-              <i class="fa fa-arrow-circle-left"></i>
-            </button>          
-            <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
-              <i class="fa fa-sign-out"></i> 
-            </button>  
-            <span *ngIf="admin" class="badge badge-pill text-center badge-danger">Admin Mode</span>
-          </div>
-          <div class="p-2">
-              <strong>Sarà possibile inserire i pronostici per : </strong>
-              <span class="badge badge-pill text-center" 
-              [ngClass]="{'badge-success': !pronoClosed, 'badge-danger': pronoClosed }">
-                <countdown-timer (zeroTrigger)="disableProno()" [end]="dataChiusuraProno"></countdown-timer>
-              </span>
-          </div>
-        </div>
-    </div>
-    <div class="col-md-1"></div>
-  </div>
+  <hotkeys-cheatsheet title="Comandi Nascosti"></hotkeys-cheatsheet>
   <div class="row">
     <div class="col-md-12">
-      <div class="divButton rounded btn-group btn-group-lg mx-auto">
+      <div class="rounded btn-group btn-group-lg mx-auto"
+          [ngClass]="{
+            'divButton': !admin,
+            'divButtonAdmin': admin }"
+      >
+        <button 
+          *ngIf="admin"
+          disabled
+          type="button" 
+          class="btn btn-danger w-100 h-100 btn-lg active"  
+        >
+          Admin Mode
+        </button>         
         <button *ngFor="let competizione of competizioni" type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="fillPronostici(competizione.numero_pronostici, competizione.id)">
             {{competizione.competizione}} 
             <span

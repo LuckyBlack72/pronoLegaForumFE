@@ -1,27 +1,7 @@
-<div class="container-fluid">
 
-  <div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
-      <div class="d-flex justify-content-between mb-1">
-          <div class="p-2">
-            <strong>Benvenuto :</strong> 
-            <span class="badge badge-pill text-center badge-success">{{nickname}}</span>
-            <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
-              <i class="fa fa-sign-out"></i> 
-            </button>  
-          </div>
-          <div class="p-2">
-              <strong>Sarà possibile inserire i pronostici per : </strong>
-              <span class="badge badge-pill text-center" 
-              [ngClass]="{'badge-success': !pronoClosed, 'badge-danger': pronoClosed }">
-                <countdown-timer [end]="dataChiusuraProno"></countdown-timer>
-              </span>
-          </div>
-        </div>
-    </div>
-    <div class="col-md-1"></div>
-  </div>
+<app-toolbar></app-toolbar>
+
+<div class="container-fluid">
   
   <div class="row">
     <div class="col-md-1"></div> 
