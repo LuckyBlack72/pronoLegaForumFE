@@ -88,6 +88,14 @@ export class PronosticiService {
 
   }
 
+  updateAnagraficaPartecipanti ( dataToSave: AnagraficaPartecipanti ): Observable<string> {
+
+    const postData = { anagraficaPartecipanti: dataToSave };
+
+    return this.http.post<string>(environment.backEndURL + '/partecipanti/updateAnagraficaPartecipanti', postData);
+
+  }
+
   getDatePronostici ( searchParameters: FiltroStagione ): Observable<DatePronostici> {
 
     return this.http.post<DatePronostici>(environment.backEndURL + '/pronostici/getDatePronostici', searchParameters);

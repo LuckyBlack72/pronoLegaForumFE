@@ -34,6 +34,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 // Hotkeys
 import { HotkeyModule } from 'angular2-hotkeys';
 import { CommandService } from './command.service';
+import { ProfiloComponent } from './profilo/profilo.component';
 // HotKeys
 
 @NgModule({
@@ -46,7 +47,8 @@ import { CommandService } from './command.service';
     MenuUtenteComponent,
     ClassificaComponent,
     PageheaderComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    ProfiloComponent
   ],
   imports: [
     BrowserModule,

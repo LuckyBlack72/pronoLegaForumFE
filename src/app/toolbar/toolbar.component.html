@@ -6,6 +6,9 @@
           <div class="p-2">
             <strong>Benvenuto :</strong> 
             <span class="badge badge-pill text-center badge-success">{{nickname}}</span>
+            <button type="button" class="btn btn-primary btn-sm active" title="Modifica Profilo" (click)="editProfile()">
+              <i class="fa fa-user-o"></i> 
+            </button>  
             <button *ngIf="backActive" type="button" class="btn btn-warning btn-sm active" title="Torna Indietro" (click)="back()">
               <i class="fa fa-arrow-circle-left"></i>
             </button>                

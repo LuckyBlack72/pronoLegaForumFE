@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { PronosticiService } from '../pronostici.service';
 import { FiltroAnagraficaPartecipanti, AnagraficaPartecipanti } from '../../models/models';
+import { UtilService } from '../util.service';
 
 @Component({
   selector: 'app-registrazione',
@@ -25,7 +26,7 @@ export class RegistrazioneComponent implements OnInit {
                                           password_value: ''
                                         };
 
-  constructor(private router: Router, private pronosticiService: PronosticiService) { }
+  constructor(private router: Router, private pronosticiService: PronosticiService, private utilService: UtilService) { }
 
   ngOnInit() {
   }
@@ -126,11 +127,7 @@ export class RegistrazioneComponent implements OnInit {
 
   checkEmail (): boolean {
 
-    let isValid = true;
-    isValid = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/.test(this.emailV);
-
-
-    return isValid;
+    return this.utilService.checkEmail(this.emailV);
 
   }
 

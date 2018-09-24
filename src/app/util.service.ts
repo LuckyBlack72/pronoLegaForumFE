@@ -62,6 +62,14 @@ export class UtilService {
 
   }
 
+  editProfile() {
+
+    this.dataService.menu_utente_page = true;
+    this.router.navigate(['/profilo']);
+
+  }
+
+
   exportPronosticiExcel(pronostici: Pronostici[], utente: string) {
 
     const workbook = XLSX.utils.book_new();
@@ -131,6 +139,16 @@ export class UtilService {
 
   private compare (a: any, b: any , isAsc: any): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  checkEmail (email: string): boolean {
+
+    let isValid = true;
+    isValid = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/.test(email);
+
+
+    return isValid;
+
   }
 
 
