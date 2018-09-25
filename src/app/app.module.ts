@@ -13,6 +13,8 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { CommandService } from './command.service';
 // HotKeys
 
+import { WebStorageModule } from 'ngx-store'; // gestione sessionstorage / localstorage
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -65,7 +67,8 @@ import { ProfiloComponent } from './profilo/profilo.component';
       customClass: 'modal-content'
     }),
     CountdownTimerModule.forRoot(),
-    HotkeyModule.forRoot()
+    HotkeyModule.forRoot(),
+    WebStorageModule
   ],
   // tslint:disable-next-line:max-line-length
   providers: [
