@@ -6,12 +6,15 @@ import { PronosticiComponent } from './pronostici/pronostici.component';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
 import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
 import { ClassificaComponent } from './classifica/classifica.component';
+import { ProfiloComponent } from './profilo/profilo.component';
 
 import { CompetizioniResolver } from '../resolvers/competizioni-resolver';
 import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
 import { ValoriPronosticiResolver } from '../resolvers/valoripronostici-resolver';
 import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 import { StagioniResolver } from '../resolvers/stagioni-resolver';
+import { AnagraficaPartecipantiResolver } from '../resolvers/anagraficapartecipanti-resolver';
+
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -44,6 +47,12 @@ const routes: Routes = [
     resolve: {
               listaStagioni: StagioniResolver,
             }
+  },
+  { path: 'profilo',
+    component: ProfiloComponent,
+    resolve: {
+              anagraficaPartecipante: AnagraficaPartecipantiResolver
+    }
   }
 ];
 

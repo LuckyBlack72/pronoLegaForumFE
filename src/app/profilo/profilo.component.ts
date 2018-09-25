@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { PronosticiService } from '../pronostici.service';
 import { FiltroAnagraficaPartecipanti, AnagraficaPartecipanti } from '../../models/models';
@@ -25,11 +25,20 @@ export class ProfiloComponent implements OnInit {
                                           email_address: '',
                                           password_value: ''
                                         };
+  anagraficaPartecipante: AnagraficaPartecipanti[];
 
-  constructor(private router: Router, private pronosticiService: PronosticiService, private utilService: UtilService) { }
+  constructor(private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private pronosticiService: PronosticiService,
+              private utilService: UtilService) { }
 
 
   ngOnInit() {
+
+      this.anagraficaPartecipante = this.activatedRoute.snapshot.data.anagraficaPartecipante;
+      this.nicknameV = this.anagraficaPartecipante[0].nickname;
+      this.emailV = this.anagraficaPartecipante[0].email_address;
+
   }
 
   async checkPasswordToConfirmSave() {
@@ -62,7 +71,6 @@ export class ProfiloComponent implements OnInit {
 
   }
 
-
   saveData() {
 
     let checkPassword = true;
@@ -78,7 +86,7 @@ export class ProfiloComponent implements OnInit {
         this.loading = true;
         this.dataToSave.nickname = this.nicknameV;
         this.dataToSave.email_address = this.emailV;
-        this.dataToSave.password_value = this.passwordV;
+        this.dataToSave.password_value = this.passwordV === undefined || this.passwordV === '' ? 'ZYZYZY' : this.passwordV;
         this.pronosticiService.updateAnagraficaPartecipanti(this.dataToSave)
         .subscribe(
           dataSaved => {
@@ -87,7 +95,7 @@ export class ProfiloComponent implements OnInit {
             Swal({
               allowOutsideClick: false,
               allowEscapeKey: false,
-              title: 'Registrazione Effettuata con successo',
+              title: 'Modifiche Effettuate con successo',
               type: 'success'
             });
           },
@@ -116,9 +124,12 @@ export class ProfiloComponent implements OnInit {
 
   checkPassword (): boolean {
 
+    const pVcheck = this.passwordV === undefined || this.passwordV === '' ? 'ZYZYZY' : this.passwordV;
+    const pcVcheck = this.passwordConfV === undefined || this.passwordConfV === '' ? 'ZYZYZY' : this.passwordV;
+
     let retVal = true;
 
-    if (this.passwordV !== this.passwordConfV) {
+    if ( pVcheck !== pcVcheck ) {
       retVal = false;
     }
 

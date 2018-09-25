@@ -8,6 +8,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
 
+// Hotkeys
+import { HotkeyModule } from 'angular2-hotkeys';
+import { CommandService } from './command.service';
+// HotKeys
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -22,6 +27,7 @@ import { ValoriPronosticiResolver } from '../resolvers/valoripronostici-resolver
 import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 import { StagioniResolver } from '../resolvers/stagioni-resolver';
 import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
+import { AnagraficaPartecipantiResolver } from '../resolvers/anagraficapartecipanti-resolver';
 
 import { IndexPageComponent } from './index-page/index-page.component';
 import { PronosticiComponent } from './pronostici/pronostici.component';
@@ -30,12 +36,7 @@ import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
 import { ClassificaComponent } from './classifica/classifica.component';
 import { PageheaderComponent } from './pageheader/pageheader.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-
-// Hotkeys
-import { HotkeyModule } from 'angular2-hotkeys';
-import { CommandService } from './command.service';
 import { ProfiloComponent } from './profilo/profilo.component';
-// HotKeys
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { ProfiloComponent } from './profilo/profilo.component';
               PronosticiResolver,
               DatePronosticiResolver,
               StagioniResolver,
-              CommandService
+              CommandService,
+              AnagraficaPartecipantiResolver
             ],
   bootstrap: [AppComponent]
 })

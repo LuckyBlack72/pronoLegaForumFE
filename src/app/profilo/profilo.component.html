@@ -22,14 +22,14 @@
 
           <div class="form-group text-left">
               <label for="password"><span class="badge badge-success">Password</span></label>
-              <input type="password" class="form-control" name="password" [(ngModel)]="passwordV" #password="ngModel" required />
-              <div *ngIf="f.submitted && !password.valid" class="help-block">Password obbligatoria</div>
+              <input type="password" class="form-control" name="password" [(ngModel)]="passwordV" #password="ngModel" />
+              <div *ngIf="f.submitted && passwordConf.dirty && password.untouched" class="help-block">Password obbligatoria</div>
           </div>
 
           <div class="form-group text-left">
             <label for="passwordConf"><span class="badge badge-success">Ripeti Password</span></label>
-            <input type="password" class="form-control" name="passwordConf" [(ngModel)]="passwordConfV" #passwordConf="ngModel" required />
-            <div *ngIf="f.submitted && !passwordConf.valid" class="help-block">Password Obbligatoria</div>
+            <input type="password" class="form-control" name="passwordConf" [(ngModel)]="passwordConfV" #passwordConf="ngModel" />
+            <div *ngIf="f.submitted && password.dirty && passwordConf.untouched" class="help-block">Conferma Password Obbligatoria</div>
           </div>
           
           <div class="form-group">

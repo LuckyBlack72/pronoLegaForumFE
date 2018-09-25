@@ -41,4 +41,10 @@ export class ToolbarComponent implements OnInit {
 
   }
 
+  editProfile() {
+
+    this.utilService.editProfile();
+
+  }
+
 }
