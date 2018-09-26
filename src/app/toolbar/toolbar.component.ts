@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { SessionStorage } from 'ngx-store';
 
-import { DataService } from '../dataservice.service';
+// import { DataService } from '../dataservice.service';
 import { UtilService } from '../util.service';
+
+import { ApplicationParameter } from '../../models/models';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,7 +14,7 @@ import { UtilService } from '../util.service';
 export class ToolbarComponent implements OnInit {
 
   constructor(
-    public dataService: DataService,
+    // public dataService: DataService,
     private utilService: UtilService
   ) { }
 
@@ -19,13 +22,14 @@ export class ToolbarComponent implements OnInit {
   dataChiusuraProno: string;
   nickname: string;
   backActive: boolean;
+  @SessionStorage() protected applicationParameter: ApplicationParameter;
 
   ngOnInit() {
 
-    this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
-    this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
-    this.dataChiusuraProno = this.dataService.data_chiusura;
-    this.backActive = this.dataService.menu_utente_page;
+    this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
+    this.pronoClosed = this.utilService.checkDateProno(this.applicationParameter.data_chiusura);
+    this.dataChiusuraProno = this.applicationParameter.data_chiusura;
+    this.backActive = this.applicationParameter.menu_utente_page;
 
   }
 

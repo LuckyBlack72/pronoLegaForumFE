@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SessionStorage } from 'ngx-store';
 
-import { DataService } from '../dataservice.service';
+// import { DataService } from '../dataservice.service';
 import { UtilService } from '../util.service';
+import { ApplicationParameter } from '../../models/models';
 
 @Component({
   selector: 'app-menu-utente',
@@ -13,12 +15,13 @@ export class MenuUtenteComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public dataService: DataService,
+    // public dataService: DataService,
     private utilService: UtilService
   ) { }
 
-  ngOnInit() {
+  @SessionStorage() protected applicationParameter: ApplicationParameter;
 
+  ngOnInit() {
   }
 
   navigatePage(page: String) {
@@ -26,12 +29,12 @@ export class MenuUtenteComponent implements OnInit {
     switch (page) {
 
       case 'p' :
-        this.dataService.menu_utente_page = true;
+        this.applicationParameter.menu_utente_page = true;
         this.router.navigate(['/pronostici']);
         break;
 
       case 'c' :
-        this.dataService.menu_utente_page = true;
+        this.applicationParameter.menu_utente_page = true;
         this.router.navigate(['/classifica']);
         break;
 

@@ -3,15 +3,22 @@ import { Router } from '@angular/router';
 import { Sort } from '@angular/material';
 
 import * as XLSX from 'xlsx';
+import { SessionStorage } from 'ngx-store';
 
-import { DataService } from './dataservice.service';
+// import { DataService } from './dataservice.service';
 import { Pronostici, ExcelRow } from '../models/models';
 import { Utils } from '../models/utils';
+import { ApplicationParameter } from '../models/models';
 
 @Injectable()
 export class UtilService {
 
-  constructor( private router: Router, public dataService: DataService, private utils: Utils ) { }
+  constructor(
+              private router: Router,
+              // public dataService: DataService,
+              private utils: Utils ) { }
+
+  @SessionStorage() protected applicationParameter: ApplicationParameter;
 
   checkDateProno(dateToCheck: string): boolean {
 
@@ -48,23 +55,23 @@ export class UtilService {
 
   logout(): void {
 
-    this.dataService.nickname = ''; // resetto
-    this.dataService.idPartecipante = 0; // resetto
-    this.dataService.menu_utente_page = false;
+    this.applicationParameter.nickname = ''; // resetto
+    this.applicationParameter.idPartecipante = 0; // resetto
+    this.applicationParameter.menu_utente_page = false;
     this.router.navigate(['/index-page']) ;
 
   }
 
   back() {
 
-    this.dataService.menu_utente_page = false;
+    this.applicationParameter.menu_utente_page = false;
     this.router.navigate(['/menu-utente']);
 
   }
 
   editProfile() {
 
-    this.dataService.menu_utente_page = true;
+    this.applicationParameter.menu_utente_page = true;
     this.router.navigate(['/profilo']);
 
   }

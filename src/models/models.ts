@@ -1,3 +1,13 @@
+export interface ApplicationParameter {
+
+  nickname: string;
+  idPartecipante: number;
+  data_apertura: string;
+  data_chiusura: string;
+  data_calcolo_classifica: string;
+  menu_utente_page: boolean;
+
+}
 export interface AnagraficaPartecipanti {
   id?: number;
   nickname?: string;
@@ -96,3 +106,4 @@ export interface DatiClassifica {
 export interface ExcelRow {
   [x: string]: string;
 }
+

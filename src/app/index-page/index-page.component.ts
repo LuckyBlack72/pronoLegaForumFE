@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { SessionStorage } from 'ngx-store';
 
 import { PronosticiService } from '../pronostici.service';
-import { DataService } from '../dataservice.service';
-import { DatePronostici } from '../../models/models';
+// import { DataService } from '../dataservice.service';
+import { DatePronostici, ApplicationParameter } from '../../models/models';
 
 @Component({
   selector: 'app-index-page',
@@ -19,21 +20,30 @@ export class IndexPageComponent implements OnInit {
   datePronostici: DatePronostici;
   @ViewChild('f') form: any;
 
+  @SessionStorage() applicationParameter: ApplicationParameter;
+
   constructor(
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private pronosticiService: PronosticiService,
-              public dataService: DataService
+              private pronosticiService: PronosticiService
+ //             public dataService: DataService
             ) { }
 
   ngOnInit() {
 
     this.datePronostici = this.activatedRoute.snapshot.data.datePronostici;
-    this.dataService.data_apertura = this.datePronostici[0].data_apertura;
-    this.dataService.data_chiusura = this.datePronostici[0].data_chiusura;
-    this.dataService.data_calcolo_classifica = this.datePronostici[0].data_calcolo_classifica;
-    this.dataService.nickname = '';
-    this.dataService.idPartecipante = 0;
+
+    // creo l'oggetto per il session storage da propagare in tutta l'applicazione
+    // viene distrutto quando si chiude il tab del browser con l'applicazione
+    // è nella memoria locale del browser
+    this.applicationParameter = {
+      data_apertura: this.datePronostici[0].data_apertura,
+      data_chiusura: this.datePronostici[0].data_chiusura,
+      data_calcolo_classifica : this.datePronostici[0].data_calcolo_classifica,
+      nickname: '',
+      idPartecipante: 0,
+      menu_utente_page: false
+    };
 
   }
 
@@ -44,11 +54,11 @@ export class IndexPageComponent implements OnInit {
       this.pronosticiService.checkPassword(this.nicknameV, this.passwordV)
           .subscribe(
               data => {
-                  this.dataService.nickname = this.nicknameV;
-                  this.dataService.idPartecipante = data;
+                  this.applicationParameter.nickname = this.nicknameV;
+                  this.applicationParameter.idPartecipante = data;
                   this.loading = false;
                   this.form.reset();
-                  this.dataService.menu_utente_page = false;
+                  this.applicationParameter.menu_utente_page = false;
                   this.router.navigate(['/menu-utente']) ;
               },
               error => {

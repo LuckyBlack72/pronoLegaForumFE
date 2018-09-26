@@ -3,9 +3,10 @@ import { MatPaginator, MatTableDataSource, Sort, MatSort } from '@angular/materi
 
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
+import { SessionStorage } from 'ngx-store';
 
 import { PronosticiService } from '../pronostici.service';
-import { DataService } from '../dataservice.service';
+// import { DataService } from '../dataservice.service';
 import { UtilService } from '../util.service';
 
 import { environment } from '../../environments/environment';
@@ -17,7 +18,8 @@ import {
           PuntiCompetizione,
           DatiClassifica,
           FiltroValoriPronostici,
-          ValoriPronosticiClassifica
+          ValoriPronosticiClassifica,
+          ApplicationParameter
       } from '../../models/models';
 
 @Component({
@@ -30,9 +32,11 @@ export class ClassificaComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private pronosticiService: PronosticiService,
-    public dataService: DataService,
+    // public dataService: DataService,
     private utilService: UtilService
   ) { }
+
+  @SessionStorage() protected applicationParameter: ApplicationParameter;
 
   @ViewChild('st') stCmb: ElementRef;
   @ViewChild('table') tabClassifica: ElementRef;
@@ -65,7 +69,7 @@ export class ClassificaComponent implements OnInit {
   ngOnInit() {
 
     this.listaStagioni = this.activatedRoute.snapshot.data.listaStagioni;
-    this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
+    this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
     this.showClassifica = false;
 
   }

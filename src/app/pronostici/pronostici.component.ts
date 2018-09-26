@@ -3,8 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+import { SessionStorage } from 'ngx-store';
 
-import { DataService } from '../dataservice.service';
+// import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../pronostici.service';
 import { UtilService } from '../util.service';
 import { Command, CommandService } from '../command.service';
@@ -16,7 +17,8 @@ import {
         ValoriPronosticiComboFiller,
         CheckDuplicateProno,
         ValoriPronosticiClassifica,
-        FiltroPronostici
+        FiltroPronostici,
+        ApplicationParameter
       } from '../../models/models';
 import { Utils } from '../../models/utils';
 
@@ -32,12 +34,14 @@ export class PronosticiComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private utils: Utils,
               private pronosticiService: PronosticiService,
-              public dataService: DataService,
+  //            public dataService: DataService,
               private utilService: UtilService,
               private commandService: CommandService
             ) {
     this.subscriptionHotKey = this.commandService.commands.subscribe(c => this.handleCommand(c));
   }
+
+  @SessionStorage() protected applicationParameter: ApplicationParameter;
 
   competizioni: AnagraficaCompetizioni[];
   valoriPronostici: ValoriPronostici[];
@@ -183,8 +187,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
       } else {
 
         this.pronosticiService.savePronostici(this.valoriPronosticiToSave,
-                                              this.dataService.nickname,
-                                              this.dataService.idPartecipante ).subscribe(
+                                              this.applicationParameter.nickname,
+                                              this.applicationParameter.idPartecipante ).subscribe(
           data => Swal({
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -286,7 +290,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   exportExcelPronostici(): void {
 
-    this.utilService.exportPronosticiExcel(this.valoriPronosticiToSave, this.dataService.nickname);
+    this.utilService.exportPronosticiExcel(this.valoriPronosticiToSave, this.applicationParameter.nickname);
 
   }
 
@@ -309,7 +313,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
     this.setAdmin(false);
     this.adminPassword = false;
-    this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
+    this.pronoClosed = this.utilService.checkDateProno(this.applicationParameter.data_chiusura);
     this.showProno = false;
 
   }
@@ -438,8 +442,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.cCCToSaveToPronostici = [];
     // ---------------------------
 
-    this.nickname = this.dataService.nickname; // mi prendo il valore di nickname dal servizio
-    this.idPartecipante = this.dataService.idPartecipante; // mi prendo il valore di id dal servizio
+    this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
+    this.idPartecipante = this.applicationParameter.idPartecipante; // mi prendo il valore di id dal servizio
 
     // setto l'array con i pronostici da salvare in modo che poi basti solo inserire il pronostico
     if (this.valoriPronosticiSaved.length === 0) {
@@ -499,7 +503,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     }
 
     this.showProno = false;
-    this.pronoClosed = this.utilService.checkDateProno(this.dataService.data_chiusura);
+    this.pronoClosed = this.utilService.checkDateProno(this.applicationParameter.data_chiusura);
 
   }
 

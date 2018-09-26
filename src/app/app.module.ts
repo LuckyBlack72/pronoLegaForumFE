@@ -19,7 +19,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { PronosticiService } from './pronostici.service';
-import { DataService } from './dataservice.service';
+// import { DataService } from './dataservice.service';
 import { UtilService } from './util.service';
 
 import { Utils } from '../models/utils';
@@ -75,7 +75,7 @@ import { ProfiloComponent } from './profilo/profilo.component';
               Utils,
               PronosticiService,
               UtilService,
-              DataService,
+              // DataService,
               CompetizioniResolver,
               ValoriPronosticiResolver,
               PronosticiResolver,
