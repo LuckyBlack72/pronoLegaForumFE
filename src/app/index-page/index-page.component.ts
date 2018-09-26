@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
-import { SessionStorage } from 'ngx-store';
+import { SessionStorage, LocalStorage } from 'ngx-store';
 
 import { PronosticiService } from '../pronostici.service';
 // import { DataService } from '../dataservice.service';
 import { DatePronostici, ApplicationParameter } from '../../models/models';
+import { Utils } from '../../models/utils';
 
 @Component({
   selector: 'app-index-page',
@@ -17,15 +18,16 @@ export class IndexPageComponent implements OnInit {
   nicknameV: string;
   passwordV: string;
   loading = false;
-  datePronostici: DatePronostici;
   @ViewChild('f') form: any;
 
+  @LocalStorage() datePronostici: DatePronostici;
   @SessionStorage() applicationParameter: ApplicationParameter;
 
   constructor(
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private pronosticiService: PronosticiService
+              private pronosticiService: PronosticiService,
+              private utils: Utils
  //             public dataService: DataService
             ) { }
 
