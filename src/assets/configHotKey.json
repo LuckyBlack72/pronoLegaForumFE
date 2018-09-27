@@ -1,7 +1,8 @@
 {
   "hotkeys": {
     "ctrl+up": [ "PronosticiComponent.SetAdmin" ],
-    "ctrl+down": [ "PronosticiComponent.UnsetAdmin" ]
+    "ctrl+down": [ "PronosticiComponent.UnsetAdmin" ],
+    "ctrl+left": [ "PronosticiComponent.AggiornaClassifica" ]
   }
 
 }

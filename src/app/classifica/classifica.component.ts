@@ -3,7 +3,7 @@ import { MatPaginator, MatTableDataSource, Sort, MatSort } from '@angular/materi
 
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
-import { SessionStorage } from 'ngx-store';
+import { SessionStorage, LocalStorage } from 'ngx-store';
 
 import { PronosticiService } from '../pronostici.service';
 // import { DataService } from '../dataservice.service';
@@ -37,6 +37,8 @@ export class ClassificaComponent implements OnInit {
   ) { }
 
   @SessionStorage() protected applicationParameter: ApplicationParameter;
+  @LocalStorage() listaStagioni: Stagioni[];
+
 
   @ViewChild('st') stCmb: ElementRef;
   @ViewChild('table') tabClassifica: ElementRef;
@@ -59,8 +61,8 @@ export class ClassificaComponent implements OnInit {
   // fsort: Sort;
   showClassifica: boolean;
   nickname: string;
-  listaStagioni: Stagioni[];
   datiPerClassifica: DatiClassifica[];
+  pronosticiUtenti: Pronostici[];
   dataSourceClassifica = new MatTableDataSource([]);
   datiperDataSourceClassifica: any[];
   // datiperDataSourceClassificaSorted: any[];

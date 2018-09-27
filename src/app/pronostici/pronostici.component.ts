@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
-import { SessionStorage } from 'ngx-store';
+import { SessionStorage, LocalStorage } from 'ngx-store';
 
 // import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../pronostici.service';
@@ -43,8 +43,9 @@ export class PronosticiComponent implements OnInit, OnDestroy {
 
   @SessionStorage() protected applicationParameter: ApplicationParameter;
 
-  competizioni: AnagraficaCompetizioni[];
-  valoriPronostici: ValoriPronostici[];
+  @LocalStorage() competizioni: AnagraficaCompetizioni[];
+  @LocalStorage() valoriPronostici: ValoriPronostici[];
+
   showProno: boolean;
   numberPronostici: number[] = [];
   numberPronosticiGt10: number[] = [];
@@ -306,6 +307,9 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
       case 'PronosticiComponent.UnsetAdmin':
         this.unsetAdminEnvironment();
         break;
+        case 'PronosticiComponent.AggiornaClassifica':
+        this.aggiornaClassifica();
+        break;
       }
   }
 
@@ -421,6 +425,30 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
         title: 'Password Administrator Errata',
         type: 'error'
       });
+    }
+
+  }
+
+  aggiornaClassifica(): void {
+
+    if (this.admin) {
+
+      Swal({
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        title: 'Classifiche competizioni aggiornate con successo',
+        type: 'success'
+      });
+
+    } else {
+
+      Swal({
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        title: 'Solo l\'amministratore di sistema può aggiornare la classifica',
+        type: 'error'
+      });
+
     }
 
   }

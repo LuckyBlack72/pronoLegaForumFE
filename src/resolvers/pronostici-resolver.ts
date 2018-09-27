@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { SessionStorage } from 'ngx-store';
+
 import { Utils } from '../models/utils';
 import { PronosticiService } from '../app/pronostici.service';
 import { Pronostici, FiltroPronostici, ApplicationParameter } from '../models/models';
