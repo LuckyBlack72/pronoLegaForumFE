@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { LocalStorage } from 'ngx-store';
 
 import { Utils } from '../models/utils';
-import { PronosticiService } from '../app/pronostici.service';
+import { PronosticiService } from '../app/service/pronostici.service';
 import { DatePronostici, FiltroStagione } from '../models/models';
 
 @Injectable()

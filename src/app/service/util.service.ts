@@ -6,9 +6,9 @@ import * as XLSX from 'xlsx';
 import { SessionStorage } from 'ngx-store';
 
 // import { DataService } from './dataservice.service';
-import { Pronostici, ExcelRow } from '../models/models';
-import { Utils } from '../models/utils';
-import { ApplicationParameter } from '../models/models';
+import { Pronostici, ExcelRow } from '../../models/models';
+import { Utils } from '../../models/utils';
+import { ApplicationParameter } from '../../models/models';
 
 @Injectable()
 export class UtilService {
@@ -157,6 +157,5 @@ export class UtilService {
     return isValid;
 
   }
-
 
 }

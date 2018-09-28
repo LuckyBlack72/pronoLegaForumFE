@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SessionStorage } from 'ngx-store';
 
 // import { DataService } from '../dataservice.service';
-import { UtilService } from '../util.service';
+import { UtilService } from '../service/util.service';
 
 import { ApplicationParameter } from '../../models/models';
 

@@ -10,7 +10,7 @@ import { CountdownTimerModule } from 'ngx-countdown-timer';
 
 // Hotkeys
 import { HotkeyModule } from 'angular2-hotkeys';
-import { CommandService } from './command.service';
+import { CommandService } from './service/command.service';
 // HotKeys
 
 import { WebStorageModule } from 'ngx-store'; // gestione sessionstorage / localstorage
@@ -18,9 +18,10 @@ import { WebStorageModule } from 'ngx-store'; // gestione sessionstorage / local
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { PronosticiService } from './pronostici.service';
+import { PronosticiService } from './service/pronostici.service';
 // import { DataService } from './dataservice.service';
-import { UtilService } from './util.service';
+import { UtilService } from './service/util.service';
+import { ExternalApiService } from './service/externalApi.service';
 
 import { Utils } from '../models/utils';
 
@@ -39,6 +40,7 @@ import { ClassificaComponent } from './classifica/classifica.component';
 import { PageheaderComponent } from './pageheader/pageheader.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfiloComponent } from './profilo/profilo.component';
+
 
 @NgModule({
   declarations: [
@@ -82,7 +84,8 @@ import { ProfiloComponent } from './profilo/profilo.component';
               DatePronosticiResolver,
               StagioniResolver,
               CommandService,
-              AnagraficaPartecipantiResolver
+              AnagraficaPartecipantiResolver,
+              ExternalApiService
             ],
   bootstrap: [AppComponent]
 })

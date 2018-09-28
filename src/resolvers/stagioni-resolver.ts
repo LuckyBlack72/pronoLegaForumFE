@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { Observable, of } from 'rxjs';
 import { LocalStorage } from 'ngx-store';
 
-import { PronosticiService } from '../app/pronostici.service';
+import { PronosticiService } from '../app/service/pronostici.service';
 import { Stagioni } from '../models/models';
 import { Utils } from '../models/utils';
 

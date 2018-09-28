@@ -24,10 +24,10 @@ export class CommandService {
   commands: Observable<Command>;
 
   constructor(private hotkeysService: HotkeysService, private http: HttpClient) {
-    
+
     this.subject = new Subject<Command>();
     this.commands = this.subject.asObservable();
-    
+
     this.http.get<ConfigModel>('assets/configHotKey.json').subscribe(
       data => {
                   for (const key in data.hotkeys) {

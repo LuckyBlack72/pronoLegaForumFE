@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SessionStorage } from 'ngx-store';
-import { PronosticiService } from '../app/pronostici.service';
+import { PronosticiService } from '../app/service/pronostici.service';
 // import { DataService } from '../app/dataservice.service';
 import { AnagraficaPartecipanti, FiltroAnagraficaPartecipanti, ApplicationParameter } from '../models/models';
 

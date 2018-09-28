@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { SessionStorage, LocalStorage } from 'ngx-store';
 
-import { PronosticiService } from '../pronostici.service';
+import { PronosticiService } from '../service/pronostici.service';
 // import { DataService } from '../dataservice.service';
 import { DatePronostici, ApplicationParameter } from '../../models/models';
 import { Utils } from '../../models/utils';

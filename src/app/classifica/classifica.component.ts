@@ -5,9 +5,9 @@ import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { SessionStorage, LocalStorage } from 'ngx-store';
 
-import { PronosticiService } from '../pronostici.service';
+import { PronosticiService } from '../service/pronostici.service';
 // import { DataService } from '../dataservice.service';
-import { UtilService } from '../util.service';
+import { UtilService } from '../service/util.service';
 
 import { environment } from '../../environments/environment';
 
@@ -241,7 +241,7 @@ export class ClassificaComponent implements OnInit {
               if ( x === y ) { // stessa posizione
                 retVal += valoriClassifica[i].punti_esatti;
               } else { // posizioni differenti
-                if ( valoriClassifica[i].tipo_competizione === 'CMP' ) { // campionati
+                if ( valoriClassifica[i].tipo_competizione === 'CMP' || valoriClassifica[i].tipo_competizione === 'SCO' ) { // campionati
                   retVal += valoriClassifica[i].punti_lista;
                 } else { // coppe
                   if ( x > 1 && y > 1 ) { // nelle coppe 3 e 4 sono esatti anche se invertiti

@@ -6,9 +6,10 @@ import Swal from 'sweetalert2';
 import { SessionStorage, LocalStorage } from 'ngx-store';
 
 // import { DataService } from '../dataservice.service';
-import { PronosticiService } from '../pronostici.service';
-import { UtilService } from '../util.service';
-import { Command, CommandService } from '../command.service';
+import { PronosticiService } from '../service/pronostici.service';
+import { UtilService } from '../service/util.service';
+import { ExternalApiService } from '../service/externalApi.service';
+import { Command, CommandService } from '../service/command.service';
 
 import {
         AnagraficaCompetizioni,
@@ -20,6 +21,7 @@ import {
         FiltroPronostici,
         ApplicationParameter
       } from '../../models/models';
+
 import { Utils } from '../../models/utils';
 
 @Component({
@@ -36,7 +38,8 @@ export class PronosticiComponent implements OnInit, OnDestroy {
               private pronosticiService: PronosticiService,
   //            public dataService: DataService,
               private utilService: UtilService,
-              private commandService: CommandService
+              private commandService: CommandService,
+              private externalApiService: ExternalApiService
             ) {
     this.subscriptionHotKey = this.commandService.commands.subscribe(c => this.handleCommand(c));
   }
@@ -431,14 +434,57 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   aggiornaClassifica(): void {
 
+    const dataFromApi: any[] = [];
+    const datiCompetizioni: AnagraficaCompetizioni[] = [];
+    let dataToSaveOnDb: Pronostici[] = [];
+
     if (this.admin) {
 
-      Swal({
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        title: 'Classifiche competizioni aggiornate con successo',
-        type: 'success'
-      });
+      for ( let i = 0; i < this.competizioni.length; i++) {
+
+        this.externalApiService.getAggiornamentiCompetizioni(
+                                                              this.utils.getStagione().substring(0, 4),
+                                                              this.competizioni[i]
+        ).subscribe(
+          apiData => {
+
+            dataFromApi.push(apiData);
+            datiCompetizioni.push({id: this.competizioni[i].id,
+                                   numero_pronostici: this.competizioni[i].numero_pronostici,
+                                   tipo_competizione: this.competizioni[i].tipo_competizione});
+          }
+          ,
+          error => Swal({
+                          allowOutsideClick: false,
+                          allowEscapeKey: false,
+                          title: 'Errore Aggiornamento Automatico Classifiche Competizioni',
+                          type: 'error'
+                        })
+        );
+
+      }
+
+      dataToSaveOnDb = this.externalApiService.transformApiDataToPronosticiData(
+        dataFromApi,
+        datiCompetizioni,
+        parseInt(this.utils.getStagione().substring(0, 4), 10)
+      );
+
+      this.pronosticiService.saveClassificaCompetizioni(dataToSaveOnDb).subscribe(
+        data => Swal({
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          title: 'Aggiornamento Automatico Classifiche Competizioni Completato',
+          type: 'success'
+        })
+        ,
+        error => Swal({
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          title: 'Errore Aggiornamento Automatico Classifiche Competizioni',
+          type: 'error'
+        })
+      );
 
     } else {
 

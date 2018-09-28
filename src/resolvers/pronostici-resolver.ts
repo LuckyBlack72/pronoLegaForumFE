@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { SessionStorage } from 'ngx-store';
 
 import { Utils } from '../models/utils';
-import { PronosticiService } from '../app/pronostici.service';
+import { PronosticiService } from '../app/service/pronostici.service';
 import { Pronostici, FiltroPronostici, ApplicationParameter } from '../models/models';
 // import { DataService } from '../app/dataservice.service';
 

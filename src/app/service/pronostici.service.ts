@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 import { ValoriPronostici,
         FiltroValoriPronostici,
@@ -15,7 +15,7 @@ import { ValoriPronostici,
         DatePronostici,
         FiltroStagione,
         Stagioni,
-        ValoriPronosticiClassifica} from '../models/models';
+        ValoriPronosticiClassifica} from '../../models/models';
 
 @Injectable()
 export class PronosticiService {

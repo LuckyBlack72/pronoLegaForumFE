@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
-import { PronosticiService } from '../pronostici.service';
+import { PronosticiService } from '../service/pronostici.service';
 import { FiltroAnagraficaPartecipanti, AnagraficaPartecipanti } from '../../models/models';
-import { UtilService } from '../util.service';
+import { UtilService } from '../service/util.service';
 
 @Component({
   selector: 'app-profilo',
