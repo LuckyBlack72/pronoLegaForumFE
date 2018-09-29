@@ -107,3 +107,9 @@ export interface ExcelRow {
   [x: string]: string;
 }
 
+export interface ApiTransdforReturnValue {
+  datiToSaveOnDb?: Pronostici[];
+  competizioniAggiornate?: string[];
+  competizioniNonAggiornate?: string[];
+}
+
