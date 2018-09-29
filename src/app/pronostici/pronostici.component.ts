@@ -170,12 +170,20 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
   salvaPronosticiClassifica()  {
 
     const check = this.checkPronoToSave();
+    const dataToSaveArray: Pronostici[] = [];
 
     if (check.check) {
 
       if (this.admin) { // admin salva la classifica
 
-          this.pronosticiService.saveClassificaCompetizioni(this.cCCToSaveToPronostici).subscribe(
+          for (let i = 0; i < this.cCCToSaveToPronostici.length; i++) {
+            if (this.cCCToSaveToPronostici[i].id_competizione === this.idCompToselect) {
+              dataToSaveArray.push(this.cCCToSaveToPronostici[i]);
+              break;
+            }
+          }
+
+          this.pronosticiService.saveClassificaCompetizioni(dataToSaveArray).subscribe(
           data => Swal({
             allowOutsideClick: false,
             allowEscapeKey: false,
@@ -456,6 +464,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
               dataFromApi.push(apiData[i]);
               datiCompetizioni.push({id: this.competizioni[i].id,
+                                     competizione: this.competizioni[i].competizione,
                                      numero_pronostici: this.competizioni[i].numero_pronostici,
                                      tipo_competizione: this.competizioni[i].tipo_competizione});
             }
@@ -483,6 +492,42 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
                           title: messageText,
                           type: 'success'
                         });
+                        /*
+                        const searchParameter: FiltroPronostici = { stagione: parseInt(this.utils.getStagione().substring(0, 4), 10) };
+                        this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameter).subscribe(
+                          dataSaved => {
+
+                            this.calcoloClassificaCompetizioniSaved = dataSaved;
+                            this.cCCToSaveToPronostici = [];
+                            for ( let i = 0; i < this.calcoloClassificaCompetizioniSaved.length; i++ ) {
+                              for ( let x = 0; x < this.competizioni.length; x++ ) {
+                                if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
+                                  const prono = [];
+                                  for (let y = 0; y < this.competizioni[x].numero_pronostici; y++) {
+                                    prono.push(this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica[y]);
+                                  }
+                                  const pronostico: Pronostici = {
+                                    id_partecipanti: 0,
+                                    stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                                    id_competizione: this.competizioni[x].id,
+                                    pronostici: prono
+                                  };
+                                  this.cCCToSaveToPronostici.push(pronostico);
+                                  break;
+                                }
+                              }
+                            }
+                            Swal({
+                              allowOutsideClick: false,
+                              allowEscapeKey: false,
+                              title: messageText,
+                              type: 'success'
+                            });
+                          }
+                          ,
+                          errorSaved => null
+                        );
+                        */
               }
               ,
               error => Swal({

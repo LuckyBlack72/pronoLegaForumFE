@@ -66,6 +66,28 @@ export class ExternalApiService {
     const competizioniNonAggiornate: string[] = [];
 
     for (let i = 0; i < apiData.length; i++) {
+
+      if (datiCompetizioni[i].tipo_competizione === 'SCO') {
+        if ( apiData[i].data.topscorers.length > 0 ) {
+          competizioniAggiornate.push(datiCompetizioni[i].competizione);
+          for (let x = 1; x <= datiCompetizioni[i].numero_pronostici; x++ ) {
+            pronostici.push(apiData[i].data.topscorers[(x - 1)].fullname);
+          }
+        } else {
+          competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
+        }
+      } else {
+        if ( apiData[i].data.standings.length > 0 ) {
+          competizioniAggiornate.push(datiCompetizioni[i].competizione);
+          for (let x = 1; x <= datiCompetizioni[i].numero_pronostici; x++ ) {
+            pronostici.push(this.decodeTeamName(apiData[i].data.standings[(x - 1)].team));
+          }
+        } else {
+          competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
+        }
+      }
+
+      /*
       for (let x = 1; x <= datiCompetizioni[i].numero_pronostici; x++ ) {
         if (datiCompetizioni[i].tipo_competizione === 'SCO') {
           if ( apiData[i].data.topscorers.length > 0 ) {
@@ -73,6 +95,7 @@ export class ExternalApiService {
             competizioniAggiornate.push(datiCompetizioni[i].competizione);
           } else {
             competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
+            break;
           }
         } else {
           if ( apiData[i].data.standings.length > 0 ) {
@@ -80,9 +103,11 @@ export class ExternalApiService {
             competizioniAggiornate.push(datiCompetizioni[i].competizione);
           } else {
             competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
+            break;
           }
         }
       }
+      */
 
       if (pronostici.length > 0 ) {
         datiToInsertInDb.push(
