@@ -68,6 +68,7 @@ export class ExternalApiService {
     // tslint:disable-next-line:max-line-length
     const reloadData = <Observable<ValoriPronosticiClassifica[]>> this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameterForReload);
 
+    // finisce la prima richiesta , aspettea 1,5 secondi e poi esegue la seconda e manda i valori della seconda
     return saveData.pipe(mergeMap(saved => timer(1500).pipe(switchMap(() => reloadData))));
 
     /*
