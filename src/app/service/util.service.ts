@@ -103,7 +103,6 @@ export class UtilService {
 
   }
 
-
   exportClassificaExcel(datiClassifica: any[]) {
 
     const fsort: Sort = { active: 'Totale', direction: 'desc'};
@@ -128,7 +127,6 @@ export class UtilService {
                   ); // scrive il file e di conseguenza te lo fa salvare
 
   }
-
 
   private sortData(sort: Sort, datiToSort: any[]): any[] {
     const data = datiToSort.slice();
