@@ -1,15 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, timer } from 'rxjs';
+import { switchMap, mergeMap } from 'rxjs/operators';
 
-import { AnagraficaCompetizioni, Pronostici, ApiTransdforReturnValue } from '../../models/models';
+import {
+          AnagraficaCompetizioni,
+          Pronostici,
+          FiltroPronostici,
+          ValoriPronosticiClassifica,
+          ApiTransformReturnValue
+        } from '../../models/models';
+
 import { Utils } from '../../models/utils';
+import { PronosticiService } from './pronostici.service';
 
 @Injectable()
 export class ExternalApiService {
 
-  constructor ( private http: HttpClient, private utils: Utils ) { }
+  constructor ( private http: HttpClient, private utils: Utils, private pronosticiService: PronosticiService ) { }
 
   buildApiCallsUrl (stagione: string, competizioni: AnagraficaCompetizioni[]): string[] {
 
@@ -53,15 +62,34 @@ export class ExternalApiService {
 
   }
 
+  saveAndReloadClassificheCompetizioni(dataToSave: Pronostici[], searchParameterForReload: FiltroPronostici): Observable<any> {
+
+    const saveData = <Observable<string>> this.pronosticiService.saveClassificaCompetizioni(dataToSave);
+    // tslint:disable-next-line:max-line-length
+    const reloadData = <Observable<ValoriPronosticiClassifica[]>> this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameterForReload);
+
+    return saveData.pipe(mergeMap(saved => timer(1500).pipe(switchMap(() => reloadData))));
+
+    /*
+    return forkJoin (
+      <Observable<string>> this.pronosticiService.saveClassificaCompetizioni(dataToSave),
+      // tslint:disable-next-line:max-line-length
+      timer(1500).pipe(switchMap(() =>
+        <Observable<ValoriPronosticiClassifica[]>> this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameterForReload))
+    ));
+    */
+
+  }
+
   transformApiDataToPronosticiData(
                                     apiData: any[],
                                     datiCompetizioni: AnagraficaCompetizioni[],
                                     stagione: number
-                                  ):  ApiTransdforReturnValue {
+                                  ):  ApiTransformReturnValue {
 
     let pronostici: string[] = [];
     const datiToInsertInDb: Pronostici[] = [];
-    let retVal: ApiTransdforReturnValue;
+    let retVal: ApiTransformReturnValue;
     const competizioniAggiornate: string[] = [];
     const competizioniNonAggiornate: string[] = [];
 
@@ -86,28 +114,6 @@ export class ExternalApiService {
           competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
         }
       }
-
-      /*
-      for (let x = 1; x <= datiCompetizioni[i].numero_pronostici; x++ ) {
-        if (datiCompetizioni[i].tipo_competizione === 'SCO') {
-          if ( apiData[i].data.topscorers.length > 0 ) {
-            pronostici.push(apiData[i].data.topscorers[(x - 1)].fullname);
-            competizioniAggiornate.push(datiCompetizioni[i].competizione);
-          } else {
-            competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
-            break;
-          }
-        } else {
-          if ( apiData[i].data.standings.length > 0 ) {
-            pronostici.push(this.decodeTeamName(apiData[i].data.standings[(x - 1)].team));
-            competizioniAggiornate.push(datiCompetizioni[i].competizione);
-          } else {
-            competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
-            break;
-          }
-        }
-      }
-      */
 
       if (pronostici.length > 0 ) {
         datiToInsertInDb.push(

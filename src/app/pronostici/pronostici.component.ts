@@ -20,7 +20,7 @@ import {
         ValoriPronosticiClassifica,
         FiltroPronostici,
         ApplicationParameter,
-        ApiTransdforReturnValue
+        ApiTransformReturnValue
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -446,7 +446,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
     const dataFromApi: any[] = [];
     const datiCompetizioni: AnagraficaCompetizioni[] = [];
-    let dataToSaveOnDb: ApiTransdforReturnValue;
+    let dataToSaveOnDb: ApiTransformReturnValue;
     let urlsToCall: string[] = [];
 
     if (this.admin) {
@@ -475,59 +475,59 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
               parseInt(this.utils.getStagione().substring(0, 4), 10)
             );
 
-            this.pronosticiService.saveClassificaCompetizioni(dataToSaveOnDb.datiToSaveOnDb).subscribe(
-              data => {
+            const searchParameter: FiltroPronostici = { stagione: parseInt(this.utils.getStagione().substring(0, 4), 10) };
+            this.externalApiService.saveAndReloadClassificheCompetizioni(dataToSaveOnDb.datiToSaveOnDb, searchParameter).subscribe(
+              dataObject => {
+
+                console.log(dataObject);
+
                         let messageText: string;
-                        messageText = 'Classifiche Competizioni Aggiornate \n';
+                        messageText = '<p class="text-primary">Aggiornate :</p>';
                         for (let i = 0; i < dataToSaveOnDb.competizioniAggiornate.length; i++) {
-                          messageText += dataToSaveOnDb.competizioniAggiornate[i] + '\n';
+                          messageText += '<p class="text-success">' + dataToSaveOnDb.competizioniAggiornate[i] + '</p>';
                         }
-                        messageText += 'Classifiche Competizioni Non Aggiornate \n';
+                        messageText += '<p class="text-primary">Non Aggiornate :</p>';
                         for (let i = 0; i < dataToSaveOnDb.competizioniNonAggiornate.length; i++) {
-                          messageText += dataToSaveOnDb.competizioniNonAggiornate[i] + '\n';
+                          messageText += '<p class="text-danger">' + dataToSaveOnDb.competizioniNonAggiornate[i] + '</p>';
                         }
+                        this.calcoloClassificaCompetizioniSaved = dataObject;
+
+                        this.cCCToSaveToPronostici = [];
+                        for ( let i = 0; i < this.calcoloClassificaCompetizioniSaved.length; i++ ) {
+                          for ( let x = 0; x < this.competizioni.length; x++ ) {
+                            if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
+                              const prono = [];
+                              for (let y = 0; y < this.competizioni[x].numero_pronostici; y++) {
+                                prono.push(this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica[y]);
+                              }
+                              const pronostico: Pronostici = {
+                                id_partecipanti: 0,
+                                stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                                id_competizione: this.competizioni[x].id,
+                                pronostici: prono
+                              };
+                              this.cCCToSaveToPronostici.push(pronostico);
+                              break;
+                            }
+                          }
+                        }
+                        this.showProno = false;
                         Swal({
                           allowOutsideClick: false,
                           allowEscapeKey: false,
-                          title: messageText,
+                          title: 'Aggiornamento Automatico',
+                          html: messageText,
                           type: 'success'
                         });
-                        /*
-                        const searchParameter: FiltroPronostici = { stagione: parseInt(this.utils.getStagione().substring(0, 4), 10) };
-                        this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameter).subscribe(
-                          dataSaved => {
-
-                            this.calcoloClassificaCompetizioniSaved = dataSaved;
-                            this.cCCToSaveToPronostici = [];
-                            for ( let i = 0; i < this.calcoloClassificaCompetizioniSaved.length; i++ ) {
-                              for ( let x = 0; x < this.competizioni.length; x++ ) {
-                                if ( this.calcoloClassificaCompetizioniSaved[i].id_competizione === this.competizioni[x].id ) {
-                                  const prono = [];
-                                  for (let y = 0; y < this.competizioni[x].numero_pronostici; y++) {
-                                    prono.push(this.calcoloClassificaCompetizioniSaved[i].valori_pronostici_classifica[y]);
-                                  }
-                                  const pronostico: Pronostici = {
-                                    id_partecipanti: 0,
-                                    stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
-                                    id_competizione: this.competizioni[x].id,
-                                    pronostici: prono
-                                  };
-                                  this.cCCToSaveToPronostici.push(pronostico);
-                                  break;
-                                }
-                              }
-                            }
-                            Swal({
-                              allowOutsideClick: false,
-                              allowEscapeKey: false,
-                              title: messageText,
-                              type: 'success'
-                            });
-                          }
-                          ,
-                          errorSaved => null
-                        );
-                        */
+                  }
+                  ,
+                  error => Swal({
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    title: 'Errore Aggiornamento Automatico Classifiche Competizioni',
+                    type: 'error'
+                  })
+                );
               }
               ,
               error => Swal({
@@ -537,16 +537,6 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
                 type: 'error'
               })
             );
-
-          }
-          ,
-          error => Swal({
-                          allowOutsideClick: false,
-                          allowEscapeKey: false,
-                          title: 'Errore Aggiornamento Automatico Classifiche Competizioni',
-                          type: 'error'
-                        })
-        );
 
     } else {
 
