@@ -1,7 +1,8 @@
 
 <app-toolbar></app-toolbar>
 
-<div class="container-fluid">
+<!-- Desktop and tablet -->
+<div *ngIf="!isMobile" class="container-fluid">
   
   <div class="row">
     <div class="col-md-1"></div> 
@@ -17,4 +18,31 @@
 
 </div>
 
+<!-- mobile -->
+<div *ngIf="isMobile" class="container-fluid">
+  
+  <div class="row">
+      &nbsp;
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-2"></div> 
+    <div class="col-sm-8">
+      <button  class="btn-block btn-lg" mat-raised-button color="warn" (click)="navigatePage('p')" title="pronostici">Pronostici</button>
+    </div> 
+    <div class="col-sm-2"></div> 
+  </div>
+  
+  <div class="row">
+    &nbsp;
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-2"></div> 
+    <div class="col-sm-8">
+      <button class="btn-block btn-lg" mat-raised-button color="primary" (click)="navigatePage('c')" title="classifica">Classifica</button>
+    </div> 
+    <div class="col-sm-2"></div> 
+  </div>
 
+</div>

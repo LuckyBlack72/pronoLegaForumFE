@@ -1,99 +1,69 @@
 <app-toolbar></app-toolbar>
 
-<div class="container-fluid">
-  <hotkeys-cheatsheet title="Comandi Nascosti"></hotkeys-cheatsheet>
-  <div class="row">
-    <div class="col-md-12">
-      <div class="rounded btn-group btn-group-lg mx-auto"
-          [ngClass]="{
-            'divButton': !admin,
-            'divButtonAdmin': admin }"
-      >
-        <button 
-          *ngIf="admin"
-          disabled
-          type="button" 
-          class="btn btn-danger w-100 h-100 btn-lg active"  
+<!-- Desktop -->
+<div *ngIf="isDesktopDevice">
+  <div class="container-fluid">
+    
+    <hotkeys-cheatsheet title="Comandi Nascosti"></hotkeys-cheatsheet>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div class="rounded btn-group btn-group-lg mx-auto"
+            [ngClass]="{
+              'divButton': !admin,
+              'divButtonAdmin': admin }"
         >
-          Admin Mode
-        </button>         
-        <button *ngFor="let competizione of competizioni" type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="fillPronostici(competizione.numero_pronostici, competizione.id)">
-            {{competizione.competizione}} 
-            <span
-              *ngIf="!admin"
-              class="badge badge-pill text-center"
-              [ngClass]="{
-                          'badge-success': (competizione.numero_pronostici - competizione.pronostici_inseriti) == 0, 
-                          'badge-warning': (competizione.numero_pronostici - competizione.pronostici_inseriti) > 0 }" 
-            >
-              {{competizione.pronostici_inseriti}} / {{competizione.numero_pronostici}}
-            </span>
-        </button>          
-        <button 
+          <button 
+            *ngIf="admin"
+            disabled
             type="button" 
-            class="btn btn-success w-100 h-100 btn-lg active" 
-            title="Salva i Dati" 
-            (click)="salvaPronosticiClassifica()"
-            [disabled]="!showProno">
-            <i class="fa fa-floppy-o"></i>  
-        </button>          
-        <button 
-            [disabled]="admin"
-            type="button" 
-            class="btn btn-secondary w-100 h-100 btn-lg active" 
-            title="Exporta i pronostici in Excel" 
-            (click)="exportExcelPronostici()"
-            >
-            <i class="fa fa-file-excel-o"></i>  
-        </button>          
+            class="btn btn-danger w-100 h-100 btn-lg active"  
+          >
+            Admin Mode
+          </button>         
+          <button *ngFor="let competizione of competizioni" type="button" class="btn btn-primary w-100 h-100 btn-lg active" (click)="fillPronostici(competizione.numero_pronostici, competizione.id)">
+              {{competizione.competizione}} 
+              <span
+                *ngIf="!admin"
+                class="badge badge-pill text-center"
+                [ngClass]="{
+                            'badge-success': (competizione.numero_pronostici - competizione.pronostici_inseriti) == 0, 
+                            'badge-warning': (competizione.numero_pronostici - competizione.pronostici_inseriti) > 0 }" 
+              >
+                {{competizione.pronostici_inseriti}} / {{competizione.numero_pronostici}}
+              </span>
+          </button>          
+          <button 
+              type="button" 
+              class="btn btn-success w-100 h-100 btn-lg active" 
+              title="Salva i Dati" 
+              (click)="salvaPronosticiClassifica()"
+              [disabled]="!showProno">
+              <i class="fa fa-floppy-o"></i>  
+          </button>          
+          <button 
+              [disabled]="admin"
+              type="button" 
+              class="btn btn-secondary w-100 h-100 btn-lg active" 
+              title="Exporta i pronostici in Excel" 
+              (click)="exportExcelPronostici()"
+              >
+              <i class="fa fa-file-excel-o"></i>  
+          </button>          
 
-      </div> 
-    </div>   
-  </div>
-  <br>
-  <div *ngIf="showProno" class="row">
-      <div class="col-md-3">
-        <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
-      </div>
-      <div class="mx-auto" [ngClass]="{'col-md-3 divTableLeft':pronosticiGt10, 'col-md-6 divTableFull':!pronosticiGt10 }">
-        <table class="table table-bordered tableCenter" [ngClass]="{'table-sm':pronosticiGt10}">
-          <thead class="table-warning">
-            <tr>
-              <th>Posizione</th>
-              <th>Pronostico</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let e of numberPronostici">
-              <td class="align-middle">
-                  <span class="badge badge-pill text-center badge-success">{{e}}</span>
-              </td>
-              <td>
-                <div *ngIf="!admin">
-                  <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
-                          (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
-                          style="height:25px"
-                          [disabled]="pronoClosed"
-                  >
-                    <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
-                    <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
-                  </select>
-                </div>
-                <div *ngIf="admin">
-                  <select [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
-                    style="height:25px"
-                  >
-                    <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
-                    <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
-                  </select>
-                </div>
-              </td>
-            </tr>
-          </tbody>  
-        </table>
-      </div>
-      <div *ngIf="pronosticiGt10" class="col-md-3 divTableRight mx-auto">
-          <table class="table table-sm table-bordered tableCenter">
+        </div> 
+      </div>   
+    </div>
+
+    <div class="row">
+    </div>
+    
+    <div *ngIf="showProno" class="row">
+        <div class="col-md-3">
+          <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
+        </div>
+        <div class="mx-auto" [ngClass]="{'col-md-3 divTableLeft':pronosticiGt10, 'col-md-6 divTableFull':!pronosticiGt10 }">
+          <table class="table table-bordered tableCenter" [ngClass]="{'table-sm':pronosticiGt10}">
             <thead class="table-warning">
               <tr>
                 <th>Posizione</th>
@@ -101,9 +71,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let e of numberPronosticiGt10">
+              <tr *ngFor="let e of numberPronostici">
                 <td class="align-middle">
-                  <span class="badge badge-pill text-center badge-success">{{e}}</span>
+                    <span class="badge badge-pill text-center badge-success">{{e}}</span>
                 </td>
                 <td>
                   <div *ngIf="!admin">
@@ -118,24 +88,200 @@
                   </div>
                   <div *ngIf="admin">
                     <select [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
-                            style="height:25px"
+                      style="height:25px"
                     >
                       <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
                       <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
                     </select>
                   </div>
                 </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="col-md-3">
-        <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
-      </div>
-  </div>
+              </tr>
+            </tbody>  
+          </table>
+        </div>
+        <div *ngIf="pronosticiGt10" class="col-md-3 divTableRight mx-auto">
+            <table class="table table-sm table-bordered tableCenter">
+              <thead class="table-warning">
+                <tr>
+                  <th>Posizione</th>
+                  <th>Pronostico</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let e of numberPronosticiGt10">
+                  <td class="align-middle">
+                    <span class="badge badge-pill text-center badge-success">{{e}}</span>
+                  </td>
+                  <td>
+                    <div *ngIf="!admin">
+                      <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                              (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
+                              style="height:25px"
+                              [disabled]="pronoClosed"
+                      >
+                        <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                        <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                      </select>
+                    </div>
+                    <div *ngIf="admin">
+                      <select [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                              style="height:25px"
+                      >
+                        <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                        <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                      </select>
+                    </div>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-3">
+          <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
+        </div>
+    </div>
 
+  </div>
 </div>
 
+<!-- Tablet e Mobile -->
+<div *ngIf="!isDesktopDevice">
+    <div class="container-fluid">
+      
+      <hotkeys-cheatsheet title="Comandi Nascosti"></hotkeys-cheatsheet>
+      
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="rounded mx-auto"
+              [ngClass]="{
+                'divButton': !admin,
+                'divButtonAdmin': admin }"
+          >
+            <div class="form-group">
+
+              <h4><label for="cmp" class="badge badge-info">Competizione</label></h4>
+              <select #st id="cmp" (change)="fillPronostici(0, $event.target.value)"> <!-- 0 capisco che sto usando la select -->
+                <option class="form-control" value="XXX">Seleziona una Competizione</option> <!-- not selected / blank option -->
+                <option class="form-control" *ngFor="let competizione of competizioni" [value]="competizione.id">
+                  {{ competizione.competizione }} [{{competizione.pronostici_inseriti}} / {{competizione.numero_pronostici}}]
+                </option>
+              </select>
+
+              <button 
+                  type="button" 
+                  class="btn btn-success btn-sm active" 
+                  title="Salva i Dati" 
+                  (click)="salvaPronosticiClassifica()"
+                  [disabled]="!showProno"
+              >
+                <i class="fa fa-floppy-o"></i>  
+              </button>          
+              <button 
+                  [disabled]="admin"
+                  type="button" 
+                  class="btn btn-secondary btn-sm active" 
+                  title="Exporta i pronostici in Excel" 
+                  (click)="exportExcelPronostici()"
+              >
+                 <i class="fa fa-file-excel-o"></i>  
+              </button>       
+              <button 
+                *ngIf="admin"
+                disabled
+                type="button" 
+                class="btn btn-danger btn-sm active"  
+                title="Admin Mode Attivo"
+              >
+                </span><i class="fa fa-user-circle-o"></i>
+              </button>                    
+            </div>
+          </div> 
+        </div>   
+      </div>
+  
+      <div class="row">
+      </div>
+      
+      <div *ngIf="showProno" class="row">
+          <div class="mx-auto" [ngClass]="{'col-xs-3 divTableLeft':pronosticiGt10, 'col-xs-6 divTableFull':!pronosticiGt10 }">
+            <table class="table table-bordered tableCenter" [ngClass]="{'table-sm':pronosticiGt10}">
+              <thead class="table-warning">
+                <tr>
+                  <th>Posizione</th>
+                  <th>Pronostico</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let e of numberPronostici">
+                  <td class="align-middle">
+                      <span class="badge badge-pill text-center badge-success">{{e}}</span>
+                  </td>
+                  <td>
+                    <div *ngIf="!admin">
+                      <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                              (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
+                              style="height:25px"
+                              [disabled]="pronoClosed"
+                      >
+                        <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                        <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                      </select>
+                    </div>
+                    <div *ngIf="admin">
+                      <select [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                        style="height:25px"
+                      >
+                        <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                        <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>  
+            </table>
+          </div>
+          <div *ngIf="pronosticiGt10" class="col-xs-3 divTableRight mx-auto">
+              <table class="table table-sm table-bordered tableCenter">
+                <thead class="table-warning">
+                  <tr>
+                    <th>Posizione</th>
+                    <th>Pronostico</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let e of numberPronosticiGt10">
+                    <td class="align-middle">
+                      <span class="badge badge-pill text-center badge-success">{{e}}</span>
+                    </td>
+                    <td>
+                      <div *ngIf="!admin">
+                        <select [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                                (change)="setPronosticiInseriti($event.target.value, e, idCompToselect)"
+                                style="height:25px"
+                                [disabled]="pronoClosed"
+                        >
+                          <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                          <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                        </select>
+                      </div>
+                      <div *ngIf="admin">
+                        <select [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]"
+                                style="height:25px"
+                        >
+                          <option class="form-control" value="XXX">Seleziona un Valore</option> <!-- not selected / blank option -->
+                          <option class="form-control" *ngFor="let valoriProno of valoriPronosticiToShow" [value]="valoriProno.valuePronostico">{{ valoriProno.valuePronostico }}</option>
+                        </select>
+                      </div>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      </div>
+  
+    </div>
+  </div>
+  
 
 <!--
         <table>

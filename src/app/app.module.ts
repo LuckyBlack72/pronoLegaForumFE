@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 // Hotkeys
 import { HotkeyModule } from 'angular2-hotkeys';
@@ -70,7 +71,8 @@ import { ProfiloComponent } from './profilo/profilo.component';
     }),
     CountdownTimerModule.forRoot(),
     HotkeyModule.forRoot(),
-    WebStorageModule
+    WebStorageModule,
+    DeviceDetectorModule.forRoot()
   ],
   // tslint:disable-next-line:max-line-length
   providers: [

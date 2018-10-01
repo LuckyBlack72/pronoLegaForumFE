@@ -8,6 +8,7 @@ import { PronosticiService } from '../service/pronostici.service';
 import { DatePronostici, ApplicationParameter } from '../../models/models';
 import { Utils } from '../../models/utils';
 
+
 @Component({
   selector: 'app-index-page',
   templateUrl: './index-page.component.html',

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatPaginator, MatTableDataSource, Sort, MatSort } from '@angular/material';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -19,7 +20,8 @@ import {
           DatiClassifica,
           FiltroValoriPronostici,
           ValoriPronosticiClassifica,
-          ApplicationParameter
+          ApplicationParameter,
+          DeviceInfo
       } from '../../models/models';
 
 @Component({
@@ -33,8 +35,14 @@ export class ClassificaComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private pronosticiService: PronosticiService,
     // public dataService: DataService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private deviceDetectorService: DeviceDetectorService
   ) { }
+
+  deviceInfo: DeviceInfo;
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktopDevice: boolean;
 
   @SessionStorage() protected applicationParameter: ApplicationParameter;
   @LocalStorage() listaStagioni: Stagioni[];
@@ -69,6 +77,11 @@ export class ClassificaComponent implements OnInit {
   displayedColumns = [];
 
   ngOnInit() {
+
+    this.deviceInfo = this.deviceDetectorService.getDeviceInfo();
+    this.isMobile  = this.deviceDetectorService.isMobile();
+    this.isTablet = this.deviceDetectorService.isTablet();
+    this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
     this.listaStagioni = this.activatedRoute.snapshot.data.listaStagioni;
     this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio

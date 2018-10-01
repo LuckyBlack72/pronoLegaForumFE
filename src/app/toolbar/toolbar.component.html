@@ -1,29 +1,99 @@
-<div class="container-fluid">
+<!-- desktop and Tablet -->
+<div *ngIf="!isMobile" class="container-fluid">
+  
   <div class="row">
+    
     <div class="col-md-1"></div>
+    
     <div class="col-md-10">
-      <div class="d-flex justify-content-between mb-1">
-          <div class="p-2">
-            <strong>Benvenuto : </strong> 
-            <button type="button" class="btn btn-success btn-sm active" title="Modifica Profilo" (click)="editProfile()">
-              <span>{{nickname}} &nbsp; &nbsp; </span><i class="fa fa-user-circle-o bg-primary"></i> 
-            </button>  
-            <button *ngIf="backActive" type="button" class="btn btn-warning btn-sm active" title="Torna Indietro" (click)="back()">
-              <i class="fa fa-arrow-circle-left"></i>
-            </button>                
-            <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
-              <i class="fa fa-sign-out"></i> 
-            </button>  
-          </div>
-          <div class="p-2">
-              <strong>Sarà possibile inserire i pronostici per : </strong>
+
+        <div class="d-flex justify-content-between mb-1">
+        
+            <div class="p-2">
+              
+              <strong>Benvenuto : </strong> 
+              <button type="button" class="btn btn-success btn-sm active" title="Modifica Profilo" (click)="editProfile()">
+                <span>{{nickname}} &nbsp; &nbsp; </span><i class="fa fa-user-circle-o bg-primary"></i> 
+              </button>  
+              <button *ngIf="backActive" type="button" class="btn btn-warning btn-sm active" title="Torna Indietro" (click)="back()">
+                <i class="fa fa-arrow-circle-left"></i>
+              </button>                
+              <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
+                <i class="fa fa-sign-out"></i> 
+              </button>  
+      
+            </div>
+
+            <div class="p-2">
+
+              <strong>Pronostici Inseribili per : </strong>
               <span class="badge text-center" 
               [ngClass]="{'badge-success': !pronoClosed, 'badge-danger': pronoClosed }">
                 <countdown-timer [end]="dataChiusuraProno"></countdown-timer>
               </span>
-          </div>
+
+            </div>
+
         </div>
+    
     </div>
+      
     <div class="col-md-1"></div>
+  
   </div>
+
+</div>
+
+<!-- mobile -->
+<div *ngIf="isMobile" class="container-fluid">
+  
+  <div class="row">
+    
+    <div class="col-xs-12">
+
+      <div class="d-flex justify-content mb-1">
+
+        <div class="p-2">
+              
+          <strong>Benvenuto : </strong> 
+          <button type="button" class="btn btn-success btn-sm active" title="Modifica Profilo" (click)="editProfile()">
+            <span>{{nickname}} &nbsp; &nbsp; </span><i class="fa fa-user-circle-o bg-primary"></i> 
+          </button>  
+          <button *ngIf="backActive" type="button" class="btn btn-warning btn-sm active" title="Torna Indietro" (click)="back()">
+            <i class="fa fa-arrow-circle-left"></i>
+          </button>                
+          <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
+            <i class="fa fa-sign-out"></i> 
+          </button>  
+    
+        </div>
+      
+      </div>
+    
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-xs-12">
+
+      <div class="d-flex justify-content mb-1">
+    
+        <div class="p-2">
+            
+          <strong>Pronostici Inseribili per : </strong>
+          <span class="badge text-center" 
+          [ngClass]="{'badge-success': !pronoClosed, 'badge-danger': pronoClosed }">
+            <countdown-timer [end]="dataChiusuraProno"></countdown-timer>
+          </span>        
+        
+        </div>
+    
+      </div>    
+
+    </div>
+
+  </div>
+
 </div>

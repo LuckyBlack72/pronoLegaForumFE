@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { SessionStorage, LocalStorage } from 'ngx-store';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 // import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../service/pronostici.service';
@@ -20,11 +21,12 @@ import {
         ValoriPronosticiClassifica,
         FiltroPronostici,
         ApplicationParameter,
-        ApiTransformReturnValue
+        ApiTransformReturnValue,
+        DeviceInfo
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
-import { appInitializerFactory } from '@angular/platform-browser/src/browser/server-transition';
+
 
 @Component({
   selector: 'app-pronostici',
@@ -41,10 +43,16 @@ export class PronosticiComponent implements OnInit, OnDestroy {
   //            public dataService: DataService,
               private utilService: UtilService,
               private commandService: CommandService,
-              private externalApiService: ExternalApiService
+              private externalApiService: ExternalApiService,
+              private deviceDetectorService: DeviceDetectorService
             ) {
     this.subscriptionHotKey = this.commandService.commands.subscribe(c => this.handleCommand(c));
   }
+
+  deviceInfo: DeviceInfo;
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktopDevice: boolean;
 
   @SessionStorage() protected applicationParameter: ApplicationParameter;
 
@@ -128,6 +136,18 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.idCompToselect = 0;
     this.logo = '';
 
+    let np = numero_pronostici;
+    if ( np === 0 ) {
+      for (let y = 0; y < this.competizioni.length; y++) {
+        if ( this.competizioni[y].id === idCompetizione ) {
+          np = this.competizioni[y].numero_pronostici;
+          break;
+        }
+      }
+    } else {
+      np = numero_pronostici;
+    }
+
     for (let x = 0; x < this.valoriPronostici.length; x++) {
       if (this.valoriPronostici[x].id_competizione === idCompetizione ) {
         this.idCompToselect = this.valoriPronostici[x].id_competizione;
@@ -142,15 +162,15 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
       }
     }
 
-    if (numero_pronostici > 10) {
+    if (np > 10) {
       for (let i = 1; i <= 10; i++) {
         this.numberPronostici.push(i);
       }
-      for (let i = 11; i <= numero_pronostici; i++) {
+      for (let i = 11; i <= np; i++) {
         this.numberPronosticiGt10.push(i);
       }
     } else {
-      for (let i = 1; i <= numero_pronostici; i++) {
+      for (let i = 1; i <= np; i++) {
         this.numberPronostici.push(i);
       }
     }
@@ -162,7 +182,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
       }
     }
 
-    numero_pronostici > 10 ? this.pronosticiGt10 = true : this.pronosticiGt10 = false;
+    np > 10 ? this.pronosticiGt10 = true : this.pronosticiGt10 = false;
     this.showProno = true;
 
   }
@@ -559,6 +579,11 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
 
   ngOnInit() {
+
+    this.deviceInfo = this.deviceDetectorService.getDeviceInfo();
+    this.isMobile  = this.deviceDetectorService.isMobile();
+    this.isTablet = this.deviceDetectorService.isTablet();
+    this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
     // prendo i dati dai resolver
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
