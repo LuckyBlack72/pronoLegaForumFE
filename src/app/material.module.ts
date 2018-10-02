@@ -4,10 +4,39 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatInputModule, MatTableModule, MatToolbarModule, MatPaginatorModule, MatSortModule } from '@angular/material';
+import {
+        MatButtonModule,
+        MatInputModule,
+        MatTableModule,
+        MatToolbarModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatRadioModule,
+        MatSelectModule
+      } from '@angular/material';
 
 @NgModule({
-  imports: [CommonModule, MatButtonModule, MatToolbarModule, MatInputModule, MatTableModule, MatPaginatorModule, MatSortModule],
-  exports: [CommonModule, MatButtonModule, MatToolbarModule, MatInputModule, MatTableModule, MatPaginatorModule, MatSortModule]
+  imports: [
+              CommonModule,
+              MatButtonModule,
+              MatToolbarModule,
+              MatInputModule,
+              MatTableModule,
+              MatPaginatorModule,
+              MatSortModule,
+              MatRadioModule,
+              MatSelectModule
+            ],
+  exports: [
+              CommonModule,
+              MatButtonModule,
+              MatToolbarModule,
+              MatInputModule,
+              MatTableModule,
+              MatPaginatorModule,
+              MatSortModule,
+              MatRadioModule,
+              MatSelectModule
+            ]
 })
 export class MaterialModule { }

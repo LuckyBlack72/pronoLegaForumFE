@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionStorage } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { Subscription } from 'rxjs';
 
 // import { DataService } from '../dataservice.service';
 import { UtilService } from '../service/util.service';
+import { CommandService, Command } from '../service/command.service';
+
 import { ApplicationParameter, DeviceInfo } from '../../models/models';
 
 
@@ -20,12 +23,19 @@ export class MenuUtenteComponent implements OnInit {
   isTablet: boolean;
   isDesktopDevice: boolean;
 
+  subscriptionHotKey: Subscription;
+
   constructor(
     private router: Router,
     // public dataService: DataService,
     private utilService: UtilService,
-    private deviceDetectorService: DeviceDetectorService
-  ) { }
+    private deviceDetectorService: DeviceDetectorService,
+    private commandService: CommandService,
+  ) {
+
+    this.subscriptionHotKey = this.commandService.commands.subscribe(c => this.handleCommand(c));
+
+  }
 
   @SessionStorage() protected applicationParameter: ApplicationParameter;
 
@@ -62,6 +72,16 @@ export class MenuUtenteComponent implements OnInit {
   logout() {
 
     this.utilService.logout();
+
+  }
+
+  handleCommand(command: Command) {
+
+    switch (command.name) {
+      case 'MenuUtenteComponent.SetAdmin':
+        this.router.navigate(['crud-competizione']);
+        break;
+    }
 
   }
 

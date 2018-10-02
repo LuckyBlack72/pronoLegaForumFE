@@ -41,6 +41,8 @@ import { ClassificaComponent } from './classifica/classifica.component';
 import { PageheaderComponent } from './pageheader/pageheader.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfiloComponent } from './profilo/profilo.component';
+import { CrudCompetizioneComponent } from './crud-competizione/crud-competizione.component';
+import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver';
 
 
 @NgModule({
@@ -54,7 +56,8 @@ import { ProfiloComponent } from './profilo/profilo.component';
     ClassificaComponent,
     PageheaderComponent,
     ToolbarComponent,
-    ProfiloComponent
+    ProfiloComponent,
+    CrudCompetizioneComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +90,8 @@ import { ProfiloComponent } from './profilo/profilo.component';
               StagioniResolver,
               CommandService,
               AnagraficaPartecipantiResolver,
-              ExternalApiService
+              ExternalApiService,
+              CrudCompetizioniResolver
             ],
   bootstrap: [AppComponent]
 })

@@ -7,6 +7,7 @@ import { RegistrazioneComponent } from './registrazione/registrazione.component'
 import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
 import { ClassificaComponent } from './classifica/classifica.component';
 import { ProfiloComponent } from './profilo/profilo.component';
+import { CrudCompetizioneComponent } from './crud-competizione/crud-competizione.component';
 
 import { CompetizioniResolver } from '../resolvers/competizioni-resolver';
 import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
@@ -14,6 +15,7 @@ import { ValoriPronosticiResolver } from '../resolvers/valoripronostici-resolver
 import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 import { StagioniResolver } from '../resolvers/stagioni-resolver';
 import { AnagraficaPartecipantiResolver } from '../resolvers/anagraficapartecipanti-resolver';
+import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver';
 
 
 // qui si mettono i resolver per i vari routing
@@ -53,7 +55,13 @@ const routes: Routes = [
     resolve: {
               anagraficaPartecipante: AnagraficaPartecipantiResolver
     }
+  },
+  { path: 'crud-competizione',
+  component: CrudCompetizioneComponent,
+  resolve: {
+    listaCompetizioni: CrudCompetizioniResolver,
   }
+},
 ];
 
 @NgModule({

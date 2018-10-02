@@ -1,0 +1,24 @@
+<app-toolbar></app-toolbar>
+
+<div class="container-fluid">
+  <div class="row"> <!-- riga per scelta nuova esistente -->
+      <div class="col-md-1"></div>
+      <div class="col-md-4">
+        <mat-radio-group [(ngModel)]="createUpdateCompetizione">
+          <mat-radio-button value="C">Nuova Competizione &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button value="U">&nbsp;</mat-radio-button>
+          <mat-form-field>
+              <mat-select [(ngModel)]="competizioneToEdit">
+                <mat-option value="0">Competizione</mat-option>
+                <mat-option *ngFor="let competizione of competizioni" [value]="competizione.id">{{ competizione.competizione }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+        </mat-radio-group>
+      </div>
+      <div class="col-md-2">
+        <button  mat-raised-button color="primary" (click)="createUpdateCompetizioneData(createUpdateCompetizione)" title="Scegli">Scegli</button>
+      </div>
+    <div class="col-md-5"></div>
+  </div>
+
+</div>
