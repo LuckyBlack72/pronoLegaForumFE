@@ -26,8 +26,6 @@ import {
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
-
-
 @Component({
   selector: 'app-pronostici',
   templateUrl: './pronostici.component.html',
@@ -98,13 +96,16 @@ export class PronosticiComponent implements OnInit, OnDestroy {
 setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   if (value === 'XXX') { // sto togliendo un prono
+
     for (let i = 0; i < this.competizioni.length; i++) {
       if (this.competizioni[i].id === idCompetizione) {
         this.competizioni[i].pronostici_inseriti--;
         break;
       }
     }
+
   } else { // sto aggiungendo / modificando un prono
+
     for (let i = 0; i < this.valoriPronosticiToSave.length; i++) {
       if (this.valoriPronosticiToSave[i].id_competizione === idCompetizione) {
         let totPieni = 0;
@@ -126,64 +127,73 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
 }
 
-
   fillPronostici(numero_pronostici: number, idCompetizione: number) {
 
-    this.valoriPronosticiToShow = [];
-    this.numberPronostici = [];
-    this.numberPronosticiGt10 = [];
-    this.pronosticiGt10 = false;
-    this.idCompToselect = 0;
-    this.logo = '';
+    if (idCompetizione != 0) { // non ho selezionato scegli una competizione dalla dropdown
 
-    let np = numero_pronostici;
-    if ( np === 0 ) {
-      for (let y = 0; y < this.competizioni.length; y++) {
-        if ( this.competizioni[y].id === idCompetizione ) {
-          np = this.competizioni[y].numero_pronostici;
+      this.valoriPronosticiToShow = [];
+      this.numberPronostici = [];
+      this.numberPronosticiGt10 = [];
+      this.pronosticiGt10 = false;
+      this.idCompToselect = 0;
+      this.logo = '';
+
+      let np = numero_pronostici;
+      if (np == 0) {
+        for (let y = 0; y < this.competizioni.length; y++) {
+          if ( this.competizioni[y].id === idCompetizione ) {
+            np = this.competizioni[y].numero_pronostici;
+            break;
+          }
+        }
+      } else {
+          np = numero_pronostici;
+      }
+
+      for (let x = 0; x < this.valoriPronostici.length; x++) {
+        if (this.valoriPronostici[x].id_competizione === idCompetizione ) {
+          this.idCompToselect = this.valoriPronostici[x].id_competizione;
+          for (let y = 0; y < this.valoriPronostici[x].valori_pronostici.length; y++) {
+            this.valoriPronosticiToShow.push(
+                                              {
+                                                idCompetizione: this.valoriPronostici[x].id_competizione,
+                                                valuePronostico: this.valoriPronostici[x].valori_pronostici[y]
+                                              }
+                                            );
+          }
+        }
+      }
+
+      if (np > 10) {
+        for (let i = 1; i <= 10; i++) {
+          this.numberPronostici.push(i);
+        }
+        for (let i = 11; i <= np; i++) {
+          this.numberPronosticiGt10.push(i);
+        }
+      } else {
+        for (let i = 1; i <= np; i++) {
+          this.numberPronostici.push(i);
+        }
+      }
+
+      for (let z = 0; z < this.competizioni.length; z++) {
+        if (idCompetizione === this.competizioni[z].id) {
+          this.logo = this.competizioni[z].logo;
           break;
         }
       }
+
+      np > 10 ? this.pronosticiGt10 = true : this.pronosticiGt10 = false;
+
+      this.showProno = true;
+
     } else {
-      np = numero_pronostici;
-    }
 
-    for (let x = 0; x < this.valoriPronostici.length; x++) {
-      if (this.valoriPronostici[x].id_competizione === idCompetizione ) {
-        this.idCompToselect = this.valoriPronostici[x].id_competizione;
-        for (let y = 0; y < this.valoriPronostici[x].valori_pronostici.length; y++) {
-          this.valoriPronosticiToShow.push(
-                                            {
-                                              idCompetizione: this.valoriPronostici[x].id_competizione,
-                                              valuePronostico: this.valoriPronostici[x].valori_pronostici[y]
-                                            }
-                                          );
-        }
-      }
-    }
+      this.showProno = false;
+      this.pronosticiGt10 = false;
 
-    if (np > 10) {
-      for (let i = 1; i <= 10; i++) {
-        this.numberPronostici.push(i);
-      }
-      for (let i = 11; i <= np; i++) {
-        this.numberPronosticiGt10.push(i);
-      }
-    } else {
-      for (let i = 1; i <= np; i++) {
-        this.numberPronostici.push(i);
-      }
     }
-
-    for (let z = 0; z < this.competizioni.length; z++) {
-      if (idCompetizione === this.competizioni[z].id) {
-        this.logo = this.competizioni[z].logo;
-        break;
-      }
-    }
-
-    np > 10 ? this.pronosticiGt10 = true : this.pronosticiGt10 = false;
-    this.showProno = true;
 
   }
 
