@@ -3,22 +3,29 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable, forkJoin, timer } from 'rxjs';
 import { switchMap, mergeMap } from 'rxjs/operators';
+import { LocalStorage } from 'ngx-store';
 
 import {
           AnagraficaCompetizioni,
           Pronostici,
           FiltroPronostici,
           ValoriPronosticiClassifica,
-          ApiTransformReturnValue
+          ApiTransformReturnValue,
+          ValoriPronostici
         } from '../../models/models';
 
 import { Utils } from '../../models/utils';
 import { PronosticiService } from './pronostici.service';
 
+
 @Injectable()
 export class ExternalApiService {
 
   constructor ( private http: HttpClient, private utils: Utils, private pronosticiService: PronosticiService ) { }
+
+
+  @LocalStorage() protected valoriPronostici: ValoriPronostici[];
+
 
   buildApiCallsUrl (stagione: string, competizioni: AnagraficaCompetizioni[]): string[] {
 
@@ -31,7 +38,7 @@ export class ExternalApiService {
     urlToCall = '';
     for (let i = 0; i < competizioni.length; i++) {
 
-      urlToCall = 'http://soccer.sportsopendata.net/v1/leagues/' +
+      urlToCall = 'https://soccer.sportsopendata.net/v1/leagues/' +
       competizioni[i].nome_pronostico +
       '/seasons/' +
       stagioneCall;
@@ -100,7 +107,7 @@ export class ExternalApiService {
         if ( apiData[i].data.topscorers.length > 0 ) {
           competizioniAggiornate.push(datiCompetizioni[i].competizione);
           for (let x = 1; x <= datiCompetizioni[i].numero_pronostici; x++ ) {
-            pronostici.push(apiData[i].data.topscorers[(x - 1)].fullname);
+            pronostici.push(this.decodePlayerName(datiCompetizioni[i].id, apiData[i].data.topscorers[(x - 1)].fullname));
           }
         } else {
           competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
@@ -175,6 +182,35 @@ private decodeTeamName(teamToDecode: string): string {
   }
 
   return decodedTeamName;
+
+}
+
+private decodePlayerName(idCompetizione: number, playerNameToDecode: string): string {
+
+  let decodedPlayerName = 'XXX';
+  const upperCaseNameToDecode = playerNameToDecode.toUpperCase();
+  let found = false;
+
+  for (let i = 0; i < this.valoriPronostici.length; i++) {
+    if (this.valoriPronostici[i].id_competizione === idCompetizione) {
+      for (let x = 0; x < this.valoriPronostici[i].valori_pronostici.length; x++ ) {
+        if (this.valoriPronostici[i].valori_pronostici[x].search(upperCaseNameToDecode) !== -1) {
+          decodedPlayerName = this.valoriPronostici[i].valori_pronostici[x];
+          found = true;
+        }
+      }
+      if (found = true) {
+        found = false;
+        break;
+      }
+    }
+  }
+
+  if (decodedPlayerName === 'XXX') {
+    decodedPlayerName = playerNameToDecode;
+  }
+
+  return decodedPlayerName;
 
 }
 
