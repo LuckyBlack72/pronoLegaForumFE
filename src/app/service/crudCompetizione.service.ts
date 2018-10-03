@@ -8,6 +8,7 @@ import {
 
 import { Utils } from '../../models/utils';
 import { PronosticiService } from './pronostici.service';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class CrudCompetizioneService {
@@ -21,7 +22,7 @@ export class CrudCompetizioneService {
     @LocalStorage() protected competizioni: AnagraficaCompetizioni[];
 
 
-    getDatiCompetizione(idCompetizione: number): AnagraficaCompetizioni {
+    getDatiCompetizione(idCompetizione: number): Observable<AnagraficaCompetizioni> {
 
         let datiCompetizione: AnagraficaCompetizioni;
         let fnd: boolean;
@@ -54,8 +55,35 @@ export class CrudCompetizioneService {
               }
             );
         } else {
-            return datiCompetizione;
+            return of(datiCompetizione);
         }
+
+    }
+
+    saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni): Observable<string>{
+
+        return this.pronosticiService.saveAnagraficaCompetizioni(competizioneToSave);
+
+
+    }
+
+    checkDataToSave(dataToSave: AnagraficaCompetizioni, stagioneCompetizione: number): boolean {
+
+        let retVal: boolean;
+        retVal = true;
+
+        if (stagioneCompetizione == null || stagioneCompetizione == 0) {
+            retVal = false;
+        } else {
+            if (
+                    dataToSave.competizione == null ||
+                    dataToSave.tipo_competizione == null || dataToSave.tipo_competizione === 'XXX'
+                ) {
+                    retVal = false;
+                }
+        }
+
+        return retVal;
 
     }
 

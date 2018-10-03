@@ -115,5 +115,13 @@ export class PronosticiService {
 
   }
 
+  saveAnagraficaCompetizioni ( dataToSave: AnagraficaCompetizioni ): Observable<string> {
+
+    const postData = { anagraficaCompetizioni: dataToSave };
+
+    return this.http.post<string>(environment.backEndURL + '/classifica/saveAnagraficaCompetizioni', postData);
+
+  }
+
 
 }

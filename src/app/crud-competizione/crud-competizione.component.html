@@ -4,14 +4,14 @@
   <div class="row"> <!-- riga per scelta nuova esistente -->
       <div class="col-md-1"></div>
       <div class="col-md-4">
-        <mat-radio-group [(ngModel)]="createUpdateCompetizione">
+        <mat-radio-group [(ngModel)]="createUpdateCompetizione" [disabled]="fillCompetizioneData">
           <mat-radio-button value="C">Nuova Competizione &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
           <mat-radio-button value="U">&nbsp;</mat-radio-button>
           <mat-form-field>
               <mat-select 
                 placeholder="Competizione"
                 [(ngModel)]="idCompetizioneToEdit"
-                [disabled]="setEnabledDisabledDropDownCompetizione()"
+                [disabled]="fillCompetizioneData || setEnabledDisabledDropDownCompetizione()"
               >
                 <mat-option value="0">Nessuna</mat-option>
                 <mat-option *ngFor="let competizione of competizioni" [value]="competizione.id">{{ competizione.competizione }}</mat-option>
@@ -21,7 +21,7 @@
       </div>
       <div class="col-md-2">
         <button  
-          [disabled]="setEnabledDisabledScegliButton()"
+          [disabled]="fillCompetizioneData || setEnabledDisabledScegliButton()"
           mat-raised-button color="primary"
           (click)="createUpdateCompetizioneData(createUpdateCompetizione)" 
           title="Scegli"
@@ -83,7 +83,137 @@
     </div>
     <div class="col-md-1"></div>
   
+  </div> <!--fine riga nome e stagione -->
+
+  <div class="row">
+      <div class= "col-md-12">&nbsp;</div>
   </div>
   
+  <div class="row" *ngIf="fillCompetizioneData"> <!-- slider per valori numerici -->
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Parametri Configurazione (Numero Pronostici, Punti Esatti, Punti Lista)
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="row">
+            <div class="col-md-4">
+              <p class="text-center">
+                <span 
+                  matBadge="{{competizioneToSave.numero_pronostici}}" 
+                  matBadgeOverlap="false"
+                >
+                  Numero Pronostici
+                </span>
+              </p>
+            </div>
+            <div class="col-md-4">
+              <p class="text-center">
+                <span 
+                  matBadge="{{competizioneToSave.punti_esatti}}" 
+                  matBadgeOverlap="false"
+                >
+                Punti Pronostico Posizione Esatta
+                </span>
+              </p>
+            </div>
+            <div class="col-md-4">
+              <p class="text-center">
+                <span 
+                  matBadge="{{competizioneToSave.punti_lista}}" 
+                  matBadgeOverlap="false"
+                >
+                Punti Pronostico Esatto Posizione Errata
+                </span>
+              </p>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <mat-slider
+              [disabled]="createUpdateCompetizione === 'U'"
+              [(ngModel)]="competizioneToSave.numero_pronostici"
+              thumbLabel
+              tickInterval="1"
+              min="1"
+              max="20"
+            >
+            </mat-slider>              
+          </div>
+          <div class="col-md-4">
+            <mat-slider
+              [disabled]="createUpdateCompetizione === 'U'"
+              [(ngModel)]="competizioneToSave.punti_esatti"
+              thumbLabel
+              tickInterval="1"
+              min="1"
+              max="20"
+            >
+            </mat-slider>              
+          </div>
+          <div class="col-md-4">
+            <mat-slider
+              [disabled]="createUpdateCompetizione === 'U'"
+              [(ngModel)]="competizioneToSave.punti_lista"
+              thumbLabel
+              tickInterval="1"
+              min="0"
+              max="20"
+            >
+            </mat-slider>              
+          </div>
+          <div class="col-md-3"></div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+    <div class="col-md-1"></div>
+  
+  </div> <!-- fine slider per valori numerici -->
 
-</div>
+  <div class="row" *ngIf="fillCompetizioneData">
+      <div class= "col-md-12">&nbsp;</div>
+  </div>
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-1"></div>
+    <div class= "col-md-10">
+      <mat-divider></mat-divider>
+    </div>
+    <div class= "col-md-1"></div>
+  </div>
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+
+  <div class ="row" *ngIf="fillCompetizioneData"> <!-- bottoni salva / annulla -->
+    <div class=col-md-1></div>
+    <div class=col-md-1>
+      <button  
+        [disabled]="!fillCompetizioneData"
+        mat-raised-button color="primary"
+        (click)="saveData()" 
+        title="Salva"
+      >
+        Salva
+      </button>
+    </div>
+    <div class=col-md-1>
+      <button  
+        [disabled]="!fillCompetizioneData"
+        mat-raised-button color="warn"
+        (click)="resetData()" 
+        title="Annulla"
+      >
+        Annulla
+      </button>
+    </div>
+    <div class=col-md-9></div>
+  </div> <!-- fine bottoni salva / annulla -->
+
+
+</div> <!--fine container fluid -->
