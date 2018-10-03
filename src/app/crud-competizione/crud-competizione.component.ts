@@ -83,7 +83,7 @@ export class CrudCompetizioneComponent implements OnInit {
     this.createUpdateCompetizione = 'C';
     this.fillCompetizioneData = false;
 
-    const stagione = parseInt(this.utils.getStagione().substring(0, 4), 10)
+    const stagione = parseInt(this.utils.getStagione().substring(0, 4), 10);
     this.listaStagioniCompetizione.push(stagione);
     this.listaStagioniCompetizione.push((stagione + 1));
 

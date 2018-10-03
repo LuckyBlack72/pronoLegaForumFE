@@ -60,7 +60,7 @@ export class CrudCompetizioneService {
 
     }
 
-    saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni): Observable<string>{
+    saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni): Observable<string> {
 
         return this.pronosticiService.saveAnagraficaCompetizioni(competizioneToSave);
 

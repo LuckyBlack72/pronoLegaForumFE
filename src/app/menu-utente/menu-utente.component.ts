@@ -3,9 +3,11 @@ import { Router } from '@angular/router';
 import { SessionStorage } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
 
 // import { DataService } from '../dataservice.service';
 import { UtilService } from '../service/util.service';
+import { PronosticiService } from '../service/pronostici.service';
 import { CommandService, Command } from '../service/command.service';
 
 import { ApplicationParameter, DeviceInfo } from '../../models/models';
@@ -28,6 +30,7 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     // public dataService: DataService,
+    private pronosticiService: PronosticiService,
     private utilService: UtilService,
     private deviceDetectorService: DeviceDetectorService,
     private commandService: CommandService,
@@ -86,13 +89,42 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
 
     switch (command.name) {
       case 'MenuUtenteComponent.SetAdmin':
-        this.applicationParameter.menu_utente_page = true;
-        this.router.navigate(['crud-competizione']);
+        this.checkAdminPassword();
         break;
       default:
         break;
     }
 
+  }
+
+  async checkAdminPassword() {
+
+    const {value: password} = await Swal({
+      title: 'Administrator Login',
+      input: 'password',
+      inputPlaceholder: 'Enter Administrator password',
+      inputAttributes: {
+        autocapitalize: 'off',
+        autocorrect: 'off'
+      },
+      showCancelButton: true
+    });
+
+    if (password) {
+      this.pronosticiService.checkAdminPassword(password).subscribe(
+        data => {
+          this.applicationParameter.menu_utente_page = true;
+          this.router.navigate(['crud-competizione']);
+          }
+        ,
+        error => Swal({
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          title: 'Password Errata',
+          type: 'error'
+        })
+      );
+    }
   }
 
 }
