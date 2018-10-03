@@ -23,6 +23,7 @@ import { PronosticiService } from './service/pronostici.service';
 // import { DataService } from './dataservice.service';
 import { UtilService } from './service/util.service';
 import { ExternalApiService } from './service/externalApi.service';
+import { CrudCompetizioneService } from './service/crudCompetizione.service';
 
 import { Utils } from '../models/utils';
 
@@ -91,7 +92,8 @@ import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver
               CommandService,
               AnagraficaPartecipantiResolver,
               ExternalApiService,
-              CrudCompetizioniResolver
+              CrudCompetizioniResolver,
+              CrudCompetizioneService
             ],
   bootstrap: [AppComponent]
 })

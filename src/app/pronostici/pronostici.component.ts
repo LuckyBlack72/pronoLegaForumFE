@@ -350,8 +350,10 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
       case 'PronosticiComponent.UnsetAdmin':
         this.unsetAdminEnvironment();
         break;
-        case 'PronosticiComponent.AggiornaClassifica':
+      case 'PronosticiComponent.AggiornaClassifica':
         this.aggiornaClassifica();
+        break;
+      default:
         break;
       }
   }

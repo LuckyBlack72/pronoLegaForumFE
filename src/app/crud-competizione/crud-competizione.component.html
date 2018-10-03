@@ -8,17 +8,82 @@
           <mat-radio-button value="C">Nuova Competizione &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
           <mat-radio-button value="U">&nbsp;</mat-radio-button>
           <mat-form-field>
-              <mat-select [(ngModel)]="competizioneToEdit">
-                <mat-option value="0">Competizione</mat-option>
+              <mat-select 
+                placeholder="Competizione"
+                [(ngModel)]="idCompetizioneToEdit"
+                [disabled]="setEnabledDisabledDropDownCompetizione()"
+              >
+                <mat-option value="0">Nessuna</mat-option>
                 <mat-option *ngFor="let competizione of competizioni" [value]="competizione.id">{{ competizione.competizione }}</mat-option>
               </mat-select>
             </mat-form-field>
         </mat-radio-group>
       </div>
       <div class="col-md-2">
-        <button  mat-raised-button color="primary" (click)="createUpdateCompetizioneData(createUpdateCompetizione)" title="Scegli">Scegli</button>
+        <button  
+          [disabled]="setEnabledDisabledScegliButton()"
+          mat-raised-button color="primary"
+          (click)="createUpdateCompetizioneData(createUpdateCompetizione)" 
+          title="Scegli"
+        >
+          Scegli
+        </button>
       </div>
     <div class="col-md-5"></div>
   </div>
+
+  <div class="row">
+    <div class= "col-md-1"></div>
+    <div class= "col-md-10">
+      <mat-divider></mat-divider>
+    </div>
+    <div class= "col-md-1"></div>
+  </div>
+
+  <div class="row">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+  
+  <div class="row" *ngIf="fillCompetizioneData"> <!-- Nome e Stagione di Appartenenza -->
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Nome e Stagione di Appartenenza
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="row">
+          <div class="col-md-3">
+            <mat-form-field>
+              <input 
+                [disabled]="createUpdateCompetizione === 'U'"
+                [(ngModel)]="competizioneToSave.competizione"
+                matInput
+                placeholder="Nome Competizione"
+              >
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field>
+              <mat-select 
+                placeholder="Stagione"
+                [(ngModel)]="stagioneCompetizione"
+              >
+                <mat-option value="0">Nessuna</mat-option>
+                <mat-option *ngFor="let stagione of listaStagioniCompetizione" [value]="stagione">{{ stagione }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+    <div class="col-md-1"></div>
+  
+  </div>
+  
 
 </div>

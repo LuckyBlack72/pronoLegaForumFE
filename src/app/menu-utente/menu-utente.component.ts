@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { SessionStorage } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
@@ -16,7 +16,7 @@ import { ApplicationParameter, DeviceInfo } from '../../models/models';
   templateUrl: './menu-utente.component.html',
   styleUrls: ['./menu-utente.component.css']
 })
-export class MenuUtenteComponent implements OnInit {
+export class MenuUtenteComponent implements OnInit, OnDestroy {
 
   deviceInfo: DeviceInfo;
   isMobile: boolean;
@@ -47,6 +47,13 @@ export class MenuUtenteComponent implements OnInit {
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
   }
+
+  ngOnDestroy() {
+
+    this.subscriptionHotKey.unsubscribe();
+
+  }
+
 
   navigatePage(page: String) {
 
@@ -79,7 +86,10 @@ export class MenuUtenteComponent implements OnInit {
 
     switch (command.name) {
       case 'MenuUtenteComponent.SetAdmin':
+        this.applicationParameter.menu_utente_page = true;
         this.router.navigate(['crud-competizione']);
+        break;
+      default:
         break;
     }
 
