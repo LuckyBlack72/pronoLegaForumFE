@@ -15,7 +15,8 @@ import { ValoriPronostici,
         DatePronostici,
         FiltroStagione,
         Stagioni,
-        ValoriPronosticiClassifica} from '../../models/models';
+        ValoriPronosticiClassifica,
+        TipoCompetizione} from '../../models/models';
 
 @Injectable()
 export class PronosticiService {
@@ -120,6 +121,12 @@ export class PronosticiService {
     const postData = { anagraficaCompetizioni: dataToSave };
 
     return this.http.post<string>(environment.backEndURL + '/classifica/saveAnagraficaCompetizioni', postData);
+
+  }
+
+  getTipoCompetizione (): Observable<TipoCompetizione[]> {
+
+    return this.http.post<TipoCompetizione[]>(environment.backEndURL + '/classifica/getTipoCompetizione', {});
 
   }
 

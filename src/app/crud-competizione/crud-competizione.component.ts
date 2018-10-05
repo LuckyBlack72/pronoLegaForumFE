@@ -21,7 +21,8 @@ import {
         FiltroPronostici,
         ApplicationParameter,
         ApiTransformReturnValue,
-        DeviceInfo
+        DeviceInfo,
+        TipoCompetizione
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -75,11 +76,13 @@ export class CrudCompetizioneComponent implements OnInit {
   stagioneCompetizione: number;
 
   listaStagioniCompetizione: number[] = [];
+  tipiCompetizione: TipoCompetizione[] = [];
 
 
   ngOnInit() {
 
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
+    this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
     this.createUpdateCompetizione = 'C';
     this.fillCompetizioneData = false;
 
@@ -215,6 +218,27 @@ export class CrudCompetizioneComponent implements OnInit {
       });
     }
 
+  }
+
+  async uploadLogo () { // async come le promise
+
+    const {value: file} = await Swal({
+      title: 'Logo Competizione',
+      input: 'file',
+      inputAttributes: {
+        'accept': 'image/*',
+        'aria-label': 'Carica il Logo della Competizione'
+      }
+    });
+    if (file) {
+      const reader = new FileReader;
+      reader.onload = (e) => {
+
+        reader.
+
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
 }

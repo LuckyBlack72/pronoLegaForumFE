@@ -122,3 +122,7 @@ export interface DeviceInfo {
   userAgent?: string;
 }
 
+export interface TipoCompetizione {
+  tipo?: string;
+  nome?: string;
+}

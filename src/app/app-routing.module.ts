@@ -16,7 +16,7 @@ import { PronosticiResolver } from '../resolvers/pronostici-resolver';
 import { StagioniResolver } from '../resolvers/stagioni-resolver';
 import { AnagraficaPartecipantiResolver } from '../resolvers/anagraficapartecipanti-resolver';
 import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver';
-
+import { TipoCompetizioneResolver } from '../resolvers/tipocompetizione-resolver';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -60,6 +60,7 @@ const routes: Routes = [
   component: CrudCompetizioneComponent,
   resolve: {
     listaCompetizioni: CrudCompetizioniResolver,
+    tipiCompetizione: TipoCompetizioneResolver
   }
 },
 ];

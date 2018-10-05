@@ -5,22 +5,23 @@
       <div class="col-md-1"></div>
       <div class="col-md-4">
         <mat-radio-group [(ngModel)]="createUpdateCompetizione" [disabled]="fillCompetizioneData">
-          <mat-radio-button value="C">Nuova Competizione &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
-          <mat-radio-button value="U">&nbsp;</mat-radio-button>
+          <mat-radio-button class="mat-body-1" value="C">Nuova Competizione &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button class="mat-body-1" value="U">&nbsp;</mat-radio-button>
           <mat-form-field>
               <mat-select 
                 placeholder="Competizione"
                 [(ngModel)]="idCompetizioneToEdit"
                 [disabled]="fillCompetizioneData || setEnabledDisabledDropDownCompetizione()"
               >
-                <mat-option value="0">Nessuna</mat-option>
-                <mat-option *ngFor="let competizione of competizioni" [value]="competizione.id">{{ competizione.competizione }}</mat-option>
+                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                <mat-option class="mat-body-1" *ngFor="let competizione of competizioni" [value]="competizione.id">{{ competizione.competizione }}</mat-option>
               </mat-select>
             </mat-form-field>
         </mat-radio-group>
       </div>
       <div class="col-md-2">
         <button  
+          class="mat-button"
           [disabled]="fillCompetizioneData || setEnabledDisabledScegliButton()"
           mat-raised-button color="primary"
           (click)="createUpdateCompetizioneData(createUpdateCompetizione)" 
@@ -49,8 +50,8 @@
     <div class="col-md-10">
       <mat-expansion-panel>
         <mat-expansion-panel-header>
-          <mat-panel-title>
-            Nome e Stagione di Appartenenza
+          <mat-panel-title class="mat-subheading-1">
+            Nome e Stagione di Appartenenza e Tipo Competizione
           </mat-panel-title>
           <mat-panel-description>
           </mat-panel-description>
@@ -59,6 +60,7 @@
           <div class="col-md-3">
             <mat-form-field>
               <input 
+                class="mat-body-1"
                 [disabled]="createUpdateCompetizione === 'U'"
                 [(ngModel)]="competizioneToSave.competizione"
                 matInput
@@ -72,12 +74,24 @@
                 placeholder="Stagione"
                 [(ngModel)]="stagioneCompetizione"
               >
-                <mat-option value="0">Nessuna</mat-option>
-                <mat-option *ngFor="let stagione of listaStagioniCompetizione" [value]="stagione">{{ stagione }}</mat-option>
+                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioniCompetizione" [value]="stagione">{{ stagione }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-md-6"></div>
+          <div class="col-md-3">
+            <mat-form-field>
+              <mat-select 
+                placeholder="Tipo Competizione"
+                [disabled]="createUpdateCompetizione === 'U'"
+                [(ngModel)]="competizioneToSave.tipo_competizione"
+              >
+                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                <mat-option class="mat-body-1" *ngFor="let tipoCompetizione of tipiCompetizione" [value]="tipoCompetizione.tipo">{{ tipoCompetizione.nome }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3"></div>
         </div>
       </mat-expansion-panel>
     </div>
@@ -94,7 +108,7 @@
     <div class="col-md-10">
       <mat-expansion-panel>
         <mat-expansion-panel-header>
-          <mat-panel-title>
+          <mat-panel-title class="mat-subheading-1">
             Parametri Configurazione (Numero Pronostici, Punti Esatti, Punti Lista)
           </mat-panel-title>
           <mat-panel-description>
@@ -104,6 +118,7 @@
             <div class="col-md-4">
               <p class="text-center">
                 <span 
+                  class="mat-body-2"
                   matBadge="{{competizioneToSave.numero_pronostici}}" 
                   matBadgeOverlap="false"
                 >
@@ -113,7 +128,8 @@
             </div>
             <div class="col-md-4">
               <p class="text-center">
-                <span 
+                <span
+                  class="mat-body-2"
                   matBadge="{{competizioneToSave.punti_esatti}}" 
                   matBadgeOverlap="false"
                 >
@@ -124,6 +140,7 @@
             <div class="col-md-4">
               <p class="text-center">
                 <span 
+                  class="mat-body-2"
                   matBadge="{{competizioneToSave.punti_lista}}" 
                   matBadgeOverlap="false"
                 >
@@ -135,6 +152,7 @@
         <div class="row">
           <div class="col-md-4">
             <mat-slider
+              class="mat-body-2"
               [disabled]="createUpdateCompetizione === 'U'"
               [(ngModel)]="competizioneToSave.numero_pronostici"
               thumbLabel
@@ -146,6 +164,7 @@
           </div>
           <div class="col-md-4">
             <mat-slider
+              class="mat-body-2"
               [disabled]="createUpdateCompetizione === 'U'"
               [(ngModel)]="competizioneToSave.punti_esatti"
               thumbLabel
@@ -157,12 +176,13 @@
           </div>
           <div class="col-md-4">
             <mat-slider
+              class="mat-body-2"
               [disabled]="createUpdateCompetizione === 'U'"
               [(ngModel)]="competizioneToSave.punti_lista"
               thumbLabel
               tickInterval="1"
               min="0"
-              max="20"
+              max="20"  
             >
             </mat-slider>              
           </div>
@@ -190,10 +210,57 @@
     <div class= "col-md-12">&nbsp;</div>
   </div>
 
+  <div class="row" *ngIf="fillCompetizioneData"> <!-- logo section-->
+    
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-subheading-1">
+            Logo Competizione
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="row">
+          <div class=col-md-1>
+            <button  
+              class="mat-button"
+              [disabled]="!fillCompetizioneData"
+              mat-raised-button color="primary"
+              (click)="UploadLogo()" 
+              title="Carica File Logo"
+            >
+              Carica File Logo
+            </button>
+            <div class=col-md-11>
+              <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{competizioneTosave.logo}}">
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+    <div class="col-md-1"></div>
+  
+  </div> <!-- fine logo section -->
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-1"></div>
+    <div class= "col-md-10">
+      <mat-divider></mat-divider>
+    </div>
+    <div class= "col-md-1"></div>
+  </div>
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+
   <div class ="row" *ngIf="fillCompetizioneData"> <!-- bottoni salva / annulla -->
     <div class=col-md-1></div>
     <div class=col-md-1>
       <button  
+        class="mat-button"
         [disabled]="!fillCompetizioneData"
         mat-raised-button color="primary"
         (click)="saveData()" 
@@ -204,6 +271,7 @@
     </div>
     <div class=col-md-1>
       <button  
+        class="mat-button"
         [disabled]="!fillCompetizioneData"
         mat-raised-button color="warn"
         (click)="resetData()" 

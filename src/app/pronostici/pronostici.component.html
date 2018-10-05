@@ -147,8 +147,11 @@
 <!-- Tablet e Mobile -->
 <div *ngIf="!isDesktopDevice" class="container-fluid">
     <div class="row"> <!--Riga con combo e pulsanti -->
-        <div class="col-xs-2"></div>
-        <div class="col-xs-8">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-4">
+            <h4><span class="badge badge-primary">Competizione</span></h4>
+        </div>
+        <div class="col-sm-2">
             <button 
             type="button" 
             class="btn btn-success btn-sm active" 
@@ -158,6 +161,8 @@
             >
                 <i class="fa fa-floppy-o"></i>  
             </button>                
+        </div>
+        <div class="col-sm-2">
             <button 
             [disabled]="admin"
             type="button" 
@@ -167,6 +172,8 @@
             >
                 <i class="fa fa-file-excel-o"></i>  
             </button>              
+        </div>
+        <div class="col-sm-2">
             <button 
             *ngIf="admin"
             disabled
@@ -174,16 +181,15 @@
             class="btn btn-danger btn-sm active"  
             title="Admin Mode Attivo"
             >
-                Admin Mode
+            Admin Mode
             </button>              
-            <h4><span class="badge badge-primary">Competizione</span></h4>
-          </div>
-        <div class="col-xs-2"></div> 
+        </div>
+        <div class="col-sm-1"></div> 
     </div>
 
     <div class="row"> <!-- Riga con la dropdown competizioni -->
-        <div class="col-xs-2"></div>
-        <div class="col-xs-8">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
             <select #st id="cmp" (change)="fillPronostici(0, $event.target.value)"> <!-- 0 capisco che sto usando la select -->
                 <option class="form-control" value="0">Seleziona una Competizione</option> <!-- not selected / blank option -->
                 <option class="form-control" *ngFor="let competizione of competizioni" [value]="competizione.id">
@@ -191,21 +197,19 @@
                 </option>
             </select>
         </div>
-        <div class="col-xs-2"></div>
+        <div class="col-sm-2"></div>
     </div>
 
     <div class="row">
-        <div class="col-xs-12">&nbsp;</div>
+        <div class="col-sm-12">&nbsp;</div>
     </div>
 
     <div *ngIf="showProno" class="row"> <!-- Riga con i pronostici -->
-        <div class="col-xs-2"></div>
-        <div class="col-xs-8">
-            <div class="mx-auto col-xs-4">
-                <table class="table table-bordered table-sm tableCenter">
+            <div class="mx-auto col-sm-12">
+                <table class="table table-bordered table-sm">
                     <thead class="table-warning">
                         <tr>
-                        <th>Posizione</th>
+                        <th>#</th>
                         <th>Pronostico</th>
                         </tr>
                     </thead>
@@ -237,23 +241,19 @@
                         </tr>
                     </tbody>  
                 </table>
-            </div>
         </div>
-        <div class="col-xs-2"></div>
     </div>
 
     <div class="row">
-        <div class="col-xs-12">&nbsp;</div>
+        <div class="col-sm-12">&nbsp;</div>
     </div>
     
     <div *ngIf="pronosticiGt10" class="row"> <!-- con i prono > 10 -->
-        <div class="col-xs-2"></div>
-        <div class="col-xs-8">
-            <div class="mx-auto col-xs-4">
-                <table class="table table-sm table-bordered tableCenter">
+        <div class="col-sm-12">
+                <table class="table table-sm table-bordered">
                     <thead class="table-warning">
                         <tr>
-                        <th>Posizione</th>
+                        <th>#</th>
                         <th>Pronostico</th>
                         </tr>
                     </thead>
@@ -283,9 +283,7 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
         </div>
-        <div class="col-xs-2"></div>
     </div>
 
 </div>
