@@ -223,19 +223,21 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="row">
-          <div class=col-md-1>
-            <button  
+          <div class=col-md-3>
+            <input class="mat-body-1" type="file" (change)="onFileChanged($event)">
+          </div>
+          <div class="col-md-1">
+              <button  
               class="mat-button"
-              [disabled]="!fillCompetizioneData"
               mat-raised-button color="primary"
-              (click)="UploadLogo()" 
-              title="Carica File Logo"
+              (click)="uploadLogo()" 
+              title="Carica File"
             >
-              Carica File Logo
+              Carica File
             </button>
-            <div class=col-md-11>
-              <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{competizioneTosave.logo}}">
-            </div>
+          </div>
+          <div class="col-md-8">
+            <img #imgLogo id="imgLogo" alt="Logo" class="rounded img-fluid mx-auto d-block" src="{{imgLogoUrl}}">
           </div>
         </div>
       </mat-expansion-panel>

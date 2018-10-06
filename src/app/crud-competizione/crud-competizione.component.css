@@ -1,4 +1,8 @@
 mat-slider {
     width: 300px;
   }
+
+img{
+  max-width:180px;
+}
   

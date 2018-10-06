@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import Swal from 'sweetalert2';
@@ -78,6 +78,9 @@ export class CrudCompetizioneComponent implements OnInit {
   listaStagioniCompetizione: number[] = [];
   tipiCompetizione: TipoCompetizione[] = [];
 
+  fileToUpload: File;
+  @ViewChild('imgLogo') imgLogo: ElementRef;
+  imgLogoUrl: string;
 
   ngOnInit() {
 
@@ -220,25 +223,27 @@ export class CrudCompetizioneComponent implements OnInit {
 
   }
 
-  async uploadLogo () { // async come le promise
+  onFileChanged(event: any) {
 
-    const {value: file} = await Swal({
-      title: 'Logo Competizione',
-      input: 'file',
-      inputAttributes: {
-        'accept': 'image/*',
-        'aria-label': 'Carica il Logo della Competizione'
-      }
-    });
-    if (file) {
-      const reader = new FileReader;
-      reader.onload = (e) => {
 
-        reader.
+    this.fileToUpload = event.target.files[0];
 
+    if (event.target.files && event.target.files[0]) {
+
+      console.log(event.target.files[0]);
+
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.imgLogoUrl = e.target.result;
+        console.log(this.imgLogoUrl);
       };
-      reader.readAsDataURL(file);
+
+      reader.readAsDataURL(event.target.files[0]);
+
     }
+
   }
+
 
 }
