@@ -3,6 +3,10 @@ mat-slider {
   }
 
 img{
-  max-width:180px;
+  max-width:100px;
+  max-height: 100px
 }
-  
+
+#selComp {
+  width: 300px;
+}

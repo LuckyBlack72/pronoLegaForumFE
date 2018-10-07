@@ -60,9 +60,9 @@ export class CrudCompetizioneService {
 
     }
 
-    saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni): Observable<string> {
+    saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni, logo: File): Observable<string> {
 
-        return this.pronosticiService.saveAnagraficaCompetizioni(competizioneToSave);
+        return this.pronosticiService.saveAnagraficaCompetizioni(competizioneToSave, logo);
 
 
     }
@@ -77,7 +77,8 @@ export class CrudCompetizioneService {
         } else {
             if (
                     dataToSave.competizione == null ||
-                    dataToSave.tipo_competizione == null || dataToSave.tipo_competizione === 'XXX'
+                    dataToSave.tipo_competizione == null || dataToSave.tipo_competizione === 'XXX' ||
+                    dataToSave.logo == null
                 ) {
                     retVal = false;
                 }

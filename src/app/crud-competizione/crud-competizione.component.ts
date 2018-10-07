@@ -191,7 +191,7 @@ export class CrudCompetizioneComponent implements OnInit {
       } else {
         this.competizioneToSave.anni_competizione.push(this.stagioneCompetizione);
       }
-      this.crudCompetizioneService.saveAnagraficaCompetizione(this.competizioneToSave).subscribe(
+      this.crudCompetizioneService.saveAnagraficaCompetizione(this.competizioneToSave, this.fileToUpload).subscribe(
         data => {
                   this.resetDataValues();
                   Swal({
@@ -225,18 +225,15 @@ export class CrudCompetizioneComponent implements OnInit {
 
   onFileChanged(event: any) {
 
-
-    this.fileToUpload = event.target.files[0];
+    const reader = new FileReader();
 
     if (event.target.files && event.target.files[0]) {
 
-      console.log(event.target.files[0]);
-
-      const reader = new FileReader();
+      this.fileToUpload = event.target.files[0];
 
       reader.onload = (e: any) => {
         this.imgLogoUrl = e.target.result;
-        console.log(this.imgLogoUrl);
+        this.competizioneToSave.logo = event.target.files[0];
       };
 
       reader.readAsDataURL(event.target.files[0]);

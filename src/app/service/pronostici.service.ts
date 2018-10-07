@@ -116,9 +116,9 @@ export class PronosticiService {
 
   }
 
-  saveAnagraficaCompetizioni ( dataToSave: AnagraficaCompetizioni ): Observable<string> {
+  saveAnagraficaCompetizioni ( dataToSave: AnagraficaCompetizioni, logo: File ): Observable<string> {
 
-    const postData = { anagraficaCompetizioni: dataToSave };
+    const postData = { anagraficaCompetizioni: dataToSave, logo: logo };
 
     return this.http.post<string>(environment.backEndURL + '/classifica/saveAnagraficaCompetizioni', postData);
 

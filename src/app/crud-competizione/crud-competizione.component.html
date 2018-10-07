@@ -3,21 +3,22 @@
 <div class="container-fluid">
   <div class="row"> <!-- riga per scelta nuova esistente -->
       <div class="col-md-1"></div>
-      <div class="col-md-4">
+      <div class="col-md-4 text-left" >
         <mat-radio-group [(ngModel)]="createUpdateCompetizione" [disabled]="fillCompetizioneData">
           <mat-radio-button class="mat-body-1" value="C">Nuova Competizione &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
           <mat-radio-button class="mat-body-1" value="U">&nbsp;</mat-radio-button>
-          <mat-form-field>
-              <mat-select 
-                placeholder="Competizione"
-                [(ngModel)]="idCompetizioneToEdit"
-                [disabled]="fillCompetizioneData || setEnabledDisabledDropDownCompetizione()"
-              >
-                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
-                <mat-option class="mat-body-1" *ngFor="let competizione of competizioni" [value]="competizione.id">{{ competizione.competizione }}</mat-option>
-              </mat-select>
-            </mat-form-field>
         </mat-radio-group>
+        <mat-form-field>
+          <mat-select 
+            #selComp
+            placeholder="Competizione"
+            [(ngModel)]="idCompetizioneToEdit"
+            [disabled]="fillCompetizioneData || setEnabledDisabledDropDownCompetizione()"
+          >
+            <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+            <mat-option class="mat-body-1" *ngFor="let competizione of competizioni" [value]="competizione.id">{{ competizione.competizione }}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="col-md-2">
         <button  
@@ -198,18 +199,6 @@
       <div class= "col-md-12">&nbsp;</div>
   </div>
 
-  <div class="row" *ngIf="fillCompetizioneData">
-    <div class= "col-md-1"></div>
-    <div class= "col-md-10">
-      <mat-divider></mat-divider>
-    </div>
-    <div class= "col-md-1"></div>
-  </div>
-
-  <div class="row" *ngIf="fillCompetizioneData">
-    <div class= "col-md-12">&nbsp;</div>
-  </div>
-
   <div class="row" *ngIf="fillCompetizioneData"> <!-- logo section-->
     
     <div class="col-md-1"></div>
@@ -223,18 +212,8 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="row">
-          <div class=col-md-3>
+          <div class=col-md-4>
             <input class="mat-body-1" type="file" (change)="onFileChanged($event)">
-          </div>
-          <div class="col-md-1">
-              <button  
-              class="mat-button"
-              mat-raised-button color="primary"
-              (click)="uploadLogo()" 
-              title="Carica File"
-            >
-              Carica File
-            </button>
           </div>
           <div class="col-md-8">
             <img #imgLogo id="imgLogo" alt="Logo" class="rounded img-fluid mx-auto d-block" src="{{imgLogoUrl}}">
@@ -245,6 +224,10 @@
     <div class="col-md-1"></div>
   
   </div> <!-- fine logo section -->
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
 
   <div class="row" *ngIf="fillCompetizioneData">
     <div class= "col-md-1"></div>
