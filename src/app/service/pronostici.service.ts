@@ -16,7 +16,8 @@ import { ValoriPronostici,
         FiltroStagione,
         Stagioni,
         ValoriPronosticiClassifica,
-        TipoCompetizione} from '../../models/models';
+        TipoCompetizione,
+        LogAggiornamenti} from '../../models/models';
 
 @Injectable()
 export class PronosticiService {
@@ -127,6 +128,12 @@ export class PronosticiService {
   getTipoCompetizione (): Observable<TipoCompetizione[]> {
 
     return this.http.post<TipoCompetizione[]>(environment.backEndURL + '/classifica/getTipoCompetizione', {});
+
+  }
+
+  getLogAggiornamenti (): Observable<LogAggiornamenti[]> {
+
+    return this.http.post<LogAggiornamenti[]>(environment.backEndURL + '/sincronizzazionedati/getLogAggiornamenti', {});
 
   }
 

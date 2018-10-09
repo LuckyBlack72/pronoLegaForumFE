@@ -1,11 +1,12 @@
 export interface ApplicationParameter {
 
-  nickname: string;
-  idPartecipante: number;
-  data_apertura: string;
-  data_chiusura: string;
-  data_calcolo_classifica: string;
-  menu_utente_page: boolean;
+  nickname?: string;
+  idPartecipante?: number;
+  data_apertura?: string;
+  data_chiusura?: string;
+  data_calcolo_classifica?: string;
+  menu_utente_page?: boolean;
+  log_aggiornamenti?: LogAggiornamenti[];
 
 }
 export interface AnagraficaPartecipanti {
@@ -125,4 +126,9 @@ export interface DeviceInfo {
 export interface TipoCompetizione {
   tipo?: string;
   nome?: string;
+}
+
+export interface LogAggiornamenti {
+  tabella?: string;
+  data_aggiornamento?: string;
 }

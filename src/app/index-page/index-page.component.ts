@@ -5,7 +5,7 @@ import { SessionStorage, LocalStorage } from 'ngx-store';
 
 import { PronosticiService } from '../service/pronostici.service';
 // import { DataService } from '../dataservice.service';
-import { DatePronostici, ApplicationParameter } from '../../models/models';
+import { DatePronostici, ApplicationParameter, LogAggiornamenti } from '../../models/models';
 import { Utils } from '../../models/utils';
 
 
@@ -23,6 +23,9 @@ export class IndexPageComponent implements OnInit {
 
   @LocalStorage() datePronostici: DatePronostici;
   @SessionStorage() applicationParameter: ApplicationParameter;
+  @LocalStorage() log_aggiornamentiLS: LogAggiornamenti[];
+
+  log_aggiornamenti: LogAggiornamenti[];
 
   constructor(
               private router: Router,
@@ -35,6 +38,7 @@ export class IndexPageComponent implements OnInit {
   ngOnInit() {
 
     this.datePronostici = this.activatedRoute.snapshot.data.datePronostici;
+    this.log_aggiornamenti = this.activatedRoute.snapshot.data.logAggiornamenti;
 
     // creo l'oggetto per il session storage da propagare in tutta l'applicazione
     // viene distrutto quando si chiude il tab del browser con l'applicazione
@@ -45,7 +49,8 @@ export class IndexPageComponent implements OnInit {
       data_calcolo_classifica : this.datePronostici[0].data_calcolo_classifica,
       nickname: '',
       idPartecipante: 0,
-      menu_utente_page: false
+      menu_utente_page: false,
+      log_aggiornamenti: this.log_aggiornamenti;
     };
 
   }

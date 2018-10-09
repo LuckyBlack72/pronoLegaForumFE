@@ -45,7 +45,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfiloComponent } from './profilo/profilo.component';
 import { CrudCompetizioneComponent } from './crud-competizione/crud-competizione.component';
 import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver';
-
+import { LogAggiornamentiResolver } from '../resolvers/logaggiornamenti-resolver';
 
 @NgModule({
   declarations: [
@@ -95,7 +95,8 @@ import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver
               ExternalApiService,
               CrudCompetizioniResolver,
               CrudCompetizioneService,
-              TipoCompetizioneResolver
+              TipoCompetizioneResolver,
+              LogAggiornamentiResolver
             ],
   bootstrap: [AppComponent]
 })

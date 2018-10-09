@@ -17,6 +17,7 @@ import { StagioniResolver } from '../resolvers/stagioni-resolver';
 import { AnagraficaPartecipantiResolver } from '../resolvers/anagraficapartecipanti-resolver';
 import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver';
 import { TipoCompetizioneResolver } from '../resolvers/tipocompetizione-resolver';
+import { LogAggiornamentiResolver } from '../resolvers/logaggiornamenti-resolver';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -28,6 +29,7 @@ const routes: Routes = [
     component: IndexPageComponent,
     resolve: {
       datePronostici: DatePronosticiResolver,
+      logAggiornamenti: LogAggiornamentiResolver
     }
   },
   { path: 'pronostici',
