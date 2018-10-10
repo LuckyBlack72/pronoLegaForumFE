@@ -45,7 +45,7 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
 
   }
 
-  @SessionStorage() protected applicationParameter: ApplicationParameter;
+  @SessionStorage() applicationParameter: ApplicationParameter;
   @LocalStorage() datePronostici: DatePronostici;
 
   ngOnInit() {

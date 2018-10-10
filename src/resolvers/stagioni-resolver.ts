@@ -16,7 +16,7 @@ export class StagioniResolver implements Resolve<Stagioni[]> {
             ) {
     }
 
-    @LocalStorage() protected listaStagioni: Stagioni[];
+    @LocalStorage() listaStagioni: Stagioni[];
 
     resolve(
         route: ActivatedRouteSnapshot,

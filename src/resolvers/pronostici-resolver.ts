@@ -18,7 +18,7 @@ export class PronosticiResolver implements Resolve<Pronostici[]> {
             ) {
     }
 
-    @SessionStorage() protected applicationParameter: ApplicationParameter;
+    @SessionStorage() applicationParameter: ApplicationParameter;
 
     resolve(
         route: ActivatedRouteSnapshot,

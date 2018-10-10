@@ -24,7 +24,7 @@ export class ExternalApiService {
   constructor ( private http: HttpClient, private utils: Utils, private pronosticiService: PronosticiService ) { }
 
 
-  @LocalStorage() protected valoriPronostici: ValoriPronostici[];
+  @LocalStorage() valoriPronostici: ValoriPronostici[];
 
 
   buildApiCallsUrl (stagione: string, competizioni: AnagraficaCompetizioni[]): string[] {

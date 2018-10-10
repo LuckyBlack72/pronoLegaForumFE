@@ -19,8 +19,7 @@ export class CrudCompetizioneService {
                 private pronosticiService: PronosticiService
             ) { }
 
-    @LocalStorage() protected competizioni: AnagraficaCompetizioni[];
-
+    @LocalStorage() competizioni: AnagraficaCompetizioni[];
 
     getDatiCompetizione(idCompetizione: number): Observable<AnagraficaCompetizioni> {
 

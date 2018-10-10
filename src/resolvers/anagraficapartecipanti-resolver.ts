@@ -15,7 +15,7 @@ export class AnagraficaPartecipantiResolver implements Resolve<AnagraficaParteci
             ) {
     }
 
-    @SessionStorage() protected applicationParameter: ApplicationParameter;
+    @SessionStorage() applicationParameter: ApplicationParameter;
 
     resolve(
         route: ActivatedRouteSnapshot,
