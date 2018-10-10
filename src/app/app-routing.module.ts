@@ -18,6 +18,7 @@ import { AnagraficaPartecipantiResolver } from '../resolvers/anagraficapartecipa
 import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver';
 import { TipoCompetizioneResolver } from '../resolvers/tipocompetizione-resolver';
 import { LogAggiornamentiResolver } from '../resolvers/logaggiornamenti-resolver';
+import { LeagueListResolver } from '../resolvers/leaguelist-resolver';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -64,7 +65,8 @@ const routes: Routes = [
   component: CrudCompetizioneComponent,
   resolve: {
     listaCompetizioni: CrudCompetizioniResolver,
-    tipiCompetizione: TipoCompetizioneResolver
+    tipiCompetizione: TipoCompetizioneResolver,
+    leagueList: LeagueListResolver
   }
 },
 ];

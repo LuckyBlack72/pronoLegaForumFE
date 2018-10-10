@@ -229,6 +229,43 @@
     <div class= "col-md-12">&nbsp;</div>
   </div>
 
+  <div class="row" *ngIf="fillCompetizioneData"> <!-- valori pronostici section -->
+    
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-subheading-1">
+            Valori Pronostici
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="row">
+          <div class="col-md-2">
+            <mat-form-field>
+              <mat-select 
+                placeholder="Competizione"
+                [disabled]="createUpdateCompetizione === 'U'"
+                [(ngModel)]="competizioneToSave.nome_pronostico"
+              >
+                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                <mat-option class="mat-body-1" *ngFor="let tipoCompetizione of tipiCompetizione" [value]="tipoCompetizione.tipo">{{ tipoCompetizione.nome }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-10"></div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+    <div class="col-md-1"></div>
+  
+  </div> <!-- fine valori pronostici section -->
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+
   <div class="row" *ngIf="fillCompetizioneData">
     <div class= "col-md-1"></div>
     <div class= "col-md-10">

@@ -69,6 +69,7 @@ export class ExternalApiService {
 
   }
 
+
   saveAndReloadClassificheCompetizioni(dataToSave: Pronostici[], searchParameterForReload: FiltroPronostici): Observable<any> {
 
     const saveData = <Observable<string>> this.pronosticiService.saveClassificaCompetizioni(dataToSave);
@@ -211,6 +212,12 @@ private decodePlayerName(idCompetizione: number, playerNameToDecode: string): st
   }
 
   return decodedPlayerName;
+
+}
+
+getLeagueList (): Observable<any> {
+
+  return  this.http.get<any>('https://soccer.sportsopendata.net/v1/leagues', {});
 
 }
 
