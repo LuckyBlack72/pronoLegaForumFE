@@ -16,14 +16,15 @@ export class ToolbarComponent implements OnInit {
 
   constructor(
     // public dataService: DataService,
-    private utilService: UtilService, private deviceDetectorService: DeviceDetectorService
+    private utilService: UtilService,
+    private deviceDetectorService: DeviceDetectorService
   ) { }
 
   pronoClosed: boolean;
   dataChiusuraProno: string;
   nickname: string;
   backActive: boolean;
-  @SessionStorage() protected applicationParameter: ApplicationParameter;
+  @SessionStorage() applicationParameter: ApplicationParameter;
 
   deviceInfo: DeviceInfo;
   isMobile: boolean;

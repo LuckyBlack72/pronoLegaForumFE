@@ -132,3 +132,8 @@ export interface LogAggiornamenti {
   tabella?: string;
   data_aggiornamento?: string;
 }
+export interface ReloadLocalStorageValues {
+  fnd: boolean;
+  lsIdx?: number;
+  ssIdx?: number;
+}

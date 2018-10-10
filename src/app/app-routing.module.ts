@@ -28,7 +28,6 @@ const routes: Routes = [
   { path: 'index-page',
     component: IndexPageComponent,
     resolve: {
-      datePronostici: DatePronosticiResolver,
       logAggiornamenti: LogAggiornamentiResolver
     }
   },
@@ -44,7 +43,10 @@ const routes: Routes = [
     component: RegistrazioneComponent
   },
   { path: 'menu-utente',
-    component: MenuUtenteComponent
+    component: MenuUtenteComponent,
+    resolve: {
+      datePronostici: DatePronosticiResolver,
+    }
   },
   { path: 'classifica',
     component: ClassificaComponent,

@@ -4,7 +4,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
-import { SessionStorage, LocalStorage } from 'ngx-store';
+import { SessionStorage, LocalStorage, SessionStorageService, LocalStorageService } from 'ngx-store';
 
 import { PronosticiService } from '../service/pronostici.service';
 // import { DataService } from '../dataservice.service';
@@ -36,7 +36,10 @@ export class ClassificaComponent implements OnInit {
     private pronosticiService: PronosticiService,
     // public dataService: DataService,
     private utilService: UtilService,
-    private deviceDetectorService: DeviceDetectorService
+    private deviceDetectorService: DeviceDetectorService,
+    private sessionStorageService: SessionStorageService,
+    private localStorageService: LocalStorageService,
+
   ) { }
 
   deviceInfo: DeviceInfo;
@@ -44,7 +47,7 @@ export class ClassificaComponent implements OnInit {
   isTablet: boolean;
   isDesktopDevice: boolean;
 
-  @SessionStorage() protected applicationParameter: ApplicationParameter;
+  @SessionStorage() applicationParameter: ApplicationParameter;
   @LocalStorage() listaStagioni: Stagioni[];
 
 
@@ -83,7 +86,7 @@ export class ClassificaComponent implements OnInit {
     this.isTablet = this.deviceDetectorService.isTablet();
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
-    this.listaStagioni = this.activatedRoute.snapshot.data.listaStagioni;
+    this.localStorageService.set('listaStagioni', this.activatedRoute.snapshot.data.listaStagioni);
     this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
     this.showClassifica = false;
 
@@ -103,7 +106,7 @@ export class ClassificaComponent implements OnInit {
 
   getClassifica(stagione: number) {
 
-    console.log(stagione);
+    // console.log(stagione);
 
     const searchParameter: FiltroPronostici = { stagione: stagione};
     const searchParameterCl: FiltroValoriPronostici = { stagione: stagione};

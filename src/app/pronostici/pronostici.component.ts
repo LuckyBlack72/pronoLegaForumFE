@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
-import { SessionStorage, LocalStorage } from 'ngx-store';
+import { SessionStorage, LocalStorage, SessionStorageService, LocalStorageService } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
 // import { DataService } from '../dataservice.service';
@@ -22,7 +22,7 @@ import {
         FiltroPronostici,
         ApplicationParameter,
         ApiTransformReturnValue,
-        DeviceInfo
+        DeviceInfo,
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -42,7 +42,9 @@ export class PronosticiComponent implements OnInit, OnDestroy {
               private utilService: UtilService,
               private commandService: CommandService,
               private externalApiService: ExternalApiService,
-              private deviceDetectorService: DeviceDetectorService
+              private deviceDetectorService: DeviceDetectorService,
+              private localStorageService: LocalStorageService,
+              private sessionStorageService: SessionStorageService
             ) {
     this.subscriptionHotKey = this.commandService.commands.subscribe(c => this.handleCommand(c));
   }
@@ -52,7 +54,8 @@ export class PronosticiComponent implements OnInit, OnDestroy {
   isTablet: boolean;
   isDesktopDevice: boolean;
 
-  @SessionStorage() protected applicationParameter: ApplicationParameter;
+  @SessionStorage() applicationParameter: ApplicationParameter;
+
 
   @LocalStorage() competizioni: AnagraficaCompetizioni[];
   @LocalStorage() valoriPronostici: ValoriPronostici[];
@@ -598,8 +601,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
     // prendo i dati dai resolver
-    this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
-    this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
+    this.localStorageService.set('competizioni', this.activatedRoute.snapshot.data.listaCompetizioni);
+    this.localStorageService.set('valoriPronostici', this.activatedRoute.snapshot.data.valoriPronostici);
     this.valoriPronosticiSaved = this.activatedRoute.snapshot.data.pronosticiSaved;
     this.valoriPronosticiToSave = this.activatedRoute.snapshot.data.pronosticiSaved;
     this.cCCToSaveToPronostici = [];

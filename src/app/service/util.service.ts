@@ -3,12 +3,12 @@ import { Router } from '@angular/router';
 import { Sort } from '@angular/material';
 
 import * as XLSX from 'xlsx';
-import { SessionStorage } from 'ngx-store';
+import { SessionStorage, SessionStorageService } from 'ngx-store';
 
 // import { DataService } from './dataservice.service';
-import { Pronostici, ExcelRow } from '../../models/models';
+import { Pronostici, ExcelRow, ReloadLocalStorageValues } from '../../models/models';
 import { Utils } from '../../models/utils';
-import { ApplicationParameter } from '../../models/models';
+import { ApplicationParameter, LogAggiornamenti } from '../../models/models';
 
 @Injectable()
 export class UtilService {
@@ -16,9 +16,10 @@ export class UtilService {
   constructor(
               private router: Router,
               // public dataService: DataService,
+              private sessionStorageService: SessionStorageService,
               private utils: Utils ) { }
 
-  @SessionStorage() protected applicationParameter: ApplicationParameter;
+  @SessionStorage() applicationParameter: ApplicationParameter;
 
   checkDateProno(dateToCheck: string): boolean {
 
@@ -58,6 +59,7 @@ export class UtilService {
     this.applicationParameter.nickname = ''; // resetto
     this.applicationParameter.idPartecipante = 0; // resetto
     this.applicationParameter.menu_utente_page = false;
+    this.sessionStorageService.set('applicationParameter', this.applicationParameter);
     this.router.navigate(['/index-page']) ;
 
   }
@@ -65,6 +67,7 @@ export class UtilService {
   back() {
 
     this.applicationParameter.menu_utente_page = false;
+    this.sessionStorageService.set('applicationParameter', this.applicationParameter);
     this.router.navigate(['/menu-utente']);
 
   }
@@ -72,6 +75,7 @@ export class UtilService {
   editProfile() {
 
     this.applicationParameter.menu_utente_page = true;
+    this.sessionStorageService.set('applicationParameter', this.applicationParameter);
     this.router.navigate(['/profilo']);
 
   }
@@ -153,6 +157,57 @@ export class UtilService {
 
 
     return isValid;
+
+  }
+
+  checkReloadLocalStorageData(
+                                tabella: string,
+                                localStorageData: LogAggiornamenti[],
+                                sessionStorageData: LogAggiornamenti[]
+                              ): ReloadLocalStorageValues {
+
+    let fnd_tbl: boolean;
+    const retValObj: ReloadLocalStorageValues = { fnd: true,
+                           lsIdx: 0,
+                           ssIdx: 0
+                          };
+
+
+
+    for (let i = 0; i < localStorageData.length; i++ ) {
+
+      for (let x = 0; x < sessionStorageData.length; x++ ) {
+
+        if (
+              sessionStorageData[x].tabella === tabella &&
+              ( localStorageData[i].tabella === sessionStorageData[x].tabella )
+            ) {
+                fnd_tbl = true;
+
+                if ( localStorageData[i].data_aggiornamento === sessionStorageData[x].data_aggiornamento ) {
+
+                  retValObj.fnd = true;
+                  break;
+
+                } else {
+
+                  retValObj.fnd = false;
+                  retValObj.ssIdx = i;
+                  retValObj.lsIdx = x;
+
+                  break;
+
+                }
+        }
+      }
+
+      if (fnd_tbl) {
+        break;
+      }
+
+    }
+
+  return retValObj;
 
   }
 

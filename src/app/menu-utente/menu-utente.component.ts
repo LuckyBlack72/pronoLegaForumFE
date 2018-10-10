@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { SessionStorage } from 'ngx-store';
+import { Router, ActivatedRoute } from '@angular/router';
+import { LocalStorage, SessionStorage, LocalStorageService, SessionStorageService } from 'ngx-store';
+
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -10,7 +11,7 @@ import { UtilService } from '../service/util.service';
 import { PronosticiService } from '../service/pronostici.service';
 import { CommandService, Command } from '../service/command.service';
 
-import { ApplicationParameter, DeviceInfo } from '../../models/models';
+import { ApplicationParameter, DeviceInfo, DatePronostici } from '../../models/models';
 
 
 @Component({
@@ -28,12 +29,16 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
   subscriptionHotKey: Subscription;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     // public dataService: DataService,
     private pronosticiService: PronosticiService,
     private utilService: UtilService,
     private deviceDetectorService: DeviceDetectorService,
     private commandService: CommandService,
+    private localStorageService: LocalStorageService,
+    private sessionStorageService: SessionStorageService,
+
   ) {
 
     this.subscriptionHotKey = this.commandService.commands.subscribe(c => this.handleCommand(c));
@@ -41,8 +46,18 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
   }
 
   @SessionStorage() protected applicationParameter: ApplicationParameter;
+  @LocalStorage() datePronostici: DatePronostici;
 
   ngOnInit() {
+
+    this.localStorageService.set('datePronostici', this.activatedRoute.snapshot.data.datePronostici);
+
+    this.applicationParameter.data_apertura =  this.datePronostici[0].data_apertura;
+    this.applicationParameter.data_chiusura = this.datePronostici[0].data_chiusura;
+    this.applicationParameter.data_calcolo_classifica = this.datePronostici[0].data_calcolo_classifica;
+
+    this.sessionStorageService.set('applicationParameter', this.applicationParameter);
+
 
     this.deviceInfo = this.deviceDetectorService.getDeviceInfo();
     this.isMobile  = this.deviceDetectorService.isMobile();

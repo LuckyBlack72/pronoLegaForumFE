@@ -1,63 +1,58 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { LocalStorage, SessionStorage } from 'ngx-store';
+import { LocalStorage, SessionStorage, LocalStorageService } from 'ngx-store';
 
-import { Utils } from '../models/utils';
 import { PronosticiService } from '../app/service/pronostici.service';
-import { AnagraficaCompetizioni, ApplicationParameter, LogAggiornamenti } from '../models/models';
+import { UtilService } from '../app/service/util.service';
+import { AnagraficaCompetizioni, ApplicationParameter, LogAggiornamenti, ReloadLocalStorageValues } from '../models/models';
+import { Utils } from '../models/utils';
 
 @Injectable()
 export class CompetizioniResolver implements Resolve<AnagraficaCompetizioni[]> {
 
-    constructor(private pronosticiService: PronosticiService, private utils: Utils) {
+    constructor(
+        private pronosticiService: PronosticiService,
+        private utils: Utils,
+        private utilService: UtilService,
+        private localStorageService: LocalStorageService) {
     }
 
-    @LocalStorage() protected competizioni: AnagraficaCompetizioni[];
-    @SessionStorage() protected applicationParameter: ApplicationParameter;
-    @LocalStorage() protected log_aggiornamentiLS: LogAggiornamenti[];
+    @LocalStorage() competizioni: AnagraficaCompetizioni[];
+    @SessionStorage() applicationParameter: ApplicationParameter;
+    @LocalStorage() log_aggiornamentiLS: LogAggiornamenti[];
 
     resolve(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<AnagraficaCompetizioni[]> {
 
+        let checkReload: ReloadLocalStorageValues;
         let fnd = false;
-        let fnd_tbl = false;
 
         if (this.competizioni) {
 
             if ( this.log_aggiornamentiLS ) {
 
-                for (let i = 0; i < this.log_aggiornamentiLS.length; i++ ) {
-
-                    for (let x = 0; x < this.applicationParameter.log_aggiornamenti.length; x++ ) {
-
-                        if (this.log_aggiornamentiLS[i].tabella ===
-                            this.applicationParameter.log_aggiornamenti[x].tabella) {
-                                fnd_tbl = true;
-
-                                if ( this.log_aggiornamentiLS[i].data_aggiornamento ===
-                                    this.applicationParameter.log_aggiornamenti[x].data_aggiornamento ) {
-                                        fnd = true;
-                                        break;
-                                }
-                        }
-                    }
-
-                    if (fnd_tbl) {
-                        break;
-                    }
-
+                checkReload = this.utilService.checkReloadLocalStorageData  (
+                                                                        'anagrafica_competizioni',
+                                                                        this.log_aggiornamentiLS,
+                                                                        this.applicationParameter.log_aggiornamenti
+                                                                    );
+                fnd = checkReload.fnd;
+                if (!checkReload.fnd) { // devo ricare i dati in local storage
+                    this.log_aggiornamentiLS[checkReload.lsIdx].data_aggiornamento =
+                    this.applicationParameter.log_aggiornamenti[checkReload.ssIdx].data_aggiornamento;
+                    this.localStorageService.set('log_aggiornamentiLS', this.log_aggiornamentiLS);
                 }
 
             } else {
 
                 this.log_aggiornamentiLS = this.applicationParameter.log_aggiornamenti;
+                this.localStorageService.set('log_aggiornamentiLS', this.log_aggiornamentiLS);
                 fnd = false;
 
             }
-
 
         } else {
 

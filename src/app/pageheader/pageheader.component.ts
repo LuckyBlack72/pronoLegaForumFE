@@ -24,10 +24,10 @@ export class PageheaderComponent implements OnInit {
     this.isTablet = this.deviceDetectorService.isTablet();
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
-    console.log(this.deviceInfo);
-    console.log(this.isMobile);  // returns if the device is a mobile device (android / iPhone / windows-phone etc)
-    console.log(this.isTablet);  // returns if the device us a tablet (iPad etc)
-    console.log(this.isDesktopDevice); // returns if the app is running on a Desktop browser.
+    // console.log(this.deviceInfo);
+    // console.log(this.isMobile);  // returns if the device is a mobile device (android / iPhone / windows-phone etc)
+    // console.log(this.isTablet);  // returns if the device us a tablet (iPad etc)
+    // console.log(this.isDesktopDevice); // returns if the app is running on a Desktop browser.
 
 
   }

@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import Swal from 'sweetalert2';
-import { SessionStorage, LocalStorage } from 'ngx-store';
+import { SessionStorage, LocalStorage, SessionStorageService, LocalStorageService } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
 // import { DataService } from '../dataservice.service';
@@ -52,7 +52,7 @@ export class CrudCompetizioneComponent implements OnInit {
   isTablet: boolean;
   isDesktopDevice: boolean;
 
-  @SessionStorage() protected applicationParameter: ApplicationParameter;
+  @SessionStorage() applicationParameter: ApplicationParameter;
 
   competizioni: AnagraficaCompetizioni[];
   createUpdateCompetizione: string;

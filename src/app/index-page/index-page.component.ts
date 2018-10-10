@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
-import { SessionStorage, LocalStorage } from 'ngx-store';
+import { SessionStorage, LocalStorage, LocalStorageService, SessionStorageService } from 'ngx-store';
 
 import { PronosticiService } from '../service/pronostici.service';
 // import { DataService } from '../dataservice.service';
@@ -21,7 +21,6 @@ export class IndexPageComponent implements OnInit {
   loading = false;
   @ViewChild('f') form: any;
 
-  @LocalStorage() datePronostici: DatePronostici;
   @SessionStorage() applicationParameter: ApplicationParameter;
   @LocalStorage() log_aggiornamentiLS: LogAggiornamenti[];
 
@@ -31,27 +30,33 @@ export class IndexPageComponent implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private pronosticiService: PronosticiService,
-              private utils: Utils
+              private utils: Utils,
+              private localStorageService: LocalStorageService,
+              private sessionStorageService: SessionStorageService
  //             public dataService: DataService
             ) { }
 
   ngOnInit() {
 
-    this.datePronostici = this.activatedRoute.snapshot.data.datePronostici;
+    if (!this.log_aggiornamentiLS) {
+      this.localStorageService.set('log_aggiornamentiLS', this.activatedRoute.snapshot.data.logAggiornamenti);
+    }
+
     this.log_aggiornamenti = this.activatedRoute.snapshot.data.logAggiornamenti;
 
     // creo l'oggetto per il session storage da propagare in tutta l'applicazione
     // viene distrutto quando si chiude il tab del browser con l'applicazione
     // è nella memoria locale del browser
     this.applicationParameter = {
-      data_apertura: this.datePronostici[0].data_apertura,
-      data_chiusura: this.datePronostici[0].data_chiusura,
-      data_calcolo_classifica : this.datePronostici[0].data_calcolo_classifica,
+      data_apertura: 'XXX',
+      data_chiusura: 'XXX',
+      data_calcolo_classifica : 'XXX',
       nickname: '',
       idPartecipante: 0,
       menu_utente_page: false,
-      log_aggiornamenti: this.log_aggiornamenti;
+      log_aggiornamenti: this.log_aggiornamenti
     };
+    this.sessionStorageService.set('applicationParameter', this.applicationParameter);
 
   }
 
@@ -67,6 +72,7 @@ export class IndexPageComponent implements OnInit {
                   this.loading = false;
                   this.form.reset();
                   this.applicationParameter.menu_utente_page = false;
+                  this.sessionStorageService.set('applicationParameter', this.applicationParameter);
                   this.router.navigate(['/menu-utente']) ;
               },
               error => {
