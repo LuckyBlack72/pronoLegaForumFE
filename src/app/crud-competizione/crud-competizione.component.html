@@ -248,9 +248,11 @@
                 placeholder="Competizione"
                 [disabled]="createUpdateCompetizione === 'U'"
                 [(ngModel)]="competizioneToSave.nome_pronostico"
+                (change)="loadValoriPronostici($event.target.value)"
               >
                 <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
-                <mat-option class="mat-body-1" *ngFor="let tipoCompetizione of tipiCompetizione" [value]="tipoCompetizione.tipo">{{ tipoCompetizione.nome }}</mat-option>
+                <mat-option class="mat-body-1" value="1">Personalizzata</mat-option>
+                <mat-option class="mat-body-1" *ngFor="let lega of leagueList.data.leagues" [value]="lega.league_slug">{{ lega.name }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>

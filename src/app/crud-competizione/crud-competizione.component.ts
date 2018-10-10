@@ -59,7 +59,7 @@ export class CrudCompetizioneComponent implements OnInit {
   idCompetizioneToEdit: number;
   fillCompetizioneData: boolean;
   isFillingData: boolean;
-  ligueList: any;
+  leagueList: any;
 
   competizioneToSave: AnagraficaCompetizioni = {
                                                   id: 0,
@@ -87,16 +87,14 @@ export class CrudCompetizioneComponent implements OnInit {
 
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
     this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
-    this.ligueList = this.activatedRoute.snapshot.data.leagueList;
-    
+    this.leagueList = this.activatedRoute.snapshot.data.leagueList;
+
     this.createUpdateCompetizione = 'C';
     this.fillCompetizioneData = false;
 
     const stagione = parseInt(this.utils.getStagione().substring(0, 4), 10);
     this.listaStagioniCompetizione.push(stagione);
     this.listaStagioniCompetizione.push((stagione + 1));
-
-
 
   }
 
@@ -244,6 +242,10 @@ export class CrudCompetizioneComponent implements OnInit {
       reader.readAsDataURL(event.target.files[0]);
 
     }
+
+  }
+
+  loadValoriPronostici(nome_pronostico: string): void {
 
   }
 
