@@ -76,6 +76,7 @@
                 placeholder="Tipo Competizione"
                 [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
                 [(ngModel)]="competizioneToSave.tipo_competizione"
+                (selectionChange)="buildleagueListCombo(competizioneToSave.tipo_competizione, this.activatedRoute.snapshot.data.leagueList)"                
               >
                 <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
                 <mat-option class="mat-body-1" *ngFor="let tipoCompetizione of tipiCompetizione" [value]="tipoCompetizione.tipo">{{ tipoCompetizione.nome }}</mat-option>
@@ -238,7 +239,7 @@
                 placeholder="Stagione"
                 [(ngModel)]="stagioneCompetizione"
                 [disabled]="createUpdateViewCompetizione === 'U'"
-                (selectionChange)="loadValoriPronostici(competizioneToSave.nome_pronostico, stagioneCompetizione)"
+                (selectionChange)="loadValoriPronostici(competizioneToSave.nome_pronostico, stagioneCompetizione, competizioneToSave.tipo_competizione)"
               >
                 <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
                 <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioniCompetizione" [value]="stagione">{{ stagione }}</mat-option>
@@ -251,11 +252,11 @@
                 placeholder="Competizione"
                 [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
                 [(ngModel)]="competizioneToSave.nome_pronostico"
-                (selectionChange)="loadValoriPronostici(competizioneToSave.nome_pronostico, stagioneCompetizione)"
+                (selectionChange)="loadValoriPronostici(competizioneToSave.nome_pronostico, stagioneCompetizione, competizioneToSave.tipo_competizione)"
               >
                 <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
                 <mat-option class="mat-body-1" value="1">Personalizzata</mat-option>
-                <mat-option class="mat-body-1" *ngFor="let lega of leagueList.data.leagues" [value]="lega.league_slug">{{ lega.name }}</mat-option>
+                <mat-option class="mat-body-1" *ngFor="let lega of leagueList" [value]="lega.value">{{ lega.name }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -274,10 +275,12 @@
             >
       
               <ng-container matColumnDef="prono" >
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Valori Pronostici</mat-header-cell>
+                <mat-header-cell matHeaderCellDef mat-sort-header>
+                  Valori Pronostico
+                </mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.prono}}</mat-cell>
               </ng-container>
-          
+
               <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
           
               <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

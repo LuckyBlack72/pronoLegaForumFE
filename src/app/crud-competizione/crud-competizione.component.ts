@@ -3,25 +3,16 @@ import { ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 
 import Swal from 'sweetalert2';
-import { SessionStorage, LocalStorage, SessionStorageService, LocalStorageService } from 'ngx-store';
+import { SessionStorage } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
-// import { DataService } from '../dataservice.service';
-import { PronosticiService } from '../service/pronostici.service';
-import { UtilService } from '../service/util.service';
 import { ExternalApiService } from '../service/externalApi.service';
 import { CrudCompetizioneService } from '../service/crudCompetizione.service';
 
 import {
         AnagraficaCompetizioni,
         ValoriPronostici,
-        Pronostici,
-        ValoriPronosticiComboFiller,
-        CheckDuplicateProno,
-        ValoriPronosticiClassifica,
-        FiltroPronostici,
         ApplicationParameter,
-        ApiTransformReturnValue,
         DeviceInfo,
         TipoCompetizione
       } from '../../models/models';
@@ -40,10 +31,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
     private activatedRoute: ActivatedRoute,
     private utils: Utils,
-    private pronosticiService: PronosticiService,
-    private utilService: UtilService,
     private externalApiService: ExternalApiService,
-    private deviceDetectorService: DeviceDetectorService,
     private crudCompetizioneService: CrudCompetizioneService
 
   ) { }
@@ -109,7 +97,7 @@ export class CrudCompetizioneComponent implements OnInit {
     this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
     this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
-    this.leagueList = this.activatedRoute.snapshot.data.leagueList;
+    this.leagueList = this.buildleagueListCombo('ALL', this.activatedRoute.snapshot.data.leagueList);
 
     this.createUpdateViewCompetizione = 'C';
     this.fillCompetizioneData = false;
@@ -160,7 +148,7 @@ export class CrudCompetizioneComponent implements OnInit {
                                                         ).subscribe(
               valoriPronostici => {
                 this.dataSourceValoriPronostici.data =
-                this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E');
+                this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E', 'T');
               },
               erroreApiEsterna => {
                 this.resetDataValues();
@@ -194,7 +182,7 @@ export class CrudCompetizioneComponent implements OnInit {
             for (let i = 0; i < this.valoriPronostici.length; i++) {
               if (this.competizioneToSave.id === this.valoriPronostici[i].id_competizione ) {
                 this.dataSourceValoriPronostici.data =
-                this.buildDataSourceValoriPronostici({}, this.valoriPronostici[i].valori_pronostici, 'I');
+                this.buildDataSourceValoriPronostici({}, this.valoriPronostici[i].valori_pronostici, 'I', '');
                 break;
               }
             }
@@ -324,36 +312,84 @@ export class CrudCompetizioneComponent implements OnInit {
 
   }
 
-  loadValoriPronostici(nome_pronostico: string, stagione: string): void {
+  loadValoriPronostici(nome_pronostico: string, stagione: string, tipo_competizione: string): void {
 
     console.log(nome_pronostico + ' - ' + stagione);
 
+
     if (
           (nome_pronostico == null || nome_pronostico === '0') ||
-          (stagione == null || stagione === '0')
+          (stagione == null || stagione === '0') ||
+          (tipo_competizione == null || tipo_competizione === '0')
         ) {
 
       Swal({
         allowOutsideClick: false,
         allowEscapeKey: false,
-        title: 'Inserire Stagione e Competizione per Caricare i Valori dei Pronostici',
+        title: 'Inserire Stagione e Competizione e tipo Competizione per Caricare i Valori dei Pronostici',
         type: 'error'
       });
 
     } else {
 
-      this.externalApiService.getValoriPronostici(
-        nome_pronostico,
-        stagione
-      ).subscribe(
-        valoriPronostici => {
-          this.dataSourceValoriPronostici.data =
-          this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E');
-        },
-        error => {
-          this.dataSourceValoriPronostici.data = [{prono: null}];
-        }
-      );
+      if (tipo_competizione === 'SCO') {
+
+        this.externalApiService.getValoriPronostici(
+          nome_pronostico,
+          stagione
+        ).subscribe(
+          valoriPronostici => {
+            const urlsToCall: string[] = [];
+            const annoNum = parseInt(stagione, 10) - 2000;
+            const annoNumNext = annoNum + 1;
+            const stagioneCall = annoNum.toString(10) + '-' + annoNumNext.toString(10);
+            let urlToCall = '';
+            for (let i = 0; i < valoriPronostici.data.teams.length; i++) {
+              urlToCall =
+              'https://soccer.sportsopendata.net/v1/leagues/' +
+              nome_pronostico + // Es: serie-a
+              '/seasons/' +
+              stagioneCall + // Es: 18-19
+              '/teams/' +
+              valoriPronostici.data.teams[i].name +
+              '/players';
+              urlsToCall.push(urlToCall);
+              urlToCall = '';
+            }
+            this.externalApiService.getValoriPronosticiScorer(urlsToCall).subscribe(
+              scorers => {
+                this.dataSourceValoriPronostici.data =
+                this.buildDataSourceValoriPronostici(scorers, [], 'E', 'S');
+              }
+              ,
+              erroreScorers => {
+                this.dataSourceValoriPronostici.data = [{prono: null}];
+              }
+
+            );
+
+          },
+          error => {
+            this.dataSourceValoriPronostici.data = [{prono: null}];
+          }
+        );
+
+      } else {
+
+        this.externalApiService.getValoriPronostici(
+          nome_pronostico,
+          stagione
+        ).subscribe(
+          valoriPronostici => {
+            this.dataSourceValoriPronostici.data =
+            this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E', 'T');
+          },
+          error => {
+            this.dataSourceValoriPronostici.data = [{prono: null}];
+          }
+        );
+
+      }
 
     }
 
@@ -363,7 +399,11 @@ export class CrudCompetizioneComponent implements OnInit {
     this.dataSourceValoriPronostici.filter = filterValue.trim().toLowerCase();
   }
 
-  private buildDataSourceValoriPronostici(externalData: any, internalData: string[], dataType: string): string[] {
+  private buildDataSourceValoriPronostici(
+                                            externalData: any,
+                                            internalData: string[],
+                                            dataType: string,
+                                            competizioneType: string): string[] {
 
     const retVal: any[] = [];
 
@@ -375,8 +415,74 @@ export class CrudCompetizioneComponent implements OnInit {
 
     } else { // dati esterni
 
-      for (let i = 0; i < externalData.data.teams.length; i++) {
-        retVal.push({prono: externalData.data.teams[i].name});
+      if ( competizioneType === 'T' ) { // squadre
+
+        for (let i = 0; i < externalData.data.teams.length; i++) {
+          retVal.push({
+                        prono: externalData.data.teams[i].name
+                      });
+        }
+
+      } else { // scorers
+
+        for (let x = 0; x < externalData.length; x++) {
+
+          for (let y = 0; y < externalData[x].data.players.length; y++) {
+
+            if (
+              (externalData[x].data.players[y].position === 'centrocampista') ||
+              (externalData[x].data.players[y].position === 'attaccante')
+            ) {
+              retVal.push({
+                            prono:
+                            externalData[x].data.players[y].fullname +
+                            ' ' +
+                            externalData[x].data.players[y].name
+                          });
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+    return retVal;
+
+  }
+
+  private buildleagueListCombo(tipo_competizione: string, leagues: any): any[] {
+
+    const retVal: any[] = [];
+
+    for (let i = 0; i < leagues.data.leagues.length; i++) {
+
+      if ( tipo_competizione !== 'SCO' ) {
+
+        retVal.push(
+          {
+             value: leagues.data.leagues[i].league_slug,
+             name: leagues.data.leagues[i].name
+          }
+        );
+
+      }
+
+      if ( tipo_competizione === 'ALL' || tipo_competizione === 'SCO' ) {
+
+        if ( leagues.data.leagues[i].cup === false ) {
+
+          retVal.push(
+            {
+               value: leagues.data.leagues[i].league_slug,
+               name: 'Capocannoniere ' + leagues.data.leagues[i].name
+            }
+          );
+
+        }
+
       }
 
     }

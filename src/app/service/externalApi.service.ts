@@ -238,7 +238,17 @@ getValoriPronostici (competizione: string, stagione: string): Observable<any> {
 
 }
 
+getValoriPronosticiScorer (urlsToCall: string[]): Observable<any> {
 
+  const dataFromApi: any[] = [];
+
+  for (let i = 0; i < urlsToCall.length; i++ ) {
+    dataFromApi.push(<Observable<any>> this.http.get(urlsToCall[i]));
+  }
+
+  return forkJoin(dataFromApi);
+
+}
 
 
 }
