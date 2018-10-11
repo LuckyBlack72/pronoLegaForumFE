@@ -274,10 +274,8 @@
               matSortDisableClear        
             >
       
-              <ng-container matColumnDef="prono" >
-                <mat-header-cell matHeaderCellDef mat-sort-header>
-                  Valori Pronostico
-                </mat-header-cell>
+              <ng-container matColumnDef="prono">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Valori Pronostico</mat-header-cell>
                 <mat-cell *matCellDef="let element">{{element.prono}}</mat-cell>
               </ng-container>
 

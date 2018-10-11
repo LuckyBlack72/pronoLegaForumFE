@@ -97,7 +97,7 @@ export class CrudCompetizioneComponent implements OnInit {
     this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
     this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
-    this.leagueList = this.buildleagueListCombo('ALL', this.activatedRoute.snapshot.data.leagueList);
+    this.buildleagueListCombo('ALL', this.activatedRoute.snapshot.data.leagueList);
 
     this.createUpdateViewCompetizione = 'C';
     this.fillCompetizioneData = false;
@@ -453,7 +453,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
   }
 
-  private buildleagueListCombo(tipo_competizione: string, leagues: any): any[] {
+  private buildleagueListCombo(tipo_competizione: string, leagues: any): void {
 
     const retVal: any[] = [];
 
@@ -487,7 +487,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
     }
 
-    return retVal;
+    this.leagueList = retVal;
 
   }
 
