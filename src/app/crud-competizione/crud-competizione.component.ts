@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 
 import Swal from 'sweetalert2';
 import { SessionStorage, LocalStorage, SessionStorageService, LocalStorageService } from 'ngx-store';
@@ -55,7 +56,7 @@ export class CrudCompetizioneComponent implements OnInit {
   @SessionStorage() applicationParameter: ApplicationParameter;
 
   competizioni: AnagraficaCompetizioni[];
-  createUpdateCompetizione: string;
+  createUpdateViewCompetizione: string;
   idCompetizioneToEdit: number;
   fillCompetizioneData: boolean;
   isFillingData: boolean;
@@ -78,18 +79,39 @@ export class CrudCompetizioneComponent implements OnInit {
 
   listaStagioniCompetizione: number[] = [];
   tipiCompetizione: TipoCompetizione[] = [];
+  valoriPronostici: ValoriPronostici[];
 
   fileToUpload: File;
   @ViewChild('imgLogo') imgLogo: ElementRef;
   imgLogoUrl: string;
 
+  @ViewChild('table') tabClassifica: ElementRef;
+  paginator: MatPaginator;
+  sort: MatSort;
+
+  @ViewChild(MatSort)
+  set iniSort(sort: MatSort) {
+    this.sort = sort;
+    this.dataSourceValoriPronostici.sort = this.sort;
+  }
+
+  @ViewChild(MatPaginator)
+  set iniPaginator(paginator: MatPaginator) {
+    this.paginator = paginator;
+    this.dataSourceValoriPronostici.paginator = this.paginator;
+  }
+
+  dataSourceValoriPronostici = new MatTableDataSource([]);
+  displayedColumns = ['prono'];
+
   ngOnInit() {
 
+    this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
     this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
     this.leagueList = this.activatedRoute.snapshot.data.leagueList;
 
-    this.createUpdateCompetizione = 'C';
+    this.createUpdateViewCompetizione = 'C';
     this.fillCompetizioneData = false;
 
     const stagione = parseInt(this.utils.getStagione().substring(0, 4), 10);
@@ -102,7 +124,7 @@ export class CrudCompetizioneComponent implements OnInit {
     let retVal: boolean;
     retVal = false;
     if (
-          this.createUpdateCompetizione === 'U' &&
+          this.createUpdateViewCompetizione === 'U' &&
           (!this.idCompetizioneToEdit || this.idCompetizioneToEdit == 0)
         ) {
           retVal = true;
@@ -113,23 +135,70 @@ export class CrudCompetizioneComponent implements OnInit {
   setEnabledDisabledDropDownCompetizione(): boolean {
     let retVal: boolean;
     retVal = false;
-    if (this.createUpdateCompetizione === 'C') {
+    if (this.createUpdateViewCompetizione === 'C') {
       this.idCompetizioneToEdit = null;
       retVal = true;
     }
     return retVal;
   }
 
-  createUpdateCompetizioneData(createUpdateCompetizione: string): void {
+  createUpdateViewCompetizioneData(createUpdateViewCompetizione: string): void {
 
     this.fillCompetizioneData = true;
 
-    switch (createUpdateCompetizione) {
+    switch (createUpdateViewCompetizione) {
       case 'C':
         break;
       case 'U':
         this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
-          data => this.competizioneToSave = data
+          data => {
+            this.competizioneToSave = data;
+            this.stagioneCompetizione = this.listaStagioniCompetizione[(this.listaStagioniCompetizione.length - 1)];
+            this.externalApiService.getValoriPronostici(
+                                                          this.competizioneToSave.nome_pronostico,
+                                                          this.stagioneCompetizione.toString()
+                                                        ).subscribe(
+              valoriPronostici => {
+                this.dataSourceValoriPronostici.data =
+                this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E');
+              },
+              erroreApiEsterna => {
+                this.resetDataValues();
+                Swal({
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  title: 'Errore Applicativo',
+                  type: 'error'
+                });
+              }
+            );
+          }
+          ,
+          error => {
+            this.resetDataValues();
+            Swal({
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              title: 'Errore Applicativo',
+              type: 'error'
+            });
+          }
+        );
+        break;
+      case 'V':
+        this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
+          data => {
+            this.competizioneToSave = data;
+            this.stagioneCompetizione =
+            this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];
+            for (let i = 0; i < this.valoriPronostici.length; i++) {
+              if (this.competizioneToSave.id === this.valoriPronostici[i].id_competizione ) {
+                this.dataSourceValoriPronostici.data =
+                this.buildDataSourceValoriPronostici({}, this.valoriPronostici[i].valori_pronostici, 'I');
+                break;
+              }
+            }
+          }
           ,
           error => {
             this.resetDataValues();
@@ -149,18 +218,28 @@ export class CrudCompetizioneComponent implements OnInit {
   }
 
   resetData(): void {
-    Swal({
-      title: 'Vuoi veramente annullare i dati inseriti ?',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Conferma Annullamento'
-    }).then((result) => {
-      if (result.value) {
-        this.resetDataValues();
-      }
-    });
+
+    if (this.createUpdateViewCompetizione === 'V') {
+
+      this.resetDataValues();
+
+    } else {
+
+      Swal({
+        title: 'Vuoi veramente annullare i dati inseriti ?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Conferma Annullamento'
+      }).then((result) => {
+        if (result.value) {
+          this.resetDataValues();
+        }
+      });
+
+    }
+
   }
 
   resetDataValues(): void {
@@ -180,7 +259,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
     this.fillCompetizioneData = false;
     this.idCompetizioneToEdit = null;
-    this.createUpdateCompetizione = 'C';
+    this.createUpdateViewCompetizione = 'C';
 
   }
 
@@ -245,7 +324,64 @@ export class CrudCompetizioneComponent implements OnInit {
 
   }
 
-  loadValoriPronostici(nome_pronostico: string): void {
+  loadValoriPronostici(nome_pronostico: string, stagione: string): void {
+
+    console.log(nome_pronostico + ' - ' + stagione);
+
+    if (
+          (nome_pronostico == null || nome_pronostico === '0') ||
+          (stagione == null || stagione === '0')
+        ) {
+
+      Swal({
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        title: 'Inserire Stagione e Competizione per Caricare i Valori dei Pronostici',
+        type: 'error'
+      });
+
+    } else {
+
+      this.externalApiService.getValoriPronostici(
+        nome_pronostico,
+        stagione
+      ).subscribe(
+        valoriPronostici => {
+          this.dataSourceValoriPronostici.data =
+          this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E');
+        },
+        error => {
+          this.dataSourceValoriPronostici.data = [{prono: null}];
+        }
+      );
+
+    }
+
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSourceValoriPronostici.filter = filterValue.trim().toLowerCase();
+  }
+
+  private buildDataSourceValoriPronostici(externalData: any, internalData: string[], dataType: string): string[] {
+
+    const retVal: any[] = [];
+
+    if ( dataType === 'I' ) { // dati interni
+
+      for (let i = 0; i < internalData.length; i++) {
+        retVal.push({prono: internalData[i]});
+      }
+
+    } else { // dati esterni
+
+      for (let i = 0; i < externalData.data.teams.length; i++) {
+        retVal.push({prono: externalData.data.teams[i].name});
+      }
+
+    }
+
+    return retVal;
 
   }
 

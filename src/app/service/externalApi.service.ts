@@ -221,5 +221,24 @@ getLeagueList (): Observable<any> {
 
 }
 
+getValoriPronostici (competizione: string, stagione: string): Observable<any> {
+
+  const annoNum = parseInt(stagione, 10) - 2000;
+  const annoNumNext = annoNum + 1;
+  const stagioneCall = annoNum.toString(10) + '-' + annoNumNext.toString(10);
+
+  const urlToCall =
+  'https://soccer.sportsopendata.net/v1/leagues/' +
+  competizione + // Es: serie-a
+  '/seasons/' +
+  stagioneCall + // Es: 18-19
+  '/teams';
+
+  return  this.http.get<any>(urlToCall, {});
+
+}
+
+
+
 
 }

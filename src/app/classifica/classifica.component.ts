@@ -52,7 +52,7 @@ export class ClassificaComponent implements OnInit {
 
 
   @ViewChild('st') stCmb: ElementRef;
-  @ViewChild('table') tabClassifica: ElementRef;
+  @ViewChild('table') tabValoriPronostici: ElementRef;
 
   paginator: MatPaginator;
   sort: MatSort;

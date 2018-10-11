@@ -66,7 +66,8 @@ const routes: Routes = [
   resolve: {
     listaCompetizioni: CrudCompetizioniResolver,
     tipiCompetizione: TipoCompetizioneResolver,
-    leagueList: LeagueListResolver
+    leagueList: LeagueListResolver,
+    valoriPronostici: ValoriPronosticiResolver
   }
 },
 ];

@@ -3,10 +3,11 @@
 <div class="container-fluid">
   <div class="row"> <!-- riga per scelta nuova esistente -->
       <div class="col-md-1"></div>
-      <div class="col-md-4 text-left" >
-        <mat-radio-group [(ngModel)]="createUpdateCompetizione" [disabled]="fillCompetizioneData">
-          <mat-radio-button class="mat-body-1" value="C">Nuova Competizione &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
-          <mat-radio-button class="mat-body-1" value="U">&nbsp;</mat-radio-button>
+      <div class="col-md-8 text-left" >
+        <mat-radio-group [(ngModel)]="createUpdateViewCompetizione" [disabled]="fillCompetizioneData">
+          <mat-radio-button class="mat-body-1" value="C">Nuova Competizione &nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button class="mat-body-1" value="U">Aggiorna Competizione &nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button class="mat-body-1" value="V">Visualizza Competizone &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
         </mat-radio-group>
         <mat-form-field>
           <mat-select 
@@ -25,13 +26,13 @@
           class="mat-button"
           [disabled]="fillCompetizioneData || setEnabledDisabledScegliButton()"
           mat-raised-button color="primary"
-          (click)="createUpdateCompetizioneData(createUpdateCompetizione)" 
+          (click)="createUpdateViewCompetizioneData(createUpdateViewCompetizione)" 
           title="Scegli"
         >
           Scegli
         </button>
       </div>
-    <div class="col-md-5"></div>
+    <div class="col-md-1"></div>
   </div>
 
   <div class="row">
@@ -52,7 +53,7 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title class="mat-subheading-1">
-            Nome e Stagione di Appartenenza e Tipo Competizione
+            Nome e Tipo Competizione
           </mat-panel-title>
           <mat-panel-description>
           </mat-panel-description>
@@ -62,7 +63,7 @@
             <mat-form-field>
               <input 
                 class="mat-body-1"
-                [disabled]="createUpdateCompetizione === 'U'"
+                [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
                 [(ngModel)]="competizioneToSave.competizione"
                 matInput
                 placeholder="Nome Competizione"
@@ -72,19 +73,8 @@
           <div class="col-md-3">
             <mat-form-field>
               <mat-select 
-                placeholder="Stagione"
-                [(ngModel)]="stagioneCompetizione"
-              >
-                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
-                <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioniCompetizione" [value]="stagione">{{ stagione }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-md-3">
-            <mat-form-field>
-              <mat-select 
                 placeholder="Tipo Competizione"
-                [disabled]="createUpdateCompetizione === 'U'"
+                [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
                 [(ngModel)]="competizioneToSave.tipo_competizione"
               >
                 <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
@@ -92,7 +82,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-md-3"></div>
+          <div class="col-md-6"></div>
         </div>
       </mat-expansion-panel>
     </div>
@@ -154,7 +144,7 @@
           <div class="col-md-4">
             <mat-slider
               class="mat-body-2"
-              [disabled]="createUpdateCompetizione === 'U'"
+              [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
               [(ngModel)]="competizioneToSave.numero_pronostici"
               thumbLabel
               tickInterval="1"
@@ -166,7 +156,7 @@
           <div class="col-md-4">
             <mat-slider
               class="mat-body-2"
-              [disabled]="createUpdateCompetizione === 'U'"
+              [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
               [(ngModel)]="competizioneToSave.punti_esatti"
               thumbLabel
               tickInterval="1"
@@ -178,7 +168,7 @@
           <div class="col-md-4">
             <mat-slider
               class="mat-body-2"
-              [disabled]="createUpdateCompetizione === 'U'"
+              [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
               [(ngModel)]="competizioneToSave.punti_lista"
               thumbLabel
               tickInterval="1"
@@ -236,19 +226,32 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title class="mat-subheading-1">
-            Valori Pronostici
+            Stagione di Appartenenza e Valori Pronostici
           </mat-panel-title>
           <mat-panel-description>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="row">
-          <div class="col-md-2">
+          <div class="col-md-3">
+            <mat-form-field>
+              <mat-select 
+                placeholder="Stagione"
+                [(ngModel)]="stagioneCompetizione"
+                [disabled]="createUpdateViewCompetizione === 'U'"
+                (selectionChange)="loadValoriPronostici(competizioneToSave.nome_pronostico, stagioneCompetizione)"
+              >
+                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioniCompetizione" [value]="stagione">{{ stagione }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
             <mat-form-field>
               <mat-select 
                 placeholder="Competizione"
-                [disabled]="createUpdateCompetizione === 'U'"
+                [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
                 [(ngModel)]="competizioneToSave.nome_pronostico"
-                (change)="loadValoriPronostici($event.target.value)"
+                (selectionChange)="loadValoriPronostici(competizioneToSave.nome_pronostico, stagioneCompetizione)"
               >
                 <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
                 <mat-option class="mat-body-1" value="1">Personalizzata</mat-option>
@@ -256,7 +259,39 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-md-10"></div>
+          <div class="col-md-4">
+            
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
+            </mat-form-field>
+            
+            <mat-table 
+              #table matSort 
+              [dataSource]="dataSourceValoriPronostici"
+              matSortActive="prono" 
+              matSortDirection="asc" 
+              matSortDisableClear        
+            >
+      
+              <ng-container matColumnDef="prono" >
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Valori Pronostici</mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.prono}}</mat-cell>
+              </ng-container>
+          
+              <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+          
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              
+            </mat-table>
+            
+            <mat-paginator 
+              [pageSizeOptions]="[5,10]" 
+              showFirstLastButtons
+            ></mat-paginator>
+      
+          </div>
+          <div class="col-md-2"></div>
+
         </div>
       </mat-expansion-panel>
     </div>
@@ -285,7 +320,7 @@
     <div class=col-md-1>
       <button  
         class="mat-button"
-        [disabled]="!fillCompetizioneData"
+        [disabled]="!fillCompetizioneData || createUpdateViewCompetizione === 'V'"
         mat-raised-button color="primary"
         (click)="saveData()" 
         title="Salva"
