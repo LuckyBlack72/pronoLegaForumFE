@@ -92,12 +92,14 @@ export class CrudCompetizioneComponent implements OnInit {
   dataSourceValoriPronostici = new MatTableDataSource([]);
   displayedColumns = ['prono'];
 
+  lega: any; // per avere nome nome_pronostico = lega.value - per avere competizione = lega.name
+
   ngOnInit() {
 
     this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
     this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
-    this.leagueList = this.buildleagueListCombo('ALL', this.activatedRoute.snapshot.data.leagueList);
+    this.buildleagueListCombo('ALL', this.activatedRoute.snapshot.data.leagueList);
 
     this.createUpdateViewCompetizione = 'C';
     this.fillCompetizioneData = false;
@@ -141,6 +143,7 @@ export class CrudCompetizioneComponent implements OnInit {
         this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
           data => {
             this.competizioneToSave = data;
+            this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
             this.stagioneCompetizione = this.listaStagioniCompetizione[(this.listaStagioniCompetizione.length - 1)];
             this.externalApiService.getValoriPronostici(
                                                           this.competizioneToSave.nome_pronostico,
@@ -177,6 +180,7 @@ export class CrudCompetizioneComponent implements OnInit {
         this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
           data => {
             this.competizioneToSave = data;
+            this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
             this.stagioneCompetizione =
             this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];
             for (let i = 0; i < this.valoriPronostici.length; i++) {
@@ -245,6 +249,7 @@ export class CrudCompetizioneComponent implements OnInit {
       tipo_competizione: null
     };
 
+    this.lega = { };
     this.fillCompetizioneData = false;
     this.idCompetizioneToEdit = null;
     this.createUpdateViewCompetizione = 'C';
@@ -252,6 +257,9 @@ export class CrudCompetizioneComponent implements OnInit {
   }
 
   saveData(): void {
+
+    this.competizioneToSave.competizione = this.lega.name;
+    this.competizioneToSave.nome_pronostico = this.lega.value;
 
     const checkData = this.crudCompetizioneService.checkDataToSave(this.competizioneToSave, this.stagioneCompetizione);
 
@@ -453,7 +461,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
   }
 
-  private buildleagueListCombo(tipo_competizione: string, leagues: any): any[] {
+  private buildleagueListCombo(tipo_competizione: string, leagues: any): void {
 
     const retVal: any[] = [];
 
@@ -487,7 +495,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
     }
 
-    return retVal;
+    this.leagueList = retVal;
 
   }
 
