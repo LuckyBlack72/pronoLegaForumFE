@@ -19,6 +19,7 @@ import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver
 import { TipoCompetizioneResolver } from '../resolvers/tipocompetizione-resolver';
 import { LogAggiornamentiResolver } from '../resolvers/logaggiornamenti-resolver';
 import { LeagueListResolver } from '../resolvers/leaguelist-resolver';
+import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -67,7 +68,8 @@ const routes: Routes = [
     listaCompetizioni: CrudCompetizioniResolver,
     tipiCompetizione: TipoCompetizioneResolver,
     leagueList: LeagueListResolver,
-    valoriPronostici: ValoriPronosticiResolver
+    valoriPronostici: ValoriPronosticiResolver,
+    datiLegaForum: DatiLegaForumResolver
   }
 },
 ];

@@ -11,7 +11,8 @@ import {
           FiltroPronostici,
           ValoriPronosticiClassifica,
           ApiTransformReturnValue,
-          ValoriPronostici
+          ValoriPronostici,
+          DatiSquadraLegaForum
         } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -247,6 +248,13 @@ getValoriPronosticiScorer (urlsToCall: string[]): Observable<any> {
   }
 
   return forkJoin(dataFromApi);
+
+}
+
+getDatiSorteggioLegaForum(stagione: number): Observable<DatiSquadraLegaForum[][][]> {
+
+  const postParameter = { stagione: stagione };
+  return this.http.post<DatiSquadraLegaForum[][][]>('https://sorteggiolegaforum.herokuapp.com' + '/getSorteggioStagione', postParameter);
 
 }
 

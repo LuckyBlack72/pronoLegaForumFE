@@ -31,6 +31,7 @@ export interface AnagraficaCompetizioni {
   pronostici_inseriti?: number;
   logo?: string;
   tipo_competizione?: string;
+  tipo_pronostici?: string;
 }
 
 export interface ValoriPronostici {
@@ -136,4 +137,16 @@ export interface ReloadLocalStorageValues {
   fnd: boolean;
   lsIdx?: number;
   ssIdx?: number;
+}
+
+export interface DatiSquadraLegaForum {
+  id?: number;
+  squadra?: string;
+  allenatore?: string;
+  stagione?: number;
+  serie?: string;
+  fascia?: number;
+  ranking?: number;
+  girone?: string;
+  ods?: number;
 }

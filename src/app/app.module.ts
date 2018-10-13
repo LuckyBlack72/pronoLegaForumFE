@@ -47,6 +47,7 @@ import { CrudCompetizioneComponent } from './crud-competizione/crud-competizione
 import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver';
 import { LogAggiornamentiResolver } from '../resolvers/logaggiornamenti-resolver';
 import { LeagueListResolver } from '../resolvers/leaguelist-resolver';
+import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
 
 @NgModule({
   declarations: [
@@ -98,7 +99,8 @@ import { LeagueListResolver } from '../resolvers/leaguelist-resolver';
               CrudCompetizioneService,
               TipoCompetizioneResolver,
               LogAggiornamentiResolver,
-              LeagueListResolver
+              LeagueListResolver,
+              DatiLegaForumResolver
             ],
   bootstrap: [AppComponent]
 })

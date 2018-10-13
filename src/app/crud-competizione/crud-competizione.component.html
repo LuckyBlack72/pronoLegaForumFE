@@ -79,12 +79,31 @@
 -->
             <div class="row">
               <div class="col-md-6">
+                <mat-radio-group
+                  [(ngModel)]="competizioneToSave.tipo_pronostici" 
+                  [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
+                  (change)="changeTipoPronostici($event)"
+                >
+                  <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+                  <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <div class="col-md-6"></div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
                 <mat-form-field>
                   <mat-select 
                     placeholder="Tipo Competizione"
                     [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
                     [(ngModel)]="competizioneToSave.tipo_competizione"
-                    (selectionChange)="buildleagueListCombo(competizioneToSave.tipo_competizione, this.activatedRoute.snapshot.data.leagueList)"                
+                    (selectionChange)="buildleagueListCombo(
+                                                              competizioneToSave.tipo_pronostici,
+                                                              competizioneToSave.tipo_competizione,
+                                                              this.activatedRoute.snapshot.data.leagueList,
+                                                              datiLegaForum
+                                                            )"                
                   >
                     <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
                     <mat-option class="mat-body-1" *ngFor="let tipoCompetizione of tipiCompetizione" [value]="tipoCompetizione.tipo">{{ tipoCompetizione.nome }}</mat-option>
@@ -104,7 +123,6 @@
                       (selectionChange)="loadValoriPronostici(lega.value, stagioneCompetizione, competizioneToSave.tipo_competizione)"
                     >
                       <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
-                      <mat-option class="mat-body-1" value="1">Personalizzata</mat-option>
                       <mat-option class="mat-body-1" *ngFor="let lega of leagueList" [value]="lega">{{ lega.name }}</mat-option>
                     </mat-select>
                   </mat-form-field>
@@ -131,7 +149,13 @@
         
           </div>
 
-          <div class="col-md-6">
+          <div class="col-md-2">
+            <div class="row">
+              <div class= "col-md-12">&nbsp;</div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
             
             <mat-form-field>
               <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
@@ -301,90 +325,6 @@
     <div class= "col-md-12">&nbsp;</div>
   </div>
 
-  <div class="row" *ngIf="fillCompetizioneData"> <!-- valori pronostici section -->
-    
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title class="mat-subheading-1">
-            Stagione di Appartenenza e Valori Pronostici
-          </mat-panel-title>
-          <mat-panel-description>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <div class="row">
-          <div class="col-md-3">
-            <mat-form-field>
-              <mat-select 
-                placeholder="Stagione"
-                [(ngModel)]="stagioneCompetizione"
-                [disabled]="createUpdateViewCompetizione === 'U'"
-                (selectionChange)="loadValoriPronostici(competizioneToSave.nome_pronostico, stagioneCompetizione, competizioneToSave.tipo_competizione)"
-              >
-                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
-                <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioniCompetizione" [value]="stagione">{{ stagione }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-md-3">
-            <mat-form-field>
-              <mat-select 
-                placeholder="Competizione"
-                [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
-                [(ngModel)]="competizioneToSave.nome_pronostico"
-                (selectionChange)="loadValoriPronostici(competizioneToSave.nome_pronostico, stagioneCompetizione, competizioneToSave.tipo_competizione)"
-              >
-                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
-                <mat-option class="mat-body-1" value="1">Personalizzata</mat-option>
-                <mat-option class="mat-body-1" *ngFor="let lega of leagueList" [value]="lega.value">{{ lega.name }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-md-4">
-            
-            <mat-form-field>
-              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
-            </mat-form-field>
-            
-            <mat-table 
-              #table matSort 
-              [dataSource]="dataSourceValoriPronostici"
-              matSortActive="prono" 
-              matSortDirection="asc" 
-              matSortDisableClear        
-            >
-      
-              <ng-container matColumnDef="prono">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Valori Pronostico</mat-header-cell>
-                <mat-cell *matCellDef="let element">{{element.prono}}</mat-cell>
-              </ng-container>
-
-              <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-          
-              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-              
-            </mat-table>
-            
-            <mat-paginator 
-              [pageSizeOptions]="[5,10]" 
-              showFirstLastButtons
-            ></mat-paginator>
-      
-          </div>
-          <div class="col-md-2"></div>
-
-        </div>
-      </mat-expansion-panel>
-    </div>
-    <div class="col-md-1"></div>
-  
-  </div> <!-- fine valori pronostici section -->
-
-  <div class="row" *ngIf="fillCompetizioneData">
-    <div class= "col-md-12">&nbsp;</div>
-  </div>
-
   <div class="row" *ngIf="fillCompetizioneData">
     <div class= "col-md-1"></div>
     <div class= "col-md-10">
@@ -423,6 +363,5 @@
     </div>
     <div class=col-md-9></div>
   </div> <!-- fine bottoni salva / annulla -->
-
 
 </div> <!--fine container fluid -->

@@ -1,9 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort, MatRadioChange } from '@angular/material';
 
 import Swal from 'sweetalert2';
-import { SessionStorage } from 'ngx-store';
+import { SessionStorage, LocalStorage, LocalStorageService } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { ExternalApiService } from '../service/externalApi.service';
@@ -14,7 +14,8 @@ import {
         ValoriPronostici,
         ApplicationParameter,
         DeviceInfo,
-        TipoCompetizione
+        TipoCompetizione,
+        DatiSquadraLegaForum
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -32,7 +33,8 @@ export class CrudCompetizioneComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private utils: Utils,
     private externalApiService: ExternalApiService,
-    private crudCompetizioneService: CrudCompetizioneService
+    private crudCompetizioneService: CrudCompetizioneService,
+    private localStorageService: LocalStorageService
 
   ) { }
 
@@ -42,6 +44,7 @@ export class CrudCompetizioneComponent implements OnInit {
   isDesktopDevice: boolean;
 
   @SessionStorage() applicationParameter: ApplicationParameter;
+  @LocalStorage()  datiLegaForum: DatiSquadraLegaForum[][][];
 
   competizioni: AnagraficaCompetizioni[];
   createUpdateViewCompetizione: string;
@@ -60,7 +63,8 @@ export class CrudCompetizioneComponent implements OnInit {
                                                   numero_pronostici: 1,
                                                   pronostici_inseriti: 0,
                                                   logo: null,
-                                                  tipo_competizione: null
+                                                  tipo_competizione: null,
+                                                  tipo_pronostici: null
                                                 };
 
   stagioneCompetizione: number;
@@ -99,7 +103,9 @@ export class CrudCompetizioneComponent implements OnInit {
     this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
     this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
-    this.buildleagueListCombo('ALL', this.activatedRoute.snapshot.data.leagueList);
+    this.localStorageService.set('datiLegaForum', this.activatedRoute.snapshot.data.datiLegaForum);
+    this.lega = { value : null, name: null};
+    this.buildleagueListCombo('E', 'ALL', this.activatedRoute.snapshot.data.leagueList, this.datiLegaForum);
 
     this.createUpdateViewCompetizione = 'C';
     this.fillCompetizioneData = false;
@@ -138,6 +144,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
     switch (createUpdateViewCompetizione) {
       case 'C':
+        this.competizioneToSave.tipo_pronostici = 'E';
         break;
       case 'U':
         this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
@@ -246,7 +253,8 @@ export class CrudCompetizioneComponent implements OnInit {
       numero_pronostici: 1,
       pronostici_inseriti: 0,
       logo: null,
-      tipo_competizione: null
+      tipo_competizione: null,
+      tipo_pronostici: null
     };
 
     this.lega = { };
@@ -320,84 +328,156 @@ export class CrudCompetizioneComponent implements OnInit {
 
   }
 
-  loadValoriPronostici(nome_pronostico: string, stagione: string, tipo_competizione: string): void {
+  loadValoriPronostici(nome_pronostico: string, stagione: string, tipo_competizione: string, tipo_pronostici: string): void {
 
     console.log(nome_pronostico + ' - ' + stagione);
 
-
     if (
-          (nome_pronostico == null || nome_pronostico === '0') ||
-          (stagione == null || stagione === '0') ||
-          (tipo_competizione == null || tipo_competizione === '0')
+          (nome_pronostico == null || nome_pronostico == '0') ||
+          (stagione == null || stagione == '0') ||
+          (tipo_competizione == null || tipo_competizione == '0')
         ) {
 
+console.log('aaaaaaaaaaaaaaaaaaaaaaa');
+
+      this.dataSourceValoriPronostici.data = [];
+/*
       Swal({
         allowOutsideClick: false,
         allowEscapeKey: false,
         title: 'Inserire Stagione e Competizione e tipo Competizione per Caricare i Valori dei Pronostici',
         type: 'error'
       });
+*/
 
     } else {
 
-      if (tipo_competizione === 'SCO') {
+      if (tipo_pronostici === 'E') {
 
-        this.externalApiService.getValoriPronostici(
-          nome_pronostico,
-          stagione
-        ).subscribe(
-          valoriPronostici => {
-            const urlsToCall: string[] = [];
-            const annoNum = parseInt(stagione, 10) - 2000;
-            const annoNumNext = annoNum + 1;
-            const stagioneCall = annoNum.toString(10) + '-' + annoNumNext.toString(10);
-            let urlToCall = '';
-            for (let i = 0; i < valoriPronostici.data.teams.length; i++) {
-              urlToCall =
-              'https://soccer.sportsopendata.net/v1/leagues/' +
-              nome_pronostico + // Es: serie-a
-              '/seasons/' +
-              stagioneCall + // Es: 18-19
-              '/teams/' +
-              valoriPronostici.data.teams[i].name +
-              '/players';
-              urlsToCall.push(urlToCall);
-              urlToCall = '';
-            }
-            this.externalApiService.getValoriPronosticiScorer(urlsToCall).subscribe(
-              scorers => {
-                this.dataSourceValoriPronostici.data =
-                this.buildDataSourceValoriPronostici(scorers, [], 'E', 'S');
-              }
-              ,
-              erroreScorers => {
-                this.dataSourceValoriPronostici.data = [{prono: null}];
-              }
-
-            );
-
-          },
-          error => {
-            this.dataSourceValoriPronostici.data = [{prono: null}];
-          }
-        );
+        this.loadValoriPronosticiEsterni(nome_pronostico, stagione, tipo_competizione);
 
       } else {
 
-        this.externalApiService.getValoriPronostici(
-          nome_pronostico,
-          stagione
-        ).subscribe(
-          valoriPronostici => {
-            this.dataSourceValoriPronostici.data =
-            this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E', 'T');
-          },
-          error => {
-            this.dataSourceValoriPronostici.data = [{prono: null}];
-          }
-        );
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+
+        this.loadValoriPronosticiLegaForum(nome_pronostico);
 
       }
+
+
+    }
+
+  }
+
+  private loadValoriPronosticiLegaForum(nome_pronostico: string): void {
+
+    let dataSourceData: any[] = [];
+    let arrayNomePronostico = nome_pronostico.split('-');
+    let serie = arrayNomePronostico[0]; // ALL tutti / numero = indice dell'array
+    let girone = arrayNomePronostico[0]; // ALL tutti / numero = indice dell'array
+    let push = false;
+
+    console.log(serie + ' - ' + girone);
+
+    for (let i = 0; i < this.datiLegaForum.length; i++) {
+
+      for (let x = 0; x < this.datiLegaForum[i].length; x++) {
+
+        for (let y = 0; y < this.datiLegaForum[i][x].length; y++) {
+
+          if (serie === 'ALL') {
+            if (girone === 'ALL') {
+              push = true;
+            } else {
+              if (x === parseInt(girone, 10)) {
+                push = true;
+              }
+            }
+          } else {
+            if (i === parseInt(serie, 10)) {
+              if (girone === 'ALL') {
+                push = true;
+              } else {
+                if (x === parseInt(girone, 10)) {
+                  push = true;
+                }
+              }
+            }
+          }
+
+          if (push) {
+            dataSourceData.push({prono: this.datiLegaForum[i][x][y].squadra});
+            push = false;
+          }
+
+        }
+
+      }
+
+    }
+
+    this.dataSourceValoriPronostici.data = dataSourceData;
+
+  }
+
+  private loadValoriPronosticiEsterni(nome_pronostico: string, stagione: string, tipo_competizione: string): void {
+
+    if (tipo_competizione === 'SCO') {
+
+      this.externalApiService.getValoriPronostici(
+        nome_pronostico,
+        stagione
+      ).subscribe(
+        valoriPronostici => {
+          const urlsToCall: string[] = [];
+          const annoNum = parseInt(stagione, 10) - 2000;
+          const annoNumNext = annoNum + 1;
+          const stagioneCall = annoNum.toString(10) + '-' + annoNumNext.toString(10);
+          let urlToCall = '';
+          for (let i = 0; i < valoriPronostici.data.teams.length; i++) {
+            urlToCall =
+            'https://soccer.sportsopendata.net/v1/leagues/' +
+            nome_pronostico + // Es: serie-a
+            '/seasons/' +
+            stagioneCall + // Es: 18-19
+            '/teams/' +
+            valoriPronostici.data.teams[i].name +
+            '/players';
+            urlsToCall.push(urlToCall);
+            urlToCall = '';
+          }
+          this.externalApiService.getValoriPronosticiScorer(urlsToCall).subscribe(
+            scorers => {
+              this.dataSourceValoriPronostici.data =
+              this.buildDataSourceValoriPronostici(scorers, [], 'E', 'S');
+            }
+            ,
+            erroreScorers => {
+              this.dataSourceValoriPronostici.data = [{prono: null}];
+            }
+
+          );
+
+        },
+        error => {
+          this.dataSourceValoriPronostici.data = [{prono: null}];
+        }
+      );
+
+    } else {
+
+      this.externalApiService.getValoriPronostici(
+        nome_pronostico,
+        stagione
+      ).subscribe(
+        valoriPronostici => {
+          this.dataSourceValoriPronostici.data =
+          this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E', 'T');
+        },
+        error => {
+          this.dataSourceValoriPronostici.data = [{prono: null}];
+        }
+      );
 
     }
 
@@ -461,43 +541,193 @@ export class CrudCompetizioneComponent implements OnInit {
 
   }
 
-  private buildleagueListCombo(tipo_competizione: string, leagues: any): void {
+  private buildleagueListCombo(
+                                tipo_pronostici: string,
+                                tipo_competizione: string,
+                                leagues: any,
+                                datiLegaForum: DatiSquadraLegaForum[][][]
+                              ): void {
 
     const retVal: any[] = [];
 
-    for (let i = 0; i < leagues.data.leagues.length; i++) {
+    if (tipo_pronostici == 'E' ) { // esterni
 
-      if ( tipo_competizione !== 'SCO' ) {
+      for (let i = 0; i < leagues.data.leagues.length; i++) {
 
-        retVal.push(
-          {
-             value: leagues.data.leagues[i].league_slug,
-             name: leagues.data.leagues[i].name
-          }
-        );
+        switch (tipo_competizione) {
+
+          case 'ALL':
+            retVal.push(
+              {
+                value: leagues.data.leagues[i].league_slug,
+                name: leagues.data.leagues[i].name
+              }
+            );
+            if ( leagues.data.leagues[i].cup === false ) {
+
+              retVal.push(
+                {
+                   value: leagues.data.leagues[i].league_slug,
+                   name: 'Capo Cannoniere ' + leagues.data.leagues[i].name
+                }
+              );
+
+            }
+            break;
+
+          case 'CMP':
+            if ( leagues.data.leagues[i].cup === false ) {
+              retVal.push(
+                {
+                   value: leagues.data.leagues[i].league_slug,
+                   name: leagues.data.leagues[i].name
+                });
+            }
+            break;
+
+          case 'CUP':
+            if ( leagues.data.leagues[i].cup === true ) {
+              retVal.push(
+                {
+                  value: leagues.data.leagues[i].league_slug,
+                  name: leagues.data.leagues[i].name
+                });
+            }
+            break;
+
+          case 'SCO':
+            if ( leagues.data.leagues[i].cup === false ) {
+
+              retVal.push(
+                {
+                  value: leagues.data.leagues[i].league_slug,
+                  name: 'Capo Cannoniere ' + leagues.data.leagues[i].name
+                }
+              );
+
+            }
+            break;
+        }
 
       }
 
-      if ( tipo_competizione === 'ALL' || tipo_competizione === 'SCO' ) {
+    } else { // legaforum
 
-        if ( leagues.data.leagues[i].cup === false ) {
+      switch (tipo_competizione) {
+
+        case 'CMP':
 
           retVal.push(
             {
-               value: leagues.data.leagues[i].league_slug,
-               name: 'Capocannoniere ' + leagues.data.leagues[i].name
+              value: '0-ALL',
+              name: 'Vincitore Lega Forum'
+            });
+
+          for (let x = 0; x < datiLegaForum.length; x++) {
+
+            for (let y = 0; y < datiLegaForum[x].length; y++) {
+
+              retVal.push(
+                {
+                  value: x + '-' + y,
+                  name: 'Podio Girone ' + datiLegaForum[x][y][0].girone
+                });
+
             }
-          );
 
-        }
+          }
+          break;
 
+          case 'CUP':
+          retVal.push(
+            {
+              value: 'ALL-ALL',
+              name: 'Coppa Trab'
+            });
+            retVal.push(
+              {
+                value: 'ALL-ALL',
+                name: 'Vincitore Memorial Franco'
+              });
+              retVal.push(
+                {
+                  value: 'ALL-ALL',
+                  name: 'Vincitore Masters Cup'
+                });
+              retVal.push(
+              {
+                value: 'ALL-ALL',
+                name: 'Vincitore Champions Cup'
+              });
+            break;
+
+            case 'ALL':
+              retVal.push(
+                {
+                  value: '0-ALL',
+                  name: 'Vincitore Lega Forum'
+                });
+
+              for (let x = 0; x < datiLegaForum.length; x++) {
+
+                for (let y = 0; y < datiLegaForum[x].length; y++) {
+
+                  retVal.push(
+                    {
+                      value: x + '-' + y,
+                      name: 'Podio ' + datiLegaForum[x][y][0].girone
+                    });
+
+                }
+
+              }
+              retVal.push(
+                {
+                  value: 'ALL-ALL',
+                  name: 'Vincitore Coppa Trab'
+                });
+                retVal.push(
+                  {
+                    value: 'ALL-ALL',
+                    name: 'Vincitore Memorial Franco'
+                  });
+                  retVal.push(
+                    {
+                      value: 'ALL-ALL',
+                      name: 'Vincitore Masters Cup'
+                    });
+                  retVal.push(
+                  {
+                    value: 'ALL-ALL',
+                    name: 'Vincitore Champions Cup'
+                  });
+              break;
       }
 
     }
 
     this.leagueList = retVal;
+    this.lega.nome = null;
+    this.lega.value = '0';
+    this.stagioneCompetizione = 0;
+    this.dataSourceValoriPronostici.data = [];
 
   }
 
+  changeTipoPronostici($event: MatRadioChange) {
+
+    this.competizioneToSave.tipo_competizione = '0';
+    this.lega.nome = null;
+    this.lega.value = '0';
+    this.stagioneCompetizione = 0;
+    this.dataSourceValoriPronostici.data = [];
+    this.buildleagueListCombo(
+      $event.value,
+      'ALL',
+      this.activatedRoute.snapshot.data.leagueList,
+      this.datiLegaForum
+    );
+
+  }
 
 }
