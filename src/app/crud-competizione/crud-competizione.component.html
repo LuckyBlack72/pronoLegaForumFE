@@ -311,21 +311,39 @@
         <div class="row">
           <div class="col-md-4">
             <mat-form-field>
-              <input matInput [matDatepicker]="ap" placeholder="Apertura Pronostici" disabled>
+              <input
+                matInput
+                [matDatepicker]="ap"
+                placeholder="Apertura Pronostici"
+                [(ngModel)]="date_pronostici.data_apertura"
+                disabled
+              >
               <mat-datepicker-toggle matSuffix [for]="ap"></mat-datepicker-toggle>
               <mat-datepicker #ap disabled="false"></mat-datepicker>
             </mat-form-field>          
           </div>
           <div class="col-md-4">
             <mat-form-field>
-              <input matInput [matDatepicker]="cp" placeholder="Chiusura Pronostici" disabled>
+              <input
+                matInput
+                [matDatepicker]="cp"
+                placeholder="Chiusura Pronostici"
+                [(ngModel)]="date_pronostici.data_chiusura"
+                disabled
+              >
               <mat-datepicker-toggle matSuffix [for]="cp"></mat-datepicker-toggle>
               <mat-datepicker #cp disabled="false"></mat-datepicker>
             </mat-form-field>          
           </div>
           <div class="col-md-4">
             <mat-form-field>
-              <input matInput [matDatepicker]="cc" placeholder="Calcolo Classifica" disabled>
+              <input
+                matInput
+                [matDatepicker]="cc"
+                placeholder="Calcolo Classifica"
+                [(ngModel)]="date_pronostici.data_calcolo_classifica"
+                disabled
+              >
               <mat-datepicker-toggle matSuffix [for]="cc"></mat-datepicker-toggle>
               <mat-datepicker #cc disabled="false"></mat-datepicker>
             </mat-form-field>          

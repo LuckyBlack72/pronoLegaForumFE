@@ -15,7 +15,8 @@ import {
         ApplicationParameter,
         DeviceInfo,
         TipoCompetizione,
-        DatiSquadraLegaForum
+        DatiSquadraLegaForum,
+        DatePronostici
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -74,6 +75,13 @@ export class CrudCompetizioneComponent implements OnInit {
                                                 };
 
   stagioneCompetizione: number;
+
+  date_competizione: DatePronostici = {
+                                        stagione : null,
+                                        data_apertura: null,
+                                        data_chiusura: null,
+                                        data_calcolo_classifica: null
+                                      };
 
   listaStagioniCompetizione: number[] = [];
   tipiCompetizione: TipoCompetizione[] = [];
