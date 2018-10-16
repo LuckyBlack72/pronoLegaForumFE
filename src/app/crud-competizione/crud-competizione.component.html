@@ -295,6 +295,53 @@
       <div class= "col-md-12">&nbsp;</div>
   </div>
 
+  <div class="row" *ngIf="fillCompetizioneData">  <!-- Date [Apertura Chiusura Calcolo Classifica] -->
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-10">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-subheading-1">
+            Date Apertura Pronostici - Chiusura Pronostici - Calcolo Classifica
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field>
+              <input matInput [matDatepicker]="ap" placeholder="Apertura Pronostici" disabled>
+              <mat-datepicker-toggle matSuffix [for]="ap"></mat-datepicker-toggle>
+              <mat-datepicker #ap disabled="false"></mat-datepicker>
+            </mat-form-field>          
+          </div>
+          <div class="col-md-4">
+            <mat-form-field>
+              <input matInput [matDatepicker]="cp" placeholder="Chiusura Pronostici" disabled>
+              <mat-datepicker-toggle matSuffix [for]="cp"></mat-datepicker-toggle>
+              <mat-datepicker #cp disabled="false"></mat-datepicker>
+            </mat-form-field>          
+          </div>
+          <div class="col-md-4">
+            <mat-form-field>
+              <input matInput [matDatepicker]="cc" placeholder="Calcolo Classifica" disabled>
+              <mat-datepicker-toggle matSuffix [for]="cc"></mat-datepicker-toggle>
+              <mat-datepicker #cc disabled="false"></mat-datepicker>
+            </mat-form-field>          
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+
+    <div class="col-md-1"></div>
+
+  </div>  <!-- Fine Date [Apertura Chiusura Calcolo Classifica] -->
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+
   <div class="row" *ngIf="fillCompetizioneData"> <!-- logo section-->
     
     <div class="col-md-1"></div>

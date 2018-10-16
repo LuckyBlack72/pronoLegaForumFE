@@ -32,6 +32,7 @@ export interface AnagraficaCompetizioni {
   logo?: string;
   tipo_competizione?: string;
   tipo_pronostici?: string;
+  date_competizione?: DatePronostici[];
 }
 
 export interface ValoriPronostici {

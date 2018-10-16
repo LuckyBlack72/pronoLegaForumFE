@@ -64,7 +64,13 @@ export class CrudCompetizioneComponent implements OnInit {
                                                   pronostici_inseriti: 0,
                                                   logo: null,
                                                   tipo_competizione: null,
-                                                  tipo_pronostici: null
+                                                  tipo_pronostici: null,
+                                                  date_competizione: [{
+                                                                        stagione: '0',
+                                                                        data_apertura: null,
+                                                                        data_chiusura: null,
+                                                                        data_calcolo_classifica: null
+                                                                      }]
                                                 };
 
   stagioneCompetizione: number;
@@ -254,7 +260,13 @@ export class CrudCompetizioneComponent implements OnInit {
       pronostici_inseriti: 0,
       logo: null,
       tipo_competizione: null,
-      tipo_pronostici: null
+      tipo_pronostici: null,
+      date_competizione: [{
+        stagione: '0',
+        data_apertura: null,
+        data_chiusura: null,
+        data_calcolo_classifica: null
+      }]
     };
 
     this.lega = { };
@@ -330,15 +342,11 @@ export class CrudCompetizioneComponent implements OnInit {
 
   loadValoriPronostici(nome_pronostico: string, stagione: string, tipo_competizione: string, tipo_pronostici: string): void {
 
-    console.log(nome_pronostico + ' - ' + stagione);
-
     if (
           (nome_pronostico == null || nome_pronostico == '0') ||
           (stagione == null || stagione == '0') ||
           (tipo_competizione == null || tipo_competizione == '0')
         ) {
-
-console.log('aaaaaaaaaaaaaaaaaaaaaaa');
 
       this.dataSourceValoriPronostici.data = [];
 /*
@@ -358,8 +366,6 @@ console.log('aaaaaaaaaaaaaaaaaaaaaaa');
 
       } else {
 
-        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-
         this.loadValoriPronosticiLegaForum(nome_pronostico);
 
       }
@@ -371,13 +377,11 @@ console.log('aaaaaaaaaaaaaaaaaaaaaaa');
 
   private loadValoriPronosticiLegaForum(nome_pronostico: string): void {
 
-    let dataSourceData: any[] = [];
-    let arrayNomePronostico = nome_pronostico.split('-');
-    let serie = arrayNomePronostico[0]; // ALL tutti / numero = indice dell'array
-    let girone = arrayNomePronostico[0]; // ALL tutti / numero = indice dell'array
+    const dataSourceData: any[] = [];
+    const arrayNomePronostico = nome_pronostico.split('-');
+    const serie = arrayNomePronostico[0]; // ALL tutti / numero = indice dell'array
+    const girone = arrayNomePronostico[1]; // ALL tutti / numero = indice dell'array
     let push = false;
-
-    console.log(serie + ' - ' + girone);
 
     for (let i = 0; i < this.datiLegaForum.length; i++) {
 

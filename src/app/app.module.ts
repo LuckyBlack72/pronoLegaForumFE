@@ -4,6 +4,8 @@ import { MaterialModule } from './material.module';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+
 
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
@@ -100,7 +102,8 @@ import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
               TipoCompetizioneResolver,
               LogAggiornamentiResolver,
               LeagueListResolver,
-              DatiLegaForumResolver
+              DatiLegaForumResolver,
+              {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},
             ],
   bootstrap: [AppComponent]
 })
