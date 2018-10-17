@@ -166,6 +166,12 @@ export class CrudCompetizioneComponent implements OnInit {
             this.competizioneToSave = data;
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
             this.stagioneCompetizione = this.listaStagioniCompetizione[(this.listaStagioniCompetizione.length - 1)];
+            this.date_competizione = {
+              stagione : null,
+              data_apertura: null,
+              data_chiusura: null,
+              data_calcolo_classifica: null
+            };
             this.externalApiService.getValoriPronostici(
                                                           this.competizioneToSave.nome_pronostico,
                                                           this.stagioneCompetizione.toString()
@@ -204,6 +210,7 @@ export class CrudCompetizioneComponent implements OnInit {
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
             this.stagioneCompetizione =
             this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];
+            this.date_competizione = this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)]
             for (let i = 0; i < this.valoriPronostici.length; i++) {
               if (this.competizioneToSave.id === this.valoriPronostici[i].id_competizione ) {
                 this.dataSourceValoriPronostici.data =
@@ -294,8 +301,10 @@ export class CrudCompetizioneComponent implements OnInit {
     if (checkData) { // controlli ok
       if (this.competizioneToSave.id === 0) {
         this.competizioneToSave.anni_competizione[0] = this.stagioneCompetizione;
+        this.competizioneToSave.date_competizione[0] = this.date_competizione;
       } else {
         this.competizioneToSave.anni_competizione.push(this.stagioneCompetizione);
+        this.competizioneToSave.date_competizione.push(this.date_competizione);
       }
       this.crudCompetizioneService.saveAnagraficaCompetizione(this.competizioneToSave, this.fileToUpload).subscribe(
         data => {
