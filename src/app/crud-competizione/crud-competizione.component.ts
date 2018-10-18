@@ -207,6 +207,9 @@ export class CrudCompetizioneComponent implements OnInit {
         this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
           data => {
             this.competizioneToSave = data;
+
+            console.log(this.competizioneToSave);
+
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
             this.stagioneCompetizione =
             this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];

@@ -315,11 +315,11 @@
                 matInput
                 [matDatepicker]="ap"
                 placeholder="Apertura Pronostici"
-                [(ngModel)]="date_pronostici.data_apertura"
+                [(ngModel)]="date_competizione.data_apertura"
                 disabled
               >
               <mat-datepicker-toggle matSuffix [for]="ap"></mat-datepicker-toggle>
-              <mat-datepicker #ap disabled="false"></mat-datepicker>
+              <mat-datepicker #ap [disabled]="createUpdateViewCompetizione === 'V'"></mat-datepicker>
             </mat-form-field>          
           </div>
           <div class="col-md-4">
@@ -328,11 +328,11 @@
                 matInput
                 [matDatepicker]="cp"
                 placeholder="Chiusura Pronostici"
-                [(ngModel)]="date_pronostici.data_chiusura"
+                [(ngModel)]="date_competizione.data_chiusura"
                 disabled
               >
               <mat-datepicker-toggle matSuffix [for]="cp"></mat-datepicker-toggle>
-              <mat-datepicker #cp disabled="false"></mat-datepicker>
+              <mat-datepicker #cp [disabled]="createUpdateViewCompetizione === 'V'"></mat-datepicker>
             </mat-form-field>          
           </div>
           <div class="col-md-4">
@@ -341,11 +341,11 @@
                 matInput
                 [matDatepicker]="cc"
                 placeholder="Calcolo Classifica"
-                [(ngModel)]="date_pronostici.data_calcolo_classifica"
+                [(ngModel)]="date_competizione.data_calcolo_classifica"
                 disabled
               >
               <mat-datepicker-toggle matSuffix [for]="cc"></mat-datepicker-toggle>
-              <mat-datepicker #cc disabled="false"></mat-datepicker>
+              <mat-datepicker #cc [disabled]="createUpdateViewCompetizione === 'V'"></mat-datepicker>
             </mat-form-field>          
           </div>
         </div>
