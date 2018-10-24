@@ -208,11 +208,16 @@ export class CrudCompetizioneComponent implements OnInit {
           if (this.competizioni[x].id === this.idCompetizioneToEdit) {
             this.competizioneToSave = this.competizioni[x];
 
+            console.log('this.competizioneToSave');
             console.log(this.competizioneToSave);
 
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
 
+            console.log('this.lega');
             console.log(this.lega);
+
+            console.log('this.leagueList');
+            console.log(this.leagueList);
 
             this.stagioneCompetizione =
             this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];
@@ -221,6 +226,7 @@ export class CrudCompetizioneComponent implements OnInit {
             this.date_competizione =
             this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)];
 
+            console.log('this.date_competizione');
             console.log(this.date_competizione);
 
             for (let i = 0; i < this.valoriPronostici.length; i++) {
@@ -327,8 +333,18 @@ export class CrudCompetizioneComponent implements OnInit {
 
   saveData(): void {
 
-    this.competizioneToSave.competizione = this.lega.name;
     this.competizioneToSave.nome_pronostico = this.lega.value;
+
+    for (let i = 0; i < this.leagueList.length; i++) {
+      if ( this.lega.value === this.leagueList[i].value) {
+        if (this.competizioneToSave.tipo_competizione === 'SCO') {
+          this.lega.name = 'Capo Cannoniere ' + this.leagueList[i].name;
+        } else {
+          this.lega.name = this.leagueList[i].name;
+        }
+      }
+    }
+    this.competizioneToSave.competizione = this.lega.name;
 
     const checkData = this.crudCompetizioneService.checkDataToSave(this.competizioneToSave, this.stagioneCompetizione);
 

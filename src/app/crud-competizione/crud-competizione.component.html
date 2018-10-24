@@ -119,11 +119,11 @@
                     <mat-select 
                       placeholder="Competizione"
                       [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
-                      [(ngModel)]="lega"
+                      [(ngModel)]="lega.value"
                       (selectionChange)="loadValoriPronostici(lega.value, stagioneCompetizione, competizioneToSave.tipo_competizione)"
                     >
                       <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
-                      <mat-option class="mat-body-1" *ngFor="let lega of leagueList" [value]="lega">{{ lega.name }}</mat-option>
+                      <mat-option class="mat-body-1" *ngFor="let lega of leagueList" [value]="lega.value">{{ lega.name }}</mat-option>
                     </mat-select>
                   </mat-form-field>
               </div>
