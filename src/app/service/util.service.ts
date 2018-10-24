@@ -185,7 +185,6 @@ export class UtilService {
                 fnd_tbl = true;
 
                 if ( localStorageData[i].data_aggiornamento === sessionStorageData[x].data_aggiornamento ) {
-
                   retValObj.fnd = true;
                   break;
 

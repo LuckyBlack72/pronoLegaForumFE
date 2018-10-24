@@ -110,7 +110,7 @@ export class CrudCompetizioneComponent implements OnInit {
   dataSourceValoriPronostici = new MatTableDataSource([]);
   displayedColumns = ['prono'];
 
-  lega: any; // per avere nome nome_pronostico = lega.value - per avere competizione = lega.name
+  lega: any = {value: null, name: null}; // per avere nome nome_pronostico = lega.value - per avere competizione = lega.name
 
   ngOnInit() {
 
@@ -204,6 +204,36 @@ export class CrudCompetizioneComponent implements OnInit {
         );
         break;
       case 'V':
+        for (let x = 0; x < this.competizioni.length; x++) {
+          if (this.competizioni[x].id === this.idCompetizioneToEdit) {
+            this.competizioneToSave = this.competizioni[x];
+
+            console.log(this.competizioneToSave);
+
+            this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
+
+            console.log(this.lega);
+
+            this.stagioneCompetizione =
+            this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];
+            this.competizioneToSave.date_competizione =
+            this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(this.competizioneToSave.date_competizione.toString());
+            this.date_competizione =
+            this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)];
+
+            console.log(this.date_competizione);
+
+            for (let i = 0; i < this.valoriPronostici.length; i++) {
+              if (this.competizioneToSave.id === this.valoriPronostici[i].id_competizione ) {
+                this.dataSourceValoriPronostici.data =
+                this.buildDataSourceValoriPronostici({}, this.valoriPronostici[i].valori_pronostici, 'I', '');
+                break;
+              }
+            }
+            break;
+          }
+        }
+/*
         this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
           data => {
             this.competizioneToSave = data;
@@ -233,6 +263,7 @@ export class CrudCompetizioneComponent implements OnInit {
             });
           }
         );
+*/
         break;
       default:
         break;

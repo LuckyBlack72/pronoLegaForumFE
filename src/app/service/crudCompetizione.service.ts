@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorage } from 'ngx-store';
 
 import {
-          AnagraficaCompetizioni,
+          AnagraficaCompetizioni, DatePronostici,
         } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -85,6 +85,44 @@ export class CrudCompetizioneService {
 
         return retVal;
 
+    }
+
+    SplitDateCompetizioneStringIntoArray(dateCompetizione: string): DatePronostici[] {
+
+        const retVal: DatePronostici[] = [];
+        const regExp = /["]/g;
+        const regExp2 = /[\\]/g;
+        const regExp3 = /[(]/g;
+        const regExp4 = /[)]/g;
+        let StringToSplit: string =
+        dateCompetizione.replace(regExp, '').replace(regExp2, '').replace('),(' , ')*(');
+        StringToSplit = StringToSplit.substring(1);
+        StringToSplit = StringToSplit.substring(0, (StringToSplit.length - 1));
+        StringToSplit = StringToSplit.replace(regExp3, '').replace(regExp4, '');
+console.log('StringTosplit :' + StringToSplit);
+        const recordArray: string[] = StringToSplit.split('*');
+
+console.log(recordArray);
+
+        let recordToSplit: string;
+        let dateToSetInRecord: string[] = [];
+
+        for (let i = 0; i < recordArray.length; i++) {
+            recordToSplit = recordArray[i].substring(0, (recordArray[i].length - 1));
+console.log(recordToSplit);
+            dateToSetInRecord = recordToSplit.split(',');
+            retVal.push({
+                            stagione: dateToSetInRecord[0],
+                            data_apertura: dateToSetInRecord[1],
+                            data_chiusura: dateToSetInRecord[2],
+                            data_calcolo_classifica: dateToSetInRecord[3]
+                        });
+            dateToSetInRecord = [];
+            recordToSplit = '';
+        }
+
+console.log(retVal);
+        return retVal;
     }
 
 }
