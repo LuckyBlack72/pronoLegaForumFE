@@ -8,6 +8,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { ExternalApiService } from '../service/externalApi.service';
 import { CrudCompetizioneService } from '../service/crudCompetizione.service';
+import { PronosticiService } from '../service/pronostici.service';
 
 import {
         AnagraficaCompetizioni,
@@ -20,7 +21,6 @@ import {
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
-
 
 @Component({
   selector: 'app-crud-competizione',
@@ -35,7 +35,8 @@ export class CrudCompetizioneComponent implements OnInit {
     private utils: Utils,
     private externalApiService: ExternalApiService,
     private crudCompetizioneService: CrudCompetizioneService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private pronosticiService: PronosticiService
 
   ) { }
 
@@ -183,7 +184,7 @@ export class CrudCompetizioneComponent implements OnInit {
                                         this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E', 'T');
                                     },
                 erroreApiEsterna => {
-                                        this.resetDataValues();
+                                        this.resetDataValues('R');
                                         /*
                                         Swal({
                                                 allowOutsideClick: false,
@@ -198,63 +199,13 @@ export class CrudCompetizioneComponent implements OnInit {
           }
         }
         break;
-
-/*
-        this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
-          data => {
-            this.competizioneToSave = data;
-
-            console.log('this.competizioneToSave');
-            console.log(this.competizioneToSave);
-
-
-            this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
-            this.stagioneCompetizione = this.listaStagioniCompetizione[(this.listaStagioniCompetizione.length - 1)];
-            this.date_competizione = {
-              stagione : null,
-              data_apertura: null,
-              data_chiusura: null,
-              data_calcolo_classifica: null
-            };
-            this.externalApiService.getValoriPronostici(
-                                                          this.competizioneToSave.nome_pronostico,
-                                                          this.stagioneCompetizione.toString()
-                                                        ).subscribe(
-              valoriPronostici => {
-                this.dataSourceValoriPronostici.data =
-                this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E', 'T');
-              },
-              erroreApiEsterna => {
-                this.resetDataValues();
-                Swal({
-                  allowOutsideClick: false,
-                  allowEscapeKey: false,
-                  title: 'Errore Applicativo',
-                  type: 'error'
-                });
-              }
-            );
-          }
-          ,
-          error => {
-            this.resetDataValues();
-            Swal({
-              allowOutsideClick: false,
-              allowEscapeKey: false,
-              title: 'Errore Applicativo',
-              type: 'error'
-            });
-          }
-        );
-        break;
-*/
       case 'V':
         for (let x = 0; x < this.competizioni.length; x++) {
           if (this.competizioni[x].id === this.idCompetizioneToEdit) {
             this.competizioneToSave = this.competizioni[x];
 
-            console.log('this.competizioneToSave');
-            console.log(this.competizioneToSave);
+//            console.log('this.competizioneToSave');
+//            console.log(this.competizioneToSave);
 
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
             this.stagioneCompetizione =
@@ -264,8 +215,8 @@ export class CrudCompetizioneComponent implements OnInit {
             this.date_competizione =
             this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)];
 
-            console.log('this.date_competizione');
-            console.log(this.date_competizione);
+//            console.log('this.date_competizione');
+//            console.log(this.date_competizione);
 
             for (let i = 0; i < this.valoriPronostici.length; i++) {
               if (this.competizioneToSave.id === this.valoriPronostici[i].id_competizione ) {
@@ -288,37 +239,6 @@ export class CrudCompetizioneComponent implements OnInit {
             break;
           }
         }
-/*
-        this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
-          data => {
-            this.competizioneToSave = data;
-
-            console.log(this.competizioneToSave);
-
-            this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
-            this.stagioneCompetizione =
-            this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];
-            this.date_competizione = this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)]
-            for (let i = 0; i < this.valoriPronostici.length; i++) {
-              if (this.competizioneToSave.id === this.valoriPronostici[i].id_competizione ) {
-                this.dataSourceValoriPronostici.data =
-                this.buildDataSourceValoriPronostici({}, this.valoriPronostici[i].valori_pronostici, 'I', '');
-                break;
-              }
-            }
-          }
-          ,
-          error => {
-            this.resetDataValues();
-            Swal({
-              allowOutsideClick: false,
-              allowEscapeKey: false,
-              title: 'Errore Applicativo',
-              type: 'error'
-            });
-          }
-        );
-*/
         break;
       default:
         break;
@@ -343,7 +263,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
     if (this.createUpdateViewCompetizione === 'V') {
 
-      this.resetDataValues();
+      this.resetDataValues('R');
 
     } else {
 
@@ -356,7 +276,7 @@ export class CrudCompetizioneComponent implements OnInit {
         confirmButtonText: 'Conferma Annullamento'
       }).then((result) => {
         if (result.value) {
-          this.resetDataValues();
+          this.resetDataValues('R');
         }
       });
 
@@ -364,7 +284,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
   }
 
-  resetDataValues(): void {
+  resetDataValues(resetType: string): void {
 
     this.competizioneToSave = {
       id: 0,
@@ -393,6 +313,12 @@ export class CrudCompetizioneComponent implements OnInit {
     this.createUpdateViewCompetizione = 'C';
     this.logoImage = '';
     this.imgLogoUrl = '';
+
+    if (resetType === 'S') {
+      this.pronosticiService.getAnagraficaCompetizioni(0).subscribe(
+        data => this.competizioni = data
+      );
+    }
 
   }
 
@@ -426,7 +352,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
       this.crudCompetizioneService.saveAnagraficaCompetizione(this.competizioneToSave, this.dataSourceValoriPronostici.data).subscribe(
         data => {
-                  this.resetDataValues();
+                  this.resetDataValues('S');
                   Swal({
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -436,7 +362,7 @@ export class CrudCompetizioneComponent implements OnInit {
         }
         ,
         error => {
-                    this.resetDataValues();
+                    this.resetDataValues('R');
                     Swal({
                           allowOutsideClick: false,
                           allowEscapeKey: false,
