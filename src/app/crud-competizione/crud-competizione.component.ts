@@ -392,6 +392,7 @@ export class CrudCompetizioneComponent implements OnInit {
     this.idCompetizioneToEdit = null;
     this.createUpdateViewCompetizione = 'C';
     this.logoImage = '';
+    this.imgLogoUrl = '';
 
   }
 
