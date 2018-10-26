@@ -374,11 +374,27 @@
         </mat-expansion-panel-header>
         <div class="row">
           <div class=col-md-4>
-            <input class="mat-body-1" type="file" (change)="onFileChanged($event)">
+            <input 
+              class="mat-body-1" 
+              type="file" 
+              (change)="onFileChanged($event)"
+              [disabled]="createUpdateViewCompetizione === 'V' || createUpdateViewCompetizione === 'U'"              
+            >
           </div>
-          <div class="col-md-8">
+          <div class="col-md-6">
             <img #imgLogo id="imgLogo" alt="Logo" class="rounded img-fluid mx-auto d-block" src="{{imgLogoUrl}}">
           </div>
+          <div class="col-md-2">
+            <button  
+            class="mat-button"
+            [disabled]="createUpdateViewCompetizione === 'V' || createUpdateViewCompetizione === 'U'" 
+            mat-raised-button color="primary"
+            (click)="uploadLogo()" 
+            title="Carica Logo"
+            >
+             Carica Logo
+            </button>            
+          </div>        
         </div>
       </mat-expansion-panel>
     </div>

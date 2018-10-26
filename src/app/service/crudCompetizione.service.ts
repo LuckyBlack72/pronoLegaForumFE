@@ -59,10 +59,15 @@ export class CrudCompetizioneService {
 
     }
 
-    saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni, logo: File): Observable<string> {
+    saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni): Observable<string> {
 
-        return this.pronosticiService.saveAnagraficaCompetizioni(competizioneToSave, logo);
+        return this.pronosticiService.saveAnagraficaCompetizioni(competizioneToSave);
 
+    }
+
+    uploadLogo(logo: File): Observable<string> {
+
+        return this.pronosticiService.uploadLogo(logo);
 
     }
 
@@ -99,29 +104,29 @@ export class CrudCompetizioneService {
         StringToSplit = StringToSplit.substring(1);
         StringToSplit = StringToSplit.substring(0, (StringToSplit.length - 1));
         StringToSplit = StringToSplit.replace(regExp3, '').replace(regExp4, '');
-console.log('StringTosplit :' + StringToSplit);
+// console.log('StringTosplit :' + StringToSplit);
         const recordArray: string[] = StringToSplit.split('*');
 
-console.log(recordArray);
+// console.log(recordArray);
 
         let recordToSplit: string;
         let dateToSetInRecord: string[] = [];
 
         for (let i = 0; i < recordArray.length; i++) {
             recordToSplit = recordArray[i].substring(0, (recordArray[i].length - 1));
-console.log(recordToSplit);
+// console.log(recordToSplit);
             dateToSetInRecord = recordToSplit.split(',');
             retVal.push({
                             stagione: dateToSetInRecord[0],
-                            data_apertura: dateToSetInRecord[1],
-                            data_chiusura: dateToSetInRecord[2],
-                            data_calcolo_classifica: dateToSetInRecord[3]
+                            data_apertura: dateToSetInRecord[1].substring(0, 10),
+                            data_chiusura: dateToSetInRecord[2].substring(0, 10),
+                            data_calcolo_classifica: dateToSetInRecord[3].substring(0, 10)
                         });
             dateToSetInRecord = [];
             recordToSplit = '';
         }
 
-console.log(retVal);
+// console.log(retVal);
         return retVal;
     }
 

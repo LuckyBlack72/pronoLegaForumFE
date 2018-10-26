@@ -161,9 +161,52 @@ export class CrudCompetizioneComponent implements OnInit {
         this.competizioneToSave.tipo_pronostici = 'E';
         break;
       case 'U':
+        for (let x = 0; x < this.competizioni.length; x++) {
+          if (this.competizioni[x].id === this.idCompetizioneToEdit) {
+            this.competizioneToSave = this.competizioni[x];
+
+            this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
+            this.stagioneCompetizione = this.listaStagioniCompetizione[(this.listaStagioniCompetizione.length - 1)];
+            this.date_competizione = {
+              stagione : null,
+              data_apertura: null,
+              data_chiusura: null,
+              data_calcolo_classifica: null
+            };
+            this.externalApiService.getValoriPronostici(
+              this.competizioneToSave.nome_pronostico,
+              this.stagioneCompetizione.toString()
+            ).subscribe(
+                valoriPronostici => {
+                                        this.dataSourceValoriPronostici.data =
+                                        this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E', 'T');
+                                    },
+                erroreApiEsterna => {
+                                        this.resetDataValues();
+                                        /*
+                                        Swal({
+                                                allowOutsideClick: false,
+                                                allowEscapeKey: false,
+                                                title: 'Errore Applicativo',
+                                                type: 'error'
+                                            });
+                                        */
+                                    }
+              );
+            break;
+          }
+        }
+        break;
+
+/*
         this.crudCompetizioneService.getDatiCompetizione(this.idCompetizioneToEdit).subscribe(
           data => {
             this.competizioneToSave = data;
+
+            console.log('this.competizioneToSave');
+            console.log(this.competizioneToSave);
+
+
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
             this.stagioneCompetizione = this.listaStagioniCompetizione[(this.listaStagioniCompetizione.length - 1)];
             this.date_competizione = {
@@ -203,6 +246,7 @@ export class CrudCompetizioneComponent implements OnInit {
           }
         );
         break;
+*/
       case 'V':
         for (let x = 0; x < this.competizioni.length; x++) {
           if (this.competizioni[x].id === this.idCompetizioneToEdit) {
@@ -212,13 +256,6 @@ export class CrudCompetizioneComponent implements OnInit {
             console.log(this.competizioneToSave);
 
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
-
-            console.log('this.lega');
-            console.log(this.lega);
-
-            console.log('this.leagueList');
-            console.log(this.leagueList);
-
             this.stagioneCompetizione =
             this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];
             this.competizioneToSave.date_competizione =
@@ -325,6 +362,7 @@ export class CrudCompetizioneComponent implements OnInit {
     };
 
     this.lega = { };
+    this.date_competizione = { };
     this.fillCompetizioneData = false;
     this.idCompetizioneToEdit = null;
     this.createUpdateViewCompetizione = 'C';
@@ -350,13 +388,16 @@ export class CrudCompetizioneComponent implements OnInit {
 
     if (checkData) { // controlli ok
       if (this.competizioneToSave.id === 0) {
+        this.date_competizione.stagione = this.stagioneCompetizione.toString();
         this.competizioneToSave.anni_competizione[0] = this.stagioneCompetizione;
         this.competizioneToSave.date_competizione[0] = this.date_competizione;
       } else {
+        this.date_competizione.stagione = this.stagioneCompetizione.toString();
         this.competizioneToSave.anni_competizione.push(this.stagioneCompetizione);
         this.competizioneToSave.date_competizione.push(this.date_competizione);
       }
-      this.crudCompetizioneService.saveAnagraficaCompetizione(this.competizioneToSave, this.fileToUpload).subscribe(
+
+      this.crudCompetizioneService.saveAnagraficaCompetizione(this.competizioneToSave).subscribe(
         data => {
                   this.resetDataValues();
                   Swal({
@@ -398,12 +439,35 @@ export class CrudCompetizioneComponent implements OnInit {
 
       reader.onload = (e: any) => {
         this.imgLogoUrl = e.target.result;
-        this.competizioneToSave.logo = event.target.files[0];
+        this.competizioneToSave.logo = event.target.files[0].name;
       };
 
       reader.readAsDataURL(event.target.files[0]);
 
     }
+
+  }
+
+  uploadLogo(): void {
+    this.crudCompetizioneService.uploadLogo(this.fileToUpload).subscribe(
+      data => {
+                Swal({
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  title: 'Logo Caricato',
+                  type: 'success'
+                });
+      }
+      ,
+      error => {
+                  Swal({
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        title: 'Errore nel caricamento del Logo',
+                       type: 'error'
+                      });
+      }
+    );
 
   }
 
