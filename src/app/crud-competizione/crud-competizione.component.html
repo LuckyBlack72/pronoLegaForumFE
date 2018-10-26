@@ -372,7 +372,7 @@
           <mat-panel-description>
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <div class="row">
+        <div class="row" *ngIf="createUpdateViewCompetizione !== 'V'"> <!-- create update -->
           <div class=col-md-4>
             <input 
               class="mat-body-1" 
@@ -395,7 +395,16 @@
              Carica Logo
             </button>            
           </div>        
-        </div>
+        </div> <!-- create update -->
+        <div class="row" *ngIf="createUpdateViewCompetizione === 'V'"> <!-- view -->
+          <div class=col-md-4>
+          </div>
+          <div class="col-md-4">
+            <img #imgLogoView id="imgLogoVierw" alt="Logo" class="rounded img-fluid mx-auto d-block" [src]="logoImage">
+          </div>
+          <div class="col-md-4">
+          </div>        
+        </div> <!-- view -->
       </mat-expansion-panel>
     </div>
     <div class="col-md-1"></div>

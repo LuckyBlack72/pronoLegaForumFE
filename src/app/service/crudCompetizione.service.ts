@@ -59,15 +59,21 @@ export class CrudCompetizioneService {
 
     }
 
-    saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni): Observable<string> {
+    saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni, valoriPronostici: any): Observable<string> {
 
-        return this.pronosticiService.saveAnagraficaCompetizioni(competizioneToSave);
+        return this.pronosticiService.saveAnagraficaCompetizioni(competizioneToSave, valoriPronostici);
 
     }
 
     uploadLogo(logo: File): Observable<string> {
 
         return this.pronosticiService.uploadLogo(logo);
+
+    }
+
+    loadLogo(logo: string): Observable<Blob> {
+
+        return this.pronosticiService.loadLogo(logo);
 
     }
 
@@ -129,6 +135,7 @@ export class CrudCompetizioneService {
 // console.log(retVal);
         return retVal;
     }
+
 
 }
 

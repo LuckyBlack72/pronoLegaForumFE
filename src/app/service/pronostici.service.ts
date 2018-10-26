@@ -117,9 +117,9 @@ export class PronosticiService {
 
   }
 
-  saveAnagraficaCompetizioni ( dataToSave: AnagraficaCompetizioni): Observable<string> {
+  saveAnagraficaCompetizioni ( dataToSave: AnagraficaCompetizioni, valoriPronostici: any): Observable<string> {
 
-    const postData = { anagraficaCompetizioni: dataToSave};
+    const postData = { anagraficaCompetizioni: dataToSave, valoriPronostici: valoriPronostici};
     return this.http.post<string>(environment.backEndURL + '/classifica/saveAnagraficaCompetizioni', postData);
 
   }
@@ -129,6 +129,12 @@ export class PronosticiService {
     const fd = new FormData();
     fd.append('logo', logo);
     return this.http.post<string>(environment.backEndURL + '/classifica/uploadLogo', fd);
+
+  }
+
+  loadLogo ( logo: string ): Observable<Blob> {
+
+    return this.http.get(environment.backEndURL + '/logos/' + logo, { responseType: 'blob' });
 
   }
 

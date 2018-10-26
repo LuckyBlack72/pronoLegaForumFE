@@ -111,6 +111,7 @@ export class CrudCompetizioneComponent implements OnInit {
   displayedColumns = ['prono'];
 
   lega: any = {value: null, name: null}; // per avere nome nome_pronostico = lega.value - per avere competizione = lega.name
+  logoImage: any;
 
   ngOnInit() {
 
@@ -273,6 +274,17 @@ export class CrudCompetizioneComponent implements OnInit {
                 break;
               }
             }
+
+            this.crudCompetizioneService.loadLogo(this.competizioneToSave.logo).subscribe(
+              logoImage => {
+                this.createImageFromBlob(logoImage);
+              },
+              errorImage => {
+                this.logoImage = '';
+              }
+            );
+
+
             break;
           }
         }
@@ -310,6 +322,19 @@ export class CrudCompetizioneComponent implements OnInit {
         break;
       default:
         break;
+    }
+
+  }
+
+
+  createImageFromBlob(image: Blob) {
+
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+       this.logoImage =  reader.result;
+    }, false);
+    if (image) {
+       reader.readAsDataURL(image);
     }
 
   }
@@ -366,6 +391,7 @@ export class CrudCompetizioneComponent implements OnInit {
     this.fillCompetizioneData = false;
     this.idCompetizioneToEdit = null;
     this.createUpdateViewCompetizione = 'C';
+    this.logoImage = '';
 
   }
 
@@ -397,7 +423,7 @@ export class CrudCompetizioneComponent implements OnInit {
         this.competizioneToSave.date_competizione.push(this.date_competizione);
       }
 
-      this.crudCompetizioneService.saveAnagraficaCompetizione(this.competizioneToSave).subscribe(
+      this.crudCompetizioneService.saveAnagraficaCompetizione(this.competizioneToSave, this.dataSourceValoriPronostici.data).subscribe(
         data => {
                   this.resetDataValues();
                   Swal({
