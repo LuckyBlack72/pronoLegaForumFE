@@ -17,7 +17,8 @@ import {
         DeviceInfo,
         TipoCompetizione,
         DatiSquadraLegaForum,
-        DatePronostici
+        DatePronostici,
+        AnagraficaCompetizioniGrouped
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -113,11 +114,13 @@ export class CrudCompetizioneComponent implements OnInit {
 
   lega: any = {value: null, name: null}; // per avere nome nome_pronostico = lega.value - per avere competizione = lega.name
   logoImage: any;
+  competizioniGrouped: AnagraficaCompetizioniGrouped[];
 
   ngOnInit() {
 
     this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
+    this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
     this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
     this.localStorageService.set('datiLegaForum', this.activatedRoute.snapshot.data.datiLegaForum);
     this.lega = { value : null, name: null};
@@ -316,7 +319,10 @@ export class CrudCompetizioneComponent implements OnInit {
 
     if (resetType === 'S') {
       this.pronosticiService.getAnagraficaCompetizioni(0).subscribe(
-        data => this.competizioni = data
+        data => {
+          this.competizioni = data
+          this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
+        }
       );
     }
 

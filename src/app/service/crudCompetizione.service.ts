@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorage } from 'ngx-store';
 
 import {
-          AnagraficaCompetizioni, DatePronostici,
+          AnagraficaCompetizioni, DatePronostici, AnagraficaCompetizioniGrouped
         } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -136,6 +136,30 @@ export class CrudCompetizioneService {
         return retVal;
     }
 
+    buildCompetizioniGrouped(competizioni: AnagraficaCompetizioni[]): AnagraficaCompetizioniGrouped[] {
+
+        const retVal: AnagraficaCompetizioniGrouped[] = [];
+        const extCompetizioni: AnagraficaCompetizioni[] = [];
+        const lfCompetizioni: AnagraficaCompetizioni[] = [];
+
+        for (let i = 0; i < competizioni.length; i++) {
+            if (competizioni[i].tipo_pronostici === 'E') {
+                extCompetizioni.push(competizioni[i]);
+            } else {
+                lfCompetizioni.push(competizioni[i]);
+            }
+        }
+
+        if ( extCompetizioni.length > 0 ) {
+            retVal.push({group: 'Esterne', competizioni: extCompetizioni});
+        }
+        if ( lfCompetizioni.length > 0 ) {
+            retVal.push({group: 'Lega Forum', competizioni: lfCompetizioni});
+        }
+
+        return retVal;
+
+    }
 
 }
 

@@ -35,6 +35,11 @@ export interface AnagraficaCompetizioni {
   date_competizione?: DatePronostici[];
 }
 
+export interface AnagraficaCompetizioniGrouped {
+  group?: string;
+  competizioni?: AnagraficaCompetizioni[];
+}
+
 export interface ValoriPronostici {
   id?: number;
   stagione?: number;

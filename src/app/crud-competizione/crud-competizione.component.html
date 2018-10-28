@@ -17,7 +17,9 @@
             [disabled]="fillCompetizioneData || setEnabledDisabledDropDownCompetizione()"
           >
             <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
-            <mat-option class="mat-body-1" *ngFor="let competizione of competizioni" [value]="competizione.id">{{ competizione.competizione }}</mat-option>
+            <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
+              <mat-option class="mat-body-1" *ngFor="let competizione of competizioneGroup.competizioni" [value]="competizione.id">{{ competizione.competizione }}</mat-option>
+            </mat-optgroup>
           </mat-select>
         </mat-form-field>
       </div>
