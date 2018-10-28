@@ -41,7 +41,7 @@ export class ValoriPronosticiResolver implements Resolve<ValoriPronostici[]> {
 
         if (this.valoriPronostici) {
 
-            if ( this.log_aggiornamentiLS ) {
+            if ( this.log_aggiornamentiLS && this.log_aggiornamentiLS.length > 0) {
 
                 checkReload = this.utilService.checkReloadLocalStorageData  (
                     'valori_pronostici',

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatTableDataSource, MatSort, MatRadioChange } from '@angular/material';
 
 import Swal from 'sweetalert2';
-import { SessionStorage, LocalStorage, LocalStorageService } from 'ngx-store';
+import { SessionStorage, LocalStorage, LocalStorageService, SessionStorageService } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { ExternalApiService } from '../service/externalApi.service';
@@ -18,7 +18,8 @@ import {
         TipoCompetizione,
         DatiSquadraLegaForum,
         DatePronostici,
-        AnagraficaCompetizioniGrouped
+        AnagraficaCompetizioniGrouped,
+        FiltroValoriPronostici
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
@@ -37,6 +38,7 @@ export class CrudCompetizioneComponent implements OnInit {
     private externalApiService: ExternalApiService,
     private crudCompetizioneService: CrudCompetizioneService,
     private localStorageService: LocalStorageService,
+    private sessionStorageService: SessionStorageService,
     private pronosticiService: PronosticiService
 
   ) { }
@@ -46,10 +48,11 @@ export class CrudCompetizioneComponent implements OnInit {
   isTablet: boolean;
   isDesktopDevice: boolean;
 
+  @LocalStorage() datiLegaForum: DatiSquadraLegaForum[][][];
   @SessionStorage() applicationParameter: ApplicationParameter;
-  @LocalStorage()  datiLegaForum: DatiSquadraLegaForum[][][];
+  @SessionStorage() valoriPronostici: ValoriPronostici[];
+  @SessionStorage() competizioni: AnagraficaCompetizioni[];
 
-  competizioni: AnagraficaCompetizioni[];
   createUpdateViewCompetizione: string;
   idCompetizioneToEdit: number;
   fillCompetizioneData: boolean;
@@ -87,7 +90,6 @@ export class CrudCompetizioneComponent implements OnInit {
 
   listaStagioniCompetizione: number[] = [];
   tipiCompetizione: TipoCompetizione[] = [];
-  valoriPronostici: ValoriPronostici[];
 
   fileToUpload: File;
   @ViewChild('imgLogo') imgLogo: ElementRef;
@@ -118,8 +120,9 @@ export class CrudCompetizioneComponent implements OnInit {
 
   ngOnInit() {
 
-    this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
-    this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
+    // this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
+    this.sessionStorageService.set('competizioni', this.activatedRoute.snapshot.data.listaCompetizioni);
+    this.sessionStorageService.set('valoriPronostici', this.activatedRoute.snapshot.data.valoriPronostici);
     this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
     this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
     this.localStorageService.set('datiLegaForum', this.activatedRoute.snapshot.data.datiLegaForum);
@@ -178,26 +181,37 @@ export class CrudCompetizioneComponent implements OnInit {
               data_chiusura: null,
               data_calcolo_classifica: null
             };
-            this.externalApiService.getValoriPronostici(
-              this.competizioneToSave.nome_pronostico,
-              this.stagioneCompetizione.toString()
-            ).subscribe(
-                valoriPronostici => {
-                                        this.dataSourceValoriPronostici.data =
-                                        this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E', 'T');
-                                    },
-                erroreApiEsterna => {
-                                        this.resetDataValues('R');
-                                        /*
-                                        Swal({
-                                                allowOutsideClick: false,
-                                                allowEscapeKey: false,
-                                                title: 'Errore Applicativo',
-                                                type: 'error'
-                                            });
-                                        */
-                                    }
-              );
+
+            if (this.competizioneToSave.tipo_pronostici === 'E') { // esterni
+
+              this.externalApiService.getValoriPronostici(
+                this.competizioneToSave.nome_pronostico,
+                this.stagioneCompetizione.toString()
+              ).subscribe(
+                  valoriPronostici => {
+                                          this.dataSourceValoriPronostici.data =
+                                          this.buildDataSourceValoriPronostici(valoriPronostici, [], 'E', 'T');
+                                      },
+                  erroreApiEsterna => {
+                                          this.resetDataValues('R');
+                                      }
+                );
+
+            } else { // Lega Forum
+
+              this.externalApiService.getDatiSorteggioLegaForum(
+                this.stagioneCompetizione
+              ).subscribe(
+                  valoriPronosticiLF => {
+                                          this.dataSourceValoriPronostici.data =
+                                          this.buildDataSourceValoriPronostici(valoriPronosticiLF, [], 'E', 'T');
+                                      },
+                  erroreApiEsternaLF => {
+                                          this.resetDataValues('R');
+                                      }
+                );
+
+            }
             break;
           }
         }
@@ -207,10 +221,13 @@ export class CrudCompetizioneComponent implements OnInit {
           if (this.competizioni[x].id === this.idCompetizioneToEdit) {
             this.competizioneToSave = this.competizioni[x];
 
-//            console.log('this.competizioneToSave');
-//            console.log(this.competizioneToSave);
+            console.log('this.competizioneToSave');
+            console.log(this.competizioneToSave);
 
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
+
+console.log(this.lega);
+
             this.stagioneCompetizione =
             this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];
             this.competizioneToSave.date_competizione =
@@ -318,12 +335,25 @@ export class CrudCompetizioneComponent implements OnInit {
     this.imgLogoUrl = '';
 
     if (resetType === 'S') {
+      setTimeout(function() { }, 3000);
       this.pronosticiService.getAnagraficaCompetizioni(0).subscribe(
         data => {
-          this.competizioni = data
+
+          this.sessionStorageService.set('competizioni', data);
+console.log(data);
           this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
+
+          const searchParameters: FiltroValoriPronostici = {stagione: parseInt(this.utils.getStagione().substring(0, 4), 10)};
+          this.pronosticiService.getValoriPronostici(searchParameters).subscribe(
+            dataVp  => {
+              this.sessionStorageService.set('valoriPronostici', dataVp);
+            }
+
+          );
+
         }
       );
+
     }
 
   }
@@ -589,6 +619,9 @@ export class CrudCompetizioneComponent implements OnInit {
 
     const retVal: any[] = [];
 
+    console.log('internal data');
+    console.log(internalData);
+
     if ( dataType === 'I' ) { // dati interni
 
       for (let i = 0; i < internalData.length; i++) {
@@ -713,7 +746,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
           retVal.push(
             {
-              value: '0-ALL',
+              value: '0-ALL' + '-' + 'Vincitore Lega Forum',
               name: 'Vincitore Lega Forum'
             });
 
@@ -723,7 +756,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
               retVal.push(
                 {
-                  value: x + '-' + y,
+                  value: x + '-' + y + '-' + 'Podio Girone ' + datiLegaForum[x][y][0].girone,
                   name: 'Podio Girone ' + datiLegaForum[x][y][0].girone
                 });
 
@@ -735,22 +768,22 @@ export class CrudCompetizioneComponent implements OnInit {
           case 'CUP':
           retVal.push(
             {
-              value: 'ALL-ALL',
+              value: 'ALL-ALL' + '-' + 'Coppa Trab',
               name: 'Coppa Trab'
             });
             retVal.push(
               {
-                value: 'ALL-ALL',
+                value: 'ALL-ALL' + '-' + 'Vincitore Memorial Franco',
                 name: 'Vincitore Memorial Franco'
               });
               retVal.push(
                 {
-                  value: 'ALL-ALL',
+                  value: 'ALL-ALL' + '-' + 'Vincitore Masters Cup',
                   name: 'Vincitore Masters Cup'
                 });
               retVal.push(
               {
-                value: 'ALL-ALL',
+                value: 'ALL-ALL' + '-' + 'Vincitore Champions Cup',
                 name: 'Vincitore Champions Cup'
               });
             break;
@@ -758,7 +791,7 @@ export class CrudCompetizioneComponent implements OnInit {
             case 'ALL':
               retVal.push(
                 {
-                  value: '0-ALL',
+                  value: '0-ALL' + '-' + 'Vincitore Lega Forum',
                   name: 'Vincitore Lega Forum'
                 });
 
@@ -768,7 +801,7 @@ export class CrudCompetizioneComponent implements OnInit {
 
                   retVal.push(
                     {
-                      value: x + '-' + y,
+                      value: x + '-' + y  + '-' + 'Podio ' + datiLegaForum[x][y][0].girone,
                       name: 'Podio ' + datiLegaForum[x][y][0].girone
                     });
 
@@ -777,22 +810,22 @@ export class CrudCompetizioneComponent implements OnInit {
               }
               retVal.push(
                 {
-                  value: 'ALL-ALL',
+                  value: 'ALL-ALL' + '-' + 'Vincitore Coppa Trab',
                   name: 'Vincitore Coppa Trab'
                 });
                 retVal.push(
                   {
-                    value: 'ALL-ALL',
+                    value: 'ALL-ALL' + '-' + 'Vincitore Memorial Franco',
                     name: 'Vincitore Memorial Franco'
                   });
                   retVal.push(
                     {
-                      value: 'ALL-ALL',
+                      value: 'ALL-ALL' + '-' + 'Vincitore Masters Cup',
                       name: 'Vincitore Masters Cup'
                     });
                   retVal.push(
                   {
-                    value: 'ALL-ALL',
+                    value: 'ALL-ALL' + '-' + 'Vincitore Champions Cup',
                     name: 'Vincitore Champions Cup'
                   });
               break;

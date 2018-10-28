@@ -32,7 +32,7 @@ export class DatePronosticiResolver implements Resolve<DatePronostici> {
 
         if (this.datePronostici) {
 
-            if ( this.log_aggiornamentiLS ) {
+            if ( this.log_aggiornamentiLS && this.log_aggiornamentiLS.length > 0) {
 
                 checkReload = this.utilService.checkReloadLocalStorageData  (
                     'valori_pronostici',

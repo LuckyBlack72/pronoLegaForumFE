@@ -32,7 +32,7 @@ export class CompetizioniResolver implements Resolve<AnagraficaCompetizioni[]> {
 
         if (this.competizioni) {
 
-            if ( this.log_aggiornamentiLS ) {
+            if ( this.log_aggiornamentiLS && this.log_aggiornamentiLS.length > 0 ) {
 
                 checkReload = this.utilService.checkReloadLocalStorageData  (
                                                                         'anagrafica_competizioni',
