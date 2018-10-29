@@ -172,7 +172,12 @@ export class CrudCompetizioneComponent implements OnInit {
         for (let x = 0; x < this.competizioni.length; x++) {
           if (this.competizioni[x].id === this.idCompetizioneToEdit) {
             this.competizioneToSave = this.competizioni[x];
-
+            this.buildleagueListCombo(
+              this.competizioneToSave.tipo_pronostici,
+              'ALL',
+              this.activatedRoute.snapshot.data.leagueList,
+              this.datiLegaForum
+            );
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
             this.stagioneCompetizione = this.listaStagioniCompetizione[(this.listaStagioniCompetizione.length - 1)];
             this.date_competizione = {
@@ -220,11 +225,19 @@ export class CrudCompetizioneComponent implements OnInit {
         for (let x = 0; x < this.competizioni.length; x++) {
           if (this.competizioni[x].id === this.idCompetizioneToEdit) {
             this.competizioneToSave = this.competizioni[x];
+            this.buildleagueListCombo(
+              this.competizioneToSave.tipo_pronostici,
+              'ALL',
+              this.activatedRoute.snapshot.data.leagueList,
+              this.datiLegaForum
+            );
 
             console.log('this.competizioneToSave');
             console.log(this.competizioneToSave);
 
             this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
+
+console.log(this.leagueList);
 
 console.log(this.lega);
 
@@ -234,6 +247,7 @@ console.log(this.lega);
             this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(this.competizioneToSave.date_competizione.toString());
             this.date_competizione =
             this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)];
+
 
 //            console.log('this.date_competizione');
 //            console.log(this.date_competizione);
@@ -335,26 +349,29 @@ console.log(this.lega);
     this.imgLogoUrl = '';
 
     if (resetType === 'S') {
-      setTimeout(function() { }, 3000);
-      this.pronosticiService.getAnagraficaCompetizioni(0).subscribe(
-        data => {
-
-          this.sessionStorageService.set('competizioni', data);
-console.log(data);
-          this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
-
-          const searchParameters: FiltroValoriPronostici = {stagione: parseInt(this.utils.getStagione().substring(0, 4), 10)};
-          this.pronosticiService.getValoriPronostici(searchParameters).subscribe(
-            dataVp  => {
-              this.sessionStorageService.set('valoriPronostici', dataVp);
-            }
-
-          );
-
-        }
-      );
-
+      this.refreshDataCompetizioniValoriPronostici();
     }
+
+  }
+
+  refreshDataCompetizioniValoriPronostici(): void {
+
+    this.pronosticiService.getAnagraficaCompetizioni(0).subscribe(
+      data => {
+        this.sessionStorageService.set('competizioni', data);
+console.log(data);
+        this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
+
+        const searchParameters: FiltroValoriPronostici = {stagione: parseInt(this.utils.getStagione().substring(0, 4), 10)};
+        this.pronosticiService.getValoriPronostici(searchParameters).subscribe(
+          dataVp  => {
+            this.sessionStorageService.set('valoriPronostici', dataVp);
+          }
+
+        );
+
+      }
+    );
 
   }
 
@@ -801,8 +818,8 @@ console.log(data);
 
                   retVal.push(
                     {
-                      value: x + '-' + y  + '-' + 'Podio ' + datiLegaForum[x][y][0].girone,
-                      name: 'Podio ' + datiLegaForum[x][y][0].girone
+                      value: x + '-' + y  + '-' + 'Podio Girone ' + datiLegaForum[x][y][0].girone,
+                      name: 'Podio Girone ' + datiLegaForum[x][y][0].girone
                     });
 
                 }
