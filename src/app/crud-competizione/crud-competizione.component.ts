@@ -244,7 +244,7 @@ console.log(this.lega);
             this.stagioneCompetizione =
             this.competizioneToSave.anni_competizione[(this.competizioneToSave.anni_competizione.length - 1)];
             this.competizioneToSave.date_competizione =
-            this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(this.competizioneToSave.date_competizione.toString());
+            this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(this.competizioneToSave.date_competizione.toString(), false);
             this.date_competizione =
             this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)];
 

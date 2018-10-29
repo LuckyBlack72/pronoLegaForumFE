@@ -5,7 +5,7 @@
   <div class="container-fluid">
     
     <hotkeys-cheatsheet title="Comandi Nascosti"></hotkeys-cheatsheet>
-    
+<!-- Timer on toolbar e only external prono
     <div class="row">
       <div class="col-md-12">
         <div class="rounded btn-group btn-group-lg mx-auto"
@@ -54,8 +54,72 @@
         </div> 
       </div>   
     </div>
+fine Timer on toolbar e only external prono
+-->
+    <div class="row"> <!-- Date on prono and legaforum prono -->
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <mat-card> 
+                       
+                <mat-form-field>
+                    <mat-select 
+                    #selComp
+                    placeholder="Competizione"
+                    [(ngModel)]="idCompetizioneToFill"
+                    (selectionChange)="fillPronostici(0, idCompetizioneToFill)"
+                    >
+                        <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                        <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
+                            <mat-option class="mat-body-1" *ngFor="let competizione of competizioneGroup.competizioni" [value]="competizione.id">
+                                {{ competizione.competizione }} [{{competizione.pronostici_inseriti}} / {{competizione.numero_pronostici}}]
+                            </mat-option>
+                        </mat-optgroup>
+                    </mat-select>
+                </mat-form-field>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button 
+                type="button" 
+                class="btn btn-success btn-lg active" 
+                title="Salva i Dati" 
+                (click)="salvaPronosticiClassifica()"
+                [disabled]="!showProno"
+                >
+                    <i class="fa fa-floppy-o"></i>  
+                </button> 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;         
+                <button 
+                [disabled]="admin"
+                type="button" 
+                class="btn btn-secondary btn-lg active" 
+                title="Exporta i pronostici in Excel" 
+                (click)="exportExcelPronostici()"
+                >
+                    <i class="fa fa-file-excel-o"></i>  
+                </button> 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
+                <button 
+                *ngIf="admin"
+                disabled
+                type="button" 
+                class="btn btn-danger btn-lg active"  
+                >
+                    Admin Mode
+                </button>  
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span *ngIf="showProno && !admin">
+                    <strong>Pronostici Inseribili per : </strong>
+                    <span class="badge text-center" 
+                    [ngClass]="{'badge-success': !pronoClosed, 'badge-danger': pronoClosed }">
+                        <countdown-timer [end]="dateCompetizioneInCorso.data_chiusura"></countdown-timer>
+                    </span>        
+                </span>
+            </mat-card>
+        </div>
+        <div class="col-md-1"></div>
+    </div> <!-- Fine Date on prono and legaforum prono -->
 
     <div class="row">
+        <div class= "col-md-12">&nbsp;</div>
     </div>
     
     <div *ngIf="showProno" class="row">

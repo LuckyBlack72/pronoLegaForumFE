@@ -20,8 +20,8 @@ export class ToolbarComponent implements OnInit {
     private deviceDetectorService: DeviceDetectorService
   ) { }
 
-  pronoClosed: boolean;
-  dataChiusuraProno: string;
+  // pronoClosed: boolean;
+  // dataChiusuraProno: string;
   nickname: string;
   backActive: boolean;
   @SessionStorage() applicationParameter: ApplicationParameter;
@@ -39,8 +39,8 @@ export class ToolbarComponent implements OnInit {
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
     this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
-    this.pronoClosed = this.utilService.checkDateProno(this.applicationParameter.data_chiusura);
-    this.dataChiusuraProno = this.applicationParameter.data_chiusura;
+    // this.pronoClosed = this.utilService.checkDateProno(this.applicationParameter.data_chiusura);
+    // this.dataChiusuraProno = this.applicationParameter.data_chiusura;
     this.backActive = this.applicationParameter.menu_utente_page;
 
   }

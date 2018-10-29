@@ -10,6 +10,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { PronosticiService } from '../service/pronostici.service';
 import { UtilService } from '../service/util.service';
 import { ExternalApiService } from '../service/externalApi.service';
+import { CrudCompetizioneService } from '../service/crudCompetizione.service';
 import { Command, CommandService } from '../service/command.service';
 
 import {
@@ -23,9 +24,13 @@ import {
         ApplicationParameter,
         ApiTransformReturnValue,
         DeviceInfo,
+        AnagraficaCompetizioniGrouped,
+        DatePronostici
       } from '../../models/models';
 
 import { Utils } from '../../models/utils';
+import { _MatTabHeaderMixinBase } from '@angular/material/tabs/typings/tab-header';
+
 @Component({
   selector: 'app-pronostici',
   templateUrl: './pronostici.component.html',
@@ -44,7 +49,8 @@ export class PronosticiComponent implements OnInit, OnDestroy {
               private externalApiService: ExternalApiService,
               private deviceDetectorService: DeviceDetectorService,
               private localStorageService: LocalStorageService,
-              private sessionStorageService: SessionStorageService
+              private sessionStorageService: SessionStorageService,
+              private crudCompetizioneService: CrudCompetizioneService
             ) {
     this.subscriptionHotKey = this.commandService.commands.subscribe(c => this.handleCommand(c));
   }
@@ -80,7 +86,15 @@ export class PronosticiComponent implements OnInit, OnDestroy {
   calcoloClassificaCompetizioniSaved: ValoriPronosticiClassifica[];
   cCCToSaveToPronostici: Pronostici[];
 
-
+  competizioniGrouped: AnagraficaCompetizioniGrouped[];
+  idCompetizioneToFill: number;
+  dataChiusuraProno: string;
+  dateCompetizioneInCorso: DatePronostici = {
+    stagione : null,
+    data_apertura: null,
+    data_chiusura: null,
+    data_calcolo_classifica: null
+  };
   /* al momento non serve
   setPronosticiToSave(value: string, index: number, idCompetizione: number) {
 
@@ -132,6 +146,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   fillPronostici(numero_pronostici: number, idCompetizione: number) {
 
+    let datePronosticiCompetizione: DatePronostici[] = [];
+
     if (idCompetizione != 0) { // non ho selezionato scegli una competizione dalla dropdown
 
       this.valoriPronosticiToShow = [];
@@ -146,6 +162,10 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
         for (let y = 0; y < this.competizioni.length; y++) {
           if ( this.competizioni[y].id === idCompetizione ) {
             np = this.competizioni[y].numero_pronostici;
+            datePronosticiCompetizione =
+            this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(this.competizioni[y].date_competizione.toString(), true);
+            this.dateCompetizioneInCorso =
+            datePronosticiCompetizione[(datePronosticiCompetizione.length - 1)];
             break;
           }
         }
@@ -189,6 +209,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
       np > 10 ? this.pronosticiGt10 = true : this.pronosticiGt10 = false;
 
+      this.pronoClosed = this.utilService.checkDateProno(this.dateCompetizioneInCorso.data_chiusura);
       this.showProno = true;
 
     } else {
@@ -365,7 +386,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
     this.setAdmin(false);
     this.adminPassword = false;
-    this.pronoClosed = this.utilService.checkDateProno(this.applicationParameter.data_chiusura);
+    // this.pronoClosed = this.utilService.checkDateProno(this.applicationParameter.data_chiusura);
+    this.idCompetizioneToFill = 0;
     this.showProno = false;
 
   }
@@ -455,6 +477,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
                   this.setAdmin(true);
                   this.enableProno();
+                  this.idCompetizioneToFill = 0;
                   this.showProno = false;
         },
         error => Swal({
@@ -603,6 +626,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     // prendo i dati dai resolver
     this.localStorageService.set('competizioni', this.activatedRoute.snapshot.data.listaCompetizioni);
     this.localStorageService.set('valoriPronostici', this.activatedRoute.snapshot.data.valoriPronostici);
+    this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
     this.valoriPronosticiSaved = this.activatedRoute.snapshot.data.pronosticiSaved;
     this.valoriPronosticiToSave = this.activatedRoute.snapshot.data.pronosticiSaved;
     this.cCCToSaveToPronostici = [];
@@ -669,7 +693,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     }
 
     this.showProno = false;
-    this.pronoClosed = this.utilService.checkDateProno(this.applicationParameter.data_chiusura);
+    // this.pronoClosed = this.utilService.checkDateProno(this.applicationParameter.data_chiusura);
 
   }
 

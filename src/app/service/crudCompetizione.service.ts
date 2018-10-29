@@ -98,7 +98,7 @@ export class CrudCompetizioneService {
 
     }
 
-    SplitDateCompetizioneStringIntoArray(dateCompetizione: string): DatePronostici[] {
+    SplitDateCompetizioneStringIntoArray(dateCompetizione: string, full: boolean): DatePronostici[] {
 
         const retVal: DatePronostici[] = [];
         const regExp = /["]/g;
@@ -122,12 +122,21 @@ export class CrudCompetizioneService {
             recordToSplit = recordArray[i].substring(0, (recordArray[i].length - 1));
 // console.log(recordToSplit);
             dateToSetInRecord = recordToSplit.split(',');
-            retVal.push({
-                            stagione: dateToSetInRecord[0],
-                            data_apertura: dateToSetInRecord[1].substring(0, 10),
-                            data_chiusura: dateToSetInRecord[2].substring(0, 10),
-                            data_calcolo_classifica: dateToSetInRecord[3].substring(0, 10)
-                        });
+            if (full) {
+                retVal.push({
+                    stagione: dateToSetInRecord[0],
+                    data_apertura: dateToSetInRecord[1],
+                    data_chiusura: dateToSetInRecord[2],
+                    data_calcolo_classifica: dateToSetInRecord[3]
+                });
+            } else {
+                retVal.push({
+                    stagione: dateToSetInRecord[0],
+                    data_apertura: dateToSetInRecord[1].substring(0, 10),
+                    data_chiusura: dateToSetInRecord[2].substring(0, 10),
+                    data_calcolo_classifica: dateToSetInRecord[3].substring(0, 10)
+                });
+            }
             dateToSetInRecord = [];
             recordToSplit = '';
         }
