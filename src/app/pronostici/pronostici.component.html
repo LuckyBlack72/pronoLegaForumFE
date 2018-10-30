@@ -254,15 +254,47 @@ fine Timer on toolbar e only external prono
     <div class="row"> <!-- Riga con la dropdown competizioni -->
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
-            <select #st id="cmp" (change)="fillPronostici(0, $event.target.value)"> <!-- 0 capisco che sto usando la select -->
-                <option class="form-control" value="0">Seleziona una Competizione</option> <!-- not selected / blank option -->
+
+            <mat-form-field>
+                <mat-select 
+                #st
+                placeholder="Competizione"
+                [(ngModel)]="idCompetizioneToFill"
+                (selectionChange)="fillPronostici(0, idCompetizioneToFill)"
+                >
+                    <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                    <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
+                        <mat-option class="mat-body-1" *ngFor="let competizione of competizioneGroup.competizioni" [value]="competizione.id">
+                            {{ competizione.competizione }} [{{competizione.pronostici_inseriti}} / {{competizione.numero_pronostici}}]
+                        </mat-option>
+                    </mat-optgroup>
+                </mat-select>
+            </mat-form-field>
+<!--
+            <select #st id="cmp" (change)="fillPronostici(0, $event.target.value)"> -- 0 capisco che sto usando la select --
+                <option class="form-control" value="0">Seleziona una Competizione</option> -- not selected / blank option --
                 <option class="form-control" *ngFor="let competizione of competizioni" [value]="competizione.id">
                   {{ competizione.competizione }} [{{competizione.pronostici_inseriti}} / {{competizione.numero_pronostici}}]
                 </option>
             </select>
+-->            
         </div>
         <div class="col-sm-2"></div>
     </div>
+    
+    <div class="row"> <!--TIMER -->
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <span *ngIf="showProno && !admin">
+                <strong>Pronostici Inseribili per : </strong>
+                <span class="badge text-center" 
+                [ngClass]="{'badge-success': !pronoClosed, 'badge-danger': pronoClosed }">
+                    <countdown-timer [end]="dateCompetizioneInCorso.data_chiusura"></countdown-timer>
+                </span>        
+            </span>    
+        </div>
+        <div class="col-sm-2"></div>
+    </div> <!-- FINE TIMER -->
 
     <div class="row">
         <div class="col-sm-12">&nbsp;</div>

@@ -25,7 +25,7 @@ export class ExternalApiService {
   constructor ( private http: HttpClient, private utils: Utils, private pronosticiService: PronosticiService ) { }
 
 
-  @LocalStorage() valoriPronostici: ValoriPronostici[];
+  // @LocalStorage() valoriPronostici: ValoriPronostici[];
 
 
   buildApiCallsUrl (stagione: string, competizioni: AnagraficaCompetizioni[]): string[] {
@@ -94,7 +94,8 @@ export class ExternalApiService {
   transformApiDataToPronosticiData(
                                     apiData: any[],
                                     datiCompetizioni: AnagraficaCompetizioni[],
-                                    stagione: number
+                                    stagione: number,
+                                    valoriPronostici: ValoriPronostici[]
                                   ):  ApiTransformReturnValue {
 
     let pronostici: string[] = [];
@@ -109,7 +110,7 @@ export class ExternalApiService {
         if ( apiData[i].data.topscorers.length > 0 ) {
           competizioniAggiornate.push(datiCompetizioni[i].competizione);
           for (let x = 1; x <= datiCompetizioni[i].numero_pronostici; x++ ) {
-            pronostici.push(this.decodePlayerName(datiCompetizioni[i].id, apiData[i].data.topscorers[(x - 1)].fullname));
+            pronostici.push(this.decodePlayerName(datiCompetizioni[i].id, apiData[i].data.topscorers[(x - 1)].fullname, valoriPronostici));
           }
         } else {
           competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
@@ -187,17 +188,17 @@ private decodeTeamName(teamToDecode: string): string {
 
 }
 
-private decodePlayerName(idCompetizione: number, playerNameToDecode: string): string {
+private decodePlayerName(idCompetizione: number, playerNameToDecode: string, valoriPronostici: ValoriPronostici[]): string {
 
   let decodedPlayerName = 'XXX';
   const upperCaseNameToDecode = playerNameToDecode.toUpperCase();
   let found = false;
 
-  for (let i = 0; i < this.valoriPronostici.length; i++) {
-    if (this.valoriPronostici[i].id_competizione === idCompetizione) {
-      for (let x = 0; x < this.valoriPronostici[i].valori_pronostici.length; x++ ) {
-        if (this.valoriPronostici[i].valori_pronostici[x].search(upperCaseNameToDecode) !== -1) {
-          decodedPlayerName = this.valoriPronostici[i].valori_pronostici[x];
+  for (let i = 0; i < valoriPronostici.length; i++) {
+    if (valoriPronostici[i].id_competizione === idCompetizione) {
+      for (let x = 0; x < valoriPronostici[i].valori_pronostici.length; x++ ) {
+        if (valoriPronostici[i].valori_pronostici[x].search(upperCaseNameToDecode) !== -1) {
+          decodedPlayerName = valoriPronostici[i].valori_pronostici[x];
           found = true;
         }
       }

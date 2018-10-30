@@ -63,8 +63,11 @@ export class PronosticiComponent implements OnInit, OnDestroy {
   @SessionStorage() applicationParameter: ApplicationParameter;
 
 
-  @LocalStorage() competizioni: AnagraficaCompetizioni[];
-  @LocalStorage() valoriPronostici: ValoriPronostici[];
+  // @LocalStorage() competizioni: AnagraficaCompetizioni[];
+  // @LocalStorage() valoriPronostici: ValoriPronostici[];
+
+  competizioni: AnagraficaCompetizioni[];
+  valoriPronostici: ValoriPronostici[];
 
   showProno: boolean;
   numberPronostici: number[] = [];
@@ -530,7 +533,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
             dataToSaveOnDb = this.externalApiService.transformApiDataToPronosticiData(
               dataFromApi,
               datiCompetizioni,
-              parseInt(this.utils.getStagione().substring(0, 4), 10)
+              parseInt(this.utils.getStagione().substring(0, 4), 10),
+              this.valoriPronostici
             );
 
             const searchParameter: FiltroPronostici = { stagione: parseInt(this.utils.getStagione().substring(0, 4), 10) };
@@ -624,8 +628,11 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
     // prendo i dati dai resolver
-    this.localStorageService.set('competizioni', this.activatedRoute.snapshot.data.listaCompetizioni);
-    this.localStorageService.set('valoriPronostici', this.activatedRoute.snapshot.data.valoriPronostici);
+    // this.localStorageService.set('competizioni', this.activatedRoute.snapshot.data.listaCompetizioni);
+    // this.localStorageService.set('valoriPronostici', this.activatedRoute.snapshot.data.valoriPronostici);
+    this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
+    this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
+
     this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
     this.valoriPronosticiSaved = this.activatedRoute.snapshot.data.pronosticiSaved;
     this.valoriPronosticiToSave = this.activatedRoute.snapshot.data.pronosticiSaved;

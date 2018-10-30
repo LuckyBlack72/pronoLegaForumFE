@@ -18,6 +18,8 @@ export class DatePronosticiResolver implements Resolve<DatePronostici> {
                     private localStorageService: LocalStorageService) {
     }
 
+/* CON LOCAL STORAGE
+
     @LocalStorage() datePronostici: DatePronostici;
     @SessionStorage() applicationParameter: ApplicationParameter;
     @LocalStorage() log_aggiornamentiLS: LogAggiornamenti[];
@@ -73,4 +75,17 @@ export class DatePronosticiResolver implements Resolve<DatePronostici> {
         }
 
     }
+
+ */
+
+    resolve( // SENZA  LOCAL STORAGE
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot
+    ): Observable<DatePronostici> {
+
+        const searchParameters: FiltroStagione = {stagione: parseInt(this.utils.getStagione().substring(0, 4), 10)};
+        return this.pronosticiService.getDatePronostici(searchParameters);
+
+    }
+
 }

@@ -24,6 +24,8 @@ export class ValoriPronosticiResolver implements Resolve<ValoriPronostici[]> {
                     private localStorageService: LocalStorageService
                 ) {
     }
+    
+/* CON LOCAL STORAGE    
 
     @LocalStorage() valoriPronostici: ValoriPronostici[];
     @SessionStorage() applicationParameter: ApplicationParameter;
@@ -81,4 +83,17 @@ export class ValoriPronosticiResolver implements Resolve<ValoriPronostici[]> {
         }
 
     }
+
+*/
+
+    resolve( // SENZA LOCAL STORAGE
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot
+    ): Observable<ValoriPronostici[]> {
+
+        const searchParameters: FiltroValoriPronostici = {stagione: parseInt(this.utils.getStagione().substring(0, 4), 10)};
+        return this.pronosticiService.getValoriPronostici(searchParameters);
+
+    }
+
 }

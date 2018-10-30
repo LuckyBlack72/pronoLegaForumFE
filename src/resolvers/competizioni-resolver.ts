@@ -18,6 +18,8 @@ export class CompetizioniResolver implements Resolve<AnagraficaCompetizioni[]> {
         private localStorageService: LocalStorageService) {
     }
 
+    /* CON LOCAL STORAGE
+
     @LocalStorage() competizioni: AnagraficaCompetizioni[];
     @SessionStorage() applicationParameter: ApplicationParameter;
     @LocalStorage() log_aggiornamentiLS: LogAggiornamenti[];
@@ -71,4 +73,16 @@ export class CompetizioniResolver implements Resolve<AnagraficaCompetizioni[]> {
         }
 
     }
+
+    */
+
+   resolve( // SENZA LOCAL STORAGE
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+    ): Observable<AnagraficaCompetizioni[]> {
+
+        return this.pronosticiService.getAnagraficaCompetizioni(parseInt(this.utils.getStagione().substring(0, 4), 10));
+
+    }
+
 }

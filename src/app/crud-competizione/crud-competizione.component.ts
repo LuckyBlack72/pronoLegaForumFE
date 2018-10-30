@@ -48,10 +48,14 @@ export class CrudCompetizioneComponent implements OnInit {
   isTablet: boolean;
   isDesktopDevice: boolean;
 
-  @LocalStorage() datiLegaForum: DatiSquadraLegaForum[][][];
+  // @LocalStorage() datiLegaForum: DatiSquadraLegaForum[][][];
+  datiLegaForum: DatiSquadraLegaForum[][][];
+
   @SessionStorage() applicationParameter: ApplicationParameter;
-  @SessionStorage() valoriPronostici: ValoriPronostici[];
-  @SessionStorage() competizioni: AnagraficaCompetizioni[];
+  // @SessionStorage() valoriPronostici: ValoriPronostici[];
+  // @SessionStorage() competizioni: AnagraficaCompetizioni[];
+  valoriPronostici: ValoriPronostici[];
+  competizioni: AnagraficaCompetizioni[];
 
   createUpdateViewCompetizione: string;
   idCompetizioneToEdit: number;
@@ -121,11 +125,15 @@ export class CrudCompetizioneComponent implements OnInit {
   ngOnInit() {
 
     // this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
-    this.sessionStorageService.set('competizioni', this.activatedRoute.snapshot.data.listaCompetizioni);
-    this.sessionStorageService.set('valoriPronostici', this.activatedRoute.snapshot.data.valoriPronostici);
+    // this.sessionStorageService.set('competizioni', this.activatedRoute.snapshot.data.listaCompetizioni);
+    // this.sessionStorageService.set('valoriPronostici', this.activatedRoute.snapshot.data.valoriPronostici);
+    this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
+    this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
+
     this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
     this.tipiCompetizione = this.activatedRoute.snapshot.data.tipiCompetizione;
-    this.localStorageService.set('datiLegaForum', this.activatedRoute.snapshot.data.datiLegaForum);
+    // this.localStorageService.set('datiLegaForum', this.activatedRoute.snapshot.data.datiLegaForum);
+    this.datiLegaForum = this.activatedRoute.snapshot.data.datiLegaForum;
     this.lega = { value : null, name: null};
     this.buildleagueListCombo('E', 'ALL', this.activatedRoute.snapshot.data.leagueList, this.datiLegaForum);
 
@@ -358,14 +366,14 @@ console.log(this.lega);
 
     this.pronosticiService.getAnagraficaCompetizioni(0).subscribe(
       data => {
-        this.sessionStorageService.set('competizioni', data);
-console.log(data);
+        // this.sessionStorageService.set('competizioni', data);
+        this.competizioni = data;
         this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
-
         const searchParameters: FiltroValoriPronostici = {stagione: parseInt(this.utils.getStagione().substring(0, 4), 10)};
         this.pronosticiService.getValoriPronostici(searchParameters).subscribe(
           dataVp  => {
-            this.sessionStorageService.set('valoriPronostici', dataVp);
+            // this.sessionStorageService.set('valoriPronostici', dataVp);
+            this.valoriPronostici = dataVp;
           }
 
         );

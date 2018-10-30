@@ -46,15 +46,15 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
   }
 
   @SessionStorage() applicationParameter: ApplicationParameter;
-  @LocalStorage() datePronostici: DatePronostici;
+  // @LocalStorage() datePronostici: DatePronostici;
 
   ngOnInit() {
 
-    this.localStorageService.set('datePronostici', this.activatedRoute.snapshot.data.datePronostici);
+    // this.localStorageService.set('datePronostici', this.activatedRoute.snapshot.data.datePronostici);
 
-    this.applicationParameter.data_apertura =  this.datePronostici[0].data_apertura;
-    this.applicationParameter.data_chiusura = this.datePronostici[0].data_chiusura;
-    this.applicationParameter.data_calcolo_classifica = this.datePronostici[0].data_calcolo_classifica;
+    // this.applicationParameter.data_apertura =  this.datePronostici[0].data_apertura;
+    // this.applicationParameter.data_chiusura = this.datePronostici[0].data_chiusura;
+    // this.applicationParameter.data_calcolo_classifica = this.datePronostici[0].data_calcolo_classifica;
 
     this.sessionStorageService.set('applicationParameter', this.applicationParameter);
 

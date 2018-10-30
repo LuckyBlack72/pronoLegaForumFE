@@ -19,8 +19,9 @@ export class CrudCompetizioneService {
                 private pronosticiService: PronosticiService
             ) { }
 
-    @LocalStorage() competizioni: AnagraficaCompetizioni[];
+    // @LocalStorage() competizioni: AnagraficaCompetizioni[];
 
+/*
     getDatiCompetizione(idCompetizione: number): Observable<AnagraficaCompetizioni> {
 
         let datiCompetizione: AnagraficaCompetizioni;
@@ -34,30 +35,29 @@ export class CrudCompetizioneService {
                 break;
             }
         }
-
         if (!fnd) {
             this.pronosticiService.getAnagraficaCompetizioni(0).subscribe(
               data => {
-                for (let i = 0; i < this.competizioni.length; i++) {
-                    if (this.competizioni[i].id === idCompetizione) {
-                        datiCompetizione = this.competizioni[i];
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].id === idCompetizione) {
+                        datiCompetizione = data[i];
                         fnd = true;
                         break;
                     }
                 }
-                return datiCompetizione;
+                return of(datiCompetizione);
               }
               ,
               error => {
                   datiCompetizione = null;
-                  return datiCompetizione;
+                  return of(datiCompetizione);
               }
             );
         } else {
             return of(datiCompetizione);
         }
-
     }
+*/
 
     saveAnagraficaCompetizione(competizioneToSave: AnagraficaCompetizioni, valoriPronostici: any): Observable<string> {
 

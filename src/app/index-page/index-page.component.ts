@@ -22,7 +22,8 @@ export class IndexPageComponent implements OnInit {
   @ViewChild('f') form: any;
 
   @SessionStorage() applicationParameter: ApplicationParameter;
-  @LocalStorage() log_aggiornamentiLS: LogAggiornamenti[];
+  // @LocalStorage() log_aggiornamentiLS: LogAggiornamenti[];
+  log_aggiornamentiLS: LogAggiornamenti[];
 
   log_aggiornamenti: LogAggiornamenti[];
 
@@ -38,9 +39,11 @@ export class IndexPageComponent implements OnInit {
 
   ngOnInit() {
 
+    /*
     if (!this.log_aggiornamentiLS) {
       this.localStorageService.set('log_aggiornamentiLS', this.activatedRoute.snapshot.data.logAggiornamenti);
     }
+    */
 
     this.log_aggiornamenti = this.activatedRoute.snapshot.data.logAggiornamenti;
 

@@ -16,6 +16,8 @@ export class StagioniResolver implements Resolve<Stagioni[]> {
             ) {
     }
 
+/* CON LOCAL STORAGE
+
     @LocalStorage() listaStagioni: Stagioni[];
 
     resolve(
@@ -47,4 +49,16 @@ export class StagioniResolver implements Resolve<Stagioni[]> {
         }
 
     }
+
+*/
+
+    resolve( // SENZA LOCAL STORAGE
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot,
+    ): Observable<Stagioni[]> {
+
+        return this.pronosticiService.getStagioni();
+
+    }
+
 }

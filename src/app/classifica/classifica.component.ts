@@ -48,8 +48,8 @@ export class ClassificaComponent implements OnInit {
   isDesktopDevice: boolean;
 
   @SessionStorage() applicationParameter: ApplicationParameter;
-  @LocalStorage() listaStagioni: Stagioni[];
-
+  // @LocalStorage() listaStagioni: Stagioni[];
+  listaStagioni: Stagioni[];
 
   @ViewChild('st') stCmb: ElementRef;
   @ViewChild('table') tabValoriPronostici: ElementRef;
@@ -86,7 +86,8 @@ export class ClassificaComponent implements OnInit {
     this.isTablet = this.deviceDetectorService.isTablet();
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
-    this.localStorageService.set('listaStagioni', this.activatedRoute.snapshot.data.listaStagioni);
+    // this.localStorageService.set('listaStagioni', this.activatedRoute.snapshot.data.listaStagioni);
+    this.listaStagioni = this.activatedRoute.snapshot.data.listaStagioni;
     this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
     this.showClassifica = false;
 

@@ -16,6 +16,8 @@ export class DatiLegaForumResolver implements Resolve<DatiSquadraLegaForum[][][]
             ) {
     }
 
+/* CON LOCAL STORAGA
+
     @LocalStorage() datiLegaForum: DatiSquadraLegaForum[][][];
 
     resolve(
@@ -54,4 +56,16 @@ export class DatiLegaForumResolver implements Resolve<DatiSquadraLegaForum[][][]
         }
 
     }
+*/
+
+    resolve( // SENZA LOCAL STORAGE
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot,
+    ): Observable<DatiSquadraLegaForum[][][]> {
+
+        const stagione = parseInt(this.utils.getStagione().substring(0, 4), 10);
+        return this.externalApiService.getDatiSorteggioLegaForum(stagione);
+
+    }
+
 }
