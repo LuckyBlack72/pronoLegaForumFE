@@ -122,6 +122,7 @@ export class ClassificaComponent implements OnInit {
         pronosticiUtenti => {
           this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameterCl).subscribe(
             valoriClassifica => {
+              console.log(valoriClassifica);
               this.datiPerClassifica = this.calcoloClassifica(pronosticiUtenti, valoriClassifica);
               this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
               // this.fsort = { active: 'Totale', direction: 'desc'};
@@ -194,40 +195,50 @@ export class ClassificaComponent implements OnInit {
     let puntiCompetizione = 0;
     let totalePartecipante = 0;
 
+    console.log(pronostici);
+
     for (let i = 0; i < pronostici.length; i++) {
 
-      if (pronostici[i].nickname === nickname) {
+      if (pronostici[i].tipo_pronostici === 'E') { // Pronostici Esterni
 
-        puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[i], valoriClassifica);
-        puntiCompetizioneArray.push({
-                                      competizione: pronostici[i].competizione,
-                                      punti: puntiCompetizione
-                                    });
-        totalePartecipante += puntiCompetizione;
-        puntiCompetizione = 0;
+        if (pronostici[i].nickname === nickname) {
 
-      } else {
+          puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[i], valoriClassifica);
+          puntiCompetizioneArray.push({
+                                        competizione: pronostici[i].competizione,
+                                        punti: puntiCompetizione
+                                      });
+          totalePartecipante += puntiCompetizione;
+          puntiCompetizione = 0;
 
-        puntiCompetizioneArray.push({
-                                      competizione: 'Totale',
-                                      punti: totalePartecipante
-                                    });
-        retVal.push({
-                      nickname: nickname,
-                      punti: puntiCompetizioneArray
-                    });
-        puntiCompetizioneArray = [];
-        totalePartecipante = 0;
-        nickname = pronostici[i].nickname;
-        puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[i], valoriClassifica);
-        puntiCompetizioneArray.push({
-                                      competizione: pronostici[i].competizione,
-                                      punti: puntiCompetizione
-                                    });
-        totalePartecipante += puntiCompetizione;
-        puntiCompetizione = 0;
+        } else {
+
+          puntiCompetizioneArray.push({
+                                        competizione: 'Totale',
+                                        punti: totalePartecipante
+                                      });
+          retVal.push({
+                        nickname: nickname,
+                        punti: puntiCompetizioneArray
+                      });
+          puntiCompetizioneArray = [];
+          totalePartecipante = 0;
+          nickname = pronostici[i].nickname;
+          puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[i], valoriClassifica);
+          puntiCompetizioneArray.push({
+                                        competizione: pronostici[i].competizione,
+                                        punti: puntiCompetizione
+                                      });
+          totalePartecipante += puntiCompetizione;
+          puntiCompetizione = 0;
+
+        }
+
+      } else { // Pronostici lega forum da implementare
+
 
       }
+
     }
 
     // i dati dell'ultimo partecipante

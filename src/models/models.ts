@@ -70,6 +70,7 @@ export interface Pronostici {
   stagione?: number;
   id_competizione?: number;
   competizione?: string;
+  tipo_pronostici?: string;
   pronostici?: string[];
 }
 
