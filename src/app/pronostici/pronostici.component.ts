@@ -98,6 +98,7 @@ export class PronosticiComponent implements OnInit, OnDestroy {
     data_chiusura: null,
     data_calcolo_classifica: null
   };
+  logoImage: any;
   /* al momento non serve
   setPronosticiToSave(value: string, index: number, idCompetizione: number) {
 
@@ -169,6 +170,14 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
             this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(this.competizioni[y].date_competizione.toString(), true);
             this.dateCompetizioneInCorso =
             datePronosticiCompetizione[(datePronosticiCompetizione.length - 1)];
+            this.crudCompetizioneService.loadLogo(this.competizioni[y].logo).subscribe(
+              logoImage => {
+                this.createImageFromBlob(logoImage);
+              },
+              errorImage => {
+                this.logoImage = '';
+              }
+            );
             break;
           }
         }
@@ -704,7 +713,16 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
   }
 
+  createImageFromBlob(image: Blob) {
 
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+       this.logoImage =  reader.result;
+    }, false);
+    if (image) {
+       reader.readAsDataURL(image);
+    }
 
+  }
 
 }

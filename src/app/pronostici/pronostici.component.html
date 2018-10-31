@@ -124,7 +124,7 @@ fine Timer on toolbar e only external prono
     
     <div *ngIf="showProno" class="row">
         <div class="col-md-3">
-          <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
+          <img alt="" class="rounded img-fluid mx-auto d-block" [src]="logoImage">
         </div>
         <div class="mx-auto" [ngClass]="{'col-md-3 divTableLeft':pronosticiGt10, 'col-md-6 divTableFull':!pronosticiGt10 }">
           <table class="table table-bordered tableCenter" [ngClass]="{'table-sm':pronosticiGt10}">
@@ -201,7 +201,7 @@ fine Timer on toolbar e only external prono
           </table>
         </div>
         <div class="col-md-3">
-          <img alt="" class="rounded img-fluid mx-auto d-block" src="assets/{{logo}}">
+          <img alt="" class="rounded img-fluid mx-auto d-block" [src]="logoImage">
         </div>
     </div>
 
