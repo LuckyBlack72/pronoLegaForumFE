@@ -151,5 +151,12 @@ export class PronosticiService {
 
   }
 
+  recoverPassword (email: string): Observable<string> {
+
+    const postData = { email: email};
+    return this.http.post<string>(environment.backEndURL + '/partecipanti/recoverPassword', postData);
+
+  }
+
 
 }

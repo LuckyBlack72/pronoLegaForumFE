@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { SessionStorage, LocalStorage, LocalStorageService, SessionStorageService } from 'ngx-store';
@@ -9,6 +8,7 @@ import { PronosticiService } from '../service/pronostici.service';
 import { DatePronostici, ApplicationParameter, LogAggiornamenti } from '../../models/models';
 import { Utils } from '../../models/utils';
 
+
 @Component({
   selector: 'app-index-page',
   templateUrl: './index-page.component.html',
@@ -16,17 +16,10 @@ import { Utils } from '../../models/utils';
 })
 export class IndexPageComponent implements OnInit {
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private pronosticiService: PronosticiService,
-    private utils: Utils,
-    private localStorageService: LocalStorageService,
-    private sessionStorageService: SessionStorageService
-//  public dataService: DataService
-  ) { }
-
+  nicknameV: string;
+  passwordV: string;
   loading = false;
+  @ViewChild('f') form: any;
 
   @SessionStorage() applicationParameter: ApplicationParameter;
   // @LocalStorage() log_aggiornamentiLS: LogAggiornamenti[];
@@ -34,11 +27,15 @@ export class IndexPageComponent implements OnInit {
 
   log_aggiornamenti: LogAggiornamenti[];
 
-  // i contenitori degli input sulla pagina
-  nicknameFormControl = new FormControl('', Validators.required);
-  passwordFormControl = new FormControl('', Validators.required);
-
-
+  constructor(
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              private pronosticiService: PronosticiService,
+              private utils: Utils,
+              private localStorageService: LocalStorageService,
+              private sessionStorageService: SessionStorageService
+ //             public dataService: DataService
+            ) { }
 
   ngOnInit() {
 
@@ -68,24 +65,22 @@ export class IndexPageComponent implements OnInit {
 
   onSubmit() {
 
-    if (this.nicknameFormControl.valid && this.passwordFormControl.valid) {
+    if (this.form.valid) {
       this.loading = true;
-      this.pronosticiService.checkPassword(this.nicknameFormControl.value, this.passwordFormControl.value)
+      this.pronosticiService.checkPassword(this.nicknameV, this.passwordV)
           .subscribe(
               data => {
-                  this.applicationParameter.nickname = this.nicknameFormControl.value;
+                  this.applicationParameter.nickname = this.nicknameV;
                   this.applicationParameter.idPartecipante = data;
                   this.loading = false;
-                  this.nicknameFormControl.setValue(null);
-                  this.passwordFormControl.setValue(null);
+                  this.form.reset();
                   this.applicationParameter.menu_utente_page = false;
                   this.sessionStorageService.set('applicationParameter', this.applicationParameter);
                   this.router.navigate(['/menu-utente']) ;
               },
               error => {
                   this.loading = false;
-                  this.nicknameFormControl.setValue(null);
-                  this.passwordFormControl.setValue(null);
+                  this.form.reset();
                   Swal({
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -102,38 +97,5 @@ export class IndexPageComponent implements OnInit {
     this.router.navigate(['/registrazione']) ;
 
   }
-
-  async recoverPassword() {
-
-    const {value: email} = await Swal({
-      title: 'Recupera Password',
-      input: 'email',
-      inputPlaceholder: 'Inserisci la mail del tuo profilo',
-      inputAttributes: {
-        autocapitalize: 'off',
-        autocorrect: 'off'
-      },
-      showCancelButton: true
-    });
-
-    if (email) {
-      this.pronosticiService.recoverPassword(email).subscribe(
-        data => Swal({
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          title: 'Riceverai una mail con la password provvisoria da modificare al primo accesso',
-          type: 'success'
-        })
-        ,
-        error => Swal({
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          title: 'Nessun utente registrato con  questo indirizzo email',
-          type: 'error'
-        })
-      );
-    }
-  }
-
 
 }
