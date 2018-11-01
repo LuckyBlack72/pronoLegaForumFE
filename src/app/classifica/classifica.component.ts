@@ -79,6 +79,8 @@ export class ClassificaComponent implements OnInit {
   // datiperDataSourceClassificaSorted: any[];
   displayedColumns = [];
 
+  stagioneSelect: number;
+
   ngOnInit() {
 
     this.deviceInfo = this.deviceDetectorService.getDeviceInfo();

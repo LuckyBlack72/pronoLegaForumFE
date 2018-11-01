@@ -210,46 +210,6 @@ fine Timer on toolbar e only external prono
 
 <!-- Tablet e Mobile -->
 <div *ngIf="!isDesktopDevice" class="container-fluid">
-    <div class="row"> <!--Riga con combo e pulsanti -->
-        <div class="col-sm-1"></div>
-        <div class="col-sm-4">
-            <h4><span class="badge badge-primary">Competizione</span></h4>
-        </div>
-        <div class="col-sm-2">
-            <button 
-            type="button" 
-            class="btn btn-success btn-sm active" 
-            title="Salva i Dati" 
-            (click)="salvaPronosticiClassifica()"
-            [disabled]="!showProno"
-            >
-                <i class="fa fa-floppy-o"></i>  
-            </button>                
-        </div>
-        <div class="col-sm-2">
-            <button 
-            [disabled]="admin"
-            type="button" 
-            class="btn btn-secondary btn-sm active" 
-            title="Exporta i pronostici in Excel" 
-            (click)="exportExcelPronostici()"
-            >
-                <i class="fa fa-file-excel-o"></i>  
-            </button>              
-        </div>
-        <div class="col-sm-2">
-            <button 
-            *ngIf="admin"
-            disabled
-            type="button" 
-            class="btn btn-danger btn-sm active"  
-            title="Admin Mode Attivo"
-            >
-            Admin Mode
-            </button>              
-        </div>
-        <div class="col-sm-1"></div> 
-    </div>
 
     <div class="row"> <!-- Riga con la dropdown competizioni -->
         <div class="col-sm-2"></div>
@@ -280,6 +240,42 @@ fine Timer on toolbar e only external prono
 -->            
         </div>
         <div class="col-sm-2"></div>
+    </div>
+
+    <div class="row"> <!--Riga con combo e pulsanti -->
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <button 
+            type="button" 
+            class="btn btn-success btn-sm active" 
+            title="Salva i Dati" 
+            (click)="salvaPronosticiClassifica()"
+            [disabled]="!showProno"
+            >
+                <i class="fa fa-floppy-o"></i>  
+            </button>       
+            &nbsp;&nbsp;         
+            <button 
+            [disabled]="admin"
+            type="button" 
+            class="btn btn-secondary btn-sm active" 
+            title="Exporta i pronostici in Excel" 
+            (click)="exportExcelPronostici()"
+            >
+                <i class="fa fa-file-excel-o"></i>  
+            </button>    
+            &nbsp;&nbsp;          
+            <button 
+            *ngIf="admin"
+            disabled
+            type="button" 
+            class="btn btn-danger btn-sm active"  
+            title="Admin Mode Attivo"
+            >
+            Admin Mode
+            </button>              
+        </div>
+        <div class="col-sm-2"></div> 
     </div>
     
     <div class="row"> <!--TIMER -->
