@@ -144,7 +144,7 @@ export class ClassificaComponent implements OnInit {
           this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameterCl).subscribe(
             valoriClassifica => {
               this.dialogData.valoriClassifica = valoriClassifica;
-              console.log(valoriClassifica);
+ //             console.log(valoriClassifica);
               this.datiPerClassifica = this.calcoloClassifica(pronosticiUtenti, valoriClassifica);
               this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
               // this.fsort = { active: 'Totale', direction: 'desc'};
@@ -217,7 +217,7 @@ export class ClassificaComponent implements OnInit {
     let puntiCompetizione = 0;
     let totalePartecipante = 0;
 
-    console.log(pronostici);
+//    console.log(pronostici);
 
     for (let i = 0; i < pronostici.length; i++) {
 
@@ -273,7 +273,7 @@ export class ClassificaComponent implements OnInit {
                   punti: puntiCompetizioneArray
     });
 
-    console.log(retVal);
+//    console.log(retVal);
 
     return retVal;
 
@@ -436,7 +436,10 @@ export class PronoUserComponent implements OnInit {
 
     this.dataSourcePronosticiData = [];
     for (let i = 0; i < this.data.pronostici.length; i++) {
-      if (this.data.pronostici[i].competizione === competizione) {
+      if (
+          this.data.pronostici[i].competizione === competizione &&
+          this.data.pronostici[i].nickname === this.data.nickname
+        ) {
         for (let y = 0; y < this.data.valoriClassifica.length; y++) {
           if (this.data.pronostici[i].id_competizione === this.data.valoriClassifica[y].id_competizione) {
             idxValoriClassifica = y;
