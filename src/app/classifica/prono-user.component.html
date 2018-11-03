@@ -1,0 +1,51 @@
+<h1 mat-dialog-title>Pronostici di : {{data.nickname}}</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <mat-select 
+        #st
+        placeholder="Competizioone"
+        [(ngModel)]="competizioneToFill"
+        (selectionChange)="fillPronostici(competizioneToFill)"
+        >
+            <mat-option class="mat-body-1" *ngFor="let competizione of data.competizioni" [value]="competizione">
+                {{ competizione }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-table 
+    #table  
+    [dataSource]="dataSourcePronostici"
+    >
+
+        <ng-container matColumnDef="Posizione" >
+            <mat-header-cell *matHeaderCellDef >Posizione</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.posizione}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Classifica" >
+            <mat-header-cell *matHeaderCellDef >Classifica</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.classifica}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Pronostico" >
+            <mat-header-cell *matHeaderCellDef >Pronostico</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.pronostico}}</mat-cell>
+        </ng-container>
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator 
+        [pageSizeOptions]="[5, 10]" 
+        showFirstLastButtons
+    >
+    </mat-paginator>    
+
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onExitClick()" mat-raised-button color="primary">Chiudi</button>
+</div>

@@ -41,7 +41,7 @@ import { IndexPageComponent } from './index-page/index-page.component';
 import { PronosticiComponent } from './pronostici/pronostici.component';
 import { RegistrazioneComponent } from './registrazione/registrazione.component';
 import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
-import { ClassificaComponent } from './classifica/classifica.component';
+import { ClassificaComponent, PronoUserComponent } from './classifica/classifica.component';
 import { PageheaderComponent } from './pageheader/pageheader.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ProfiloComponent } from './profilo/profilo.component';
@@ -63,7 +63,8 @@ import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
     PageheaderComponent,
     ToolbarComponent,
     ProfiloComponent,
-    CrudCompetizioneComponent
+    CrudCompetizioneComponent,
+    PronoUserComponent
   ],
   imports: [
     BrowserModule,
@@ -106,6 +107,7 @@ import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
               DatiLegaForumResolver,
               {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},
             ],
+  entryComponents: [PronoUserComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatPaginator, MatTableDataSource, Sort, MatSort } from '@angular/material';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
+import { MatPaginator, MatTableDataSource, Sort, MatSort, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +21,9 @@ import {
           FiltroValoriPronostici,
           ValoriPronosticiClassifica,
           ApplicationParameter,
-          DeviceInfo
+          DeviceInfo,
+          DialogClassificaData,
+          DialogPronoTableData
       } from '../../models/models';
 
 @Component({
@@ -39,7 +41,7 @@ export class ClassificaComponent implements OnInit {
     private deviceDetectorService: DeviceDetectorService,
     private sessionStorageService: SessionStorageService,
     private localStorageService: LocalStorageService,
-
+    public dialog: MatDialog
   ) { }
 
   deviceInfo: DeviceInfo;
@@ -81,6 +83,15 @@ export class ClassificaComponent implements OnInit {
 
   stagioneSelect: number;
 
+  dialogData: DialogClassificaData = {
+    competizioni: [],
+    pronostici: [],
+    valoriClassifica: [],
+    nickname: null
+  };
+
+  //
+
   ngOnInit() {
 
     this.deviceInfo = this.deviceDetectorService.getDeviceInfo();
@@ -92,6 +103,13 @@ export class ClassificaComponent implements OnInit {
     this.listaStagioni = this.activatedRoute.snapshot.data.listaStagioni;
     this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
     this.showClassifica = false;
+
+    this.dialogData = {
+      competizioni: [],
+      pronostici: [],
+      valoriClassifica: [],
+      nickname: null
+    };
 
   }
 
@@ -122,8 +140,10 @@ export class ClassificaComponent implements OnInit {
       this.clearDatiClassifica();
       this.pronosticiService.getPronostici(searchParameter).subscribe(
         pronosticiUtenti => {
+          this.dialogData.pronostici = pronosticiUtenti;
           this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameterCl).subscribe(
             valoriClassifica => {
+              this.dialogData.valoriClassifica = valoriClassifica;
               console.log(valoriClassifica);
               this.datiPerClassifica = this.calcoloClassifica(pronosticiUtenti, valoriClassifica);
               this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
@@ -342,11 +362,102 @@ export class ClassificaComponent implements OnInit {
     // this.datiperDataSourceClassificaSorted = [];
     this.displayedColumns = [];
 
+    this.dialogData = {
+      competizioni: [],
+      pronostici: [],
+      valoriClassifica: [],
+      nickname: null
+    };
+
   }
 
   exportClassificaExcel(): void {
 
     this.utilService.exportClassificaExcel(this.datiperDataSourceClassifica);
+
+  }
+
+  showUserProno(tableRow: any): void {
+
+    this.dialogData.nickname = tableRow.Nickname;
+    this.dialogData.competizioni = [];
+    for (let i = 1; i < (this.displayedColumns.length - 1); i++) { // la prima e l'ultima colonna non mi servono
+      this.dialogData.competizioni.push(this.displayedColumns[i]);
+    }
+
+    this.dialog.open(PronoUserComponent, {
+      width: '600px',
+      data: this.dialogData
+    });
+
+  }
+
+}
+
+@Component({
+  selector: 'app-prono-user',
+  templateUrl: 'prono-user.component.html',
+})
+export class PronoUserComponent implements OnInit {
+
+  constructor (
+    public dialogRef: MatDialogRef<PronoUserComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogClassificaData
+  ) {
+
+  }
+
+  dataSourcePronostici = new MatTableDataSource([]);
+  paginator: MatPaginator;
+  displayedColumns = ['Posizione', 'Classifica', 'Pronostico'];
+  competizioneToFill: string;
+  dataSourcePronosticiData: DialogPronoTableData[];
+
+  @ViewChild(MatPaginator)
+  set iniPaginator(paginator: MatPaginator) {
+    this.paginator = paginator;
+    this.dataSourcePronostici.paginator = this.paginator;
+  }
+
+  onExitClick(): void {
+    this.dialogRef.close();
+  }
+
+  ngOnInit() {
+
+    this.competizioneToFill = this.data.competizioni[0];
+    this.fillPronostici(this.competizioneToFill);
+
+  }
+
+  fillPronostici(competizione: string) {
+
+    let idxValoriClassifica: number;
+
+    this.dataSourcePronosticiData = [];
+    for (let i = 0; i < this.data.pronostici.length; i++) {
+      if (this.data.pronostici[i].competizione === competizione) {
+        for (let y = 0; y < this.data.valoriClassifica.length; y++) {
+          if (this.data.pronostici[i].id_competizione === this.data.valoriClassifica[y].id_competizione) {
+            idxValoriClassifica = y;
+            break;
+          }
+        }
+        for (let x = 0; x < this.data.pronostici[i].pronostici.length; x++) {
+          this.dataSourcePronosticiData.push(
+                                              {
+                                                posizione: (x + 1),
+                                                classifica: this.data.valoriClassifica[idxValoriClassifica].valori_pronostici_classifica[x]
+                                                .replace('XXX', 'Non Disponibile'),
+                                                pronostico: this.data.pronostici[i].pronostici[x]
+                                                .replace('XXX', 'Non Pronosticato')
+                                              }
+                                            );
+        }
+        break;
+      }
+    }
+    this.dataSourcePronostici.data = this.dataSourcePronosticiData;
 
   }
 

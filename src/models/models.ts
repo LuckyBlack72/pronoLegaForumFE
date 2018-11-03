@@ -157,3 +157,16 @@ export interface DatiSquadraLegaForum {
   girone?: string;
   ods?: number;
 }
+
+export interface DialogClassificaData {
+  competizioni?: string[];
+  pronostici?: Pronostici[];
+  valoriClassifica?: ValoriPronosticiClassifica[];
+  nickname?: string;
+}
+
+export interface DialogPronoTableData {
+  posizione?: number;
+  classifica?: string;
+  pronostico?: string;
+}
