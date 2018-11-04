@@ -6,6 +6,14 @@
     <div class="col-md-12">
       <div class="d-flex justify-content-center mb-1">        
         <div class="form-group">
+          <mat-radio-group
+            [(ngModel)]="pronoType" 
+            (change)="resetClassifica()"
+          >
+            <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+            <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+          </mat-radio-group>
+          &nbsp;&nbsp;
           <mat-form-field>
             <mat-select 
               placeholder="Stagione"
@@ -48,7 +56,7 @@
       >
 
         <ng-container *ngFor="let columnName of displayedColumns" matColumnDef="{{columnName}}" >
-          <mat-header-cell *matHeaderCellDef mat-sort-header>{{columnName}}</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{buildHeaderTableName(columnName)}}</mat-header-cell>
           <mat-cell *matCellDef="let element">{{element[columnName]}}</mat-cell>
         </ng-container>
     

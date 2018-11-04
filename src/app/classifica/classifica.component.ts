@@ -89,8 +89,7 @@ export class ClassificaComponent implements OnInit {
     valoriClassifica: [],
     nickname: null
   };
-
-  //
+  pronoType: string;
 
   ngOnInit() {
 
@@ -103,6 +102,7 @@ export class ClassificaComponent implements OnInit {
     this.listaStagioni = this.activatedRoute.snapshot.data.listaStagioni;
     this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
     this.showClassifica = false;
+    this.pronoType = 'E';
 
     this.dialogData = {
       competizioni: [],
@@ -141,11 +141,13 @@ export class ClassificaComponent implements OnInit {
       this.pronosticiService.getPronostici(searchParameter).subscribe(
         pronosticiUtenti => {
           this.dialogData.pronostici = pronosticiUtenti;
+// console.log(pronosticiUtenti);
           this.pronosticiService.getValoriPronosticiCalcoloClassifica(searchParameterCl).subscribe(
             valoriClassifica => {
               this.dialogData.valoriClassifica = valoriClassifica;
- //             console.log(valoriClassifica);
+// console.log(valoriClassifica);
               this.datiPerClassifica = this.calcoloClassifica(pronosticiUtenti, valoriClassifica);
+// console.log(this.datiPerClassifica);
               this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
               // this.fsort = { active: 'Totale', direction: 'desc'};
               // this.datiperDataSourceClassificaSorted = this.sortData(this.fsort);
@@ -154,6 +156,7 @@ export class ClassificaComponent implements OnInit {
               for (let x = 0; x < this.datiPerClassifica[0].punti.length; x++) {
                 this.displayedColumns.push(this.datiPerClassifica[0].punti[x].competizione);
               }
+// console.log(this.displayedColumns);
               this.showClassifica = true;
             }
             ,
@@ -213,15 +216,18 @@ export class ClassificaComponent implements OnInit {
     const retVal: DatiClassifica[] = [];
     let puntiCompetizioneArray: PuntiCompetizione[] = [];
 
-    let nickname = pronostici[0].nickname;
+    let nickname = 'XXX';
     let puntiCompetizione = 0;
     let totalePartecipante = 0;
 
 //    console.log(pronostici);
 
     for (let i = 0; i < pronostici.length; i++) {
+      if (pronostici[i].tipo_pronostici === this.pronoType) { // Pronostici dello stesso tipo del radio button
 
-      if (pronostici[i].tipo_pronostici === 'E') { // Pronostici Esterni
+        if (nickname === 'XXX') {
+          nickname = pronostici[i].nickname;
+        }
 
         if (pronostici[i].nickname === nickname) {
 
@@ -256,9 +262,6 @@ export class ClassificaComponent implements OnInit {
 
         }
 
-      } else { // Pronostici lega forum da implementare
-
-
       }
 
     }
@@ -283,30 +286,54 @@ export class ClassificaComponent implements OnInit {
 
     let retVal = 0;
 
-    for (let i = 0; i < valoriClassifica.length; i++) {
-      if (pronostici.id_competizione === valoriClassifica[i].id_competizione ) {
-        for (let x = 0; x < pronostici.pronostici.length; x++) {
-          for (let y = 0 ; y < valoriClassifica[i].valori_pronostici_classifica.length; y++) {
-            if ( pronostici.pronostici[x] === valoriClassifica[i].valori_pronostici_classifica[y] ) {
-              if ( x === y ) { // stessa posizione
-                retVal += valoriClassifica[i].punti_esatti;
-              } else { // posizioni differenti
-                if ( valoriClassifica[i].tipo_competizione === 'CMP' || valoriClassifica[i].tipo_competizione === 'SCO' ) { // campionati
-                  retVal += valoriClassifica[i].punti_lista;
-                } else { // coppe
-                  if ( x > 1 && y > 1 ) { // nelle coppe 3 e 4 sono esatti anche se invertiti
-                      retVal += valoriClassifica[i].punti_esatti;
-                    } else {
-                      retVal += valoriClassifica[i].punti_lista;
+    if (this.pronoType === 'E') {
+
+      for (let i = 0; i < valoriClassifica.length; i++) {
+        if (pronostici.id_competizione === valoriClassifica[i].id_competizione ) {
+          for (let x = 0; x < pronostici.pronostici.length; x++) {
+            for (let y = 0 ; y < valoriClassifica[i].valori_pronostici_classifica.length; y++) {
+              if ( pronostici.pronostici[x] === valoriClassifica[i].valori_pronostici_classifica[y] ) {
+                if ( x === y ) { // stessa posizione
+                  retVal += valoriClassifica[i].punti_esatti;
+                } else { // posizioni differenti
+                  if ( valoriClassifica[i].tipo_competizione === 'CMP' || valoriClassifica[i].tipo_competizione === 'SCO' ) { // campionati
+                    retVal += valoriClassifica[i].punti_lista;
+                  } else { // coppe
+                    if ( x > 1 && y > 1 ) { // nelle coppe 3 e 4 sono esatti anche se invertiti
+                        retVal += valoriClassifica[i].punti_esatti;
+                      } else {
+                        retVal += valoriClassifica[i].punti_lista;
+                      }
                     }
                   }
-                }
-              break;
+                break;
+              }
             }
           }
+          break;
         }
-        break;
       }
+
+    } else { // Lega Forum
+
+      for (let i = 0; i < valoriClassifica.length; i++) {
+        if (pronostici.id_competizione === valoriClassifica[i].id_competizione ) {
+          for (let x = 0; x < pronostici.pronostici.length; x++) {
+            for (let y = 0 ; y < valoriClassifica[i].valori_pronostici_classifica.length; y++) {
+              if ( pronostici.pronostici[x] === valoriClassifica[i].valori_pronostici_classifica[y] ) {
+                if ( x === y ) { // stessa posizione
+                  retVal += valoriClassifica[i].punti_esatti;
+                } else { // posizioni differenti
+                  retVal += valoriClassifica[i].punti_lista;
+                }
+                break;
+              }
+            }
+          }
+          break;
+        }
+      }
+
     }
 
     return retVal;
@@ -389,6 +416,53 @@ export class ClassificaComponent implements OnInit {
       width: '600px',
       data: this.dialogData
     });
+
+  }
+
+  buildHeaderTableName(columnName: string): string {
+
+//    console.log(columnName);
+
+    let retVal: string;
+
+    if (this.pronoType === 'E') {
+      retVal = columnName;
+    } else {
+
+      if (columnName.includes('Vincitore Lega Forum')) {
+        retVal = 'Lega Forum';
+      }
+      if (columnName.startsWith('Podio')) {
+        retVal = 'Gi ' + columnName[(columnName.length - 1)];
+      }
+      if (columnName.includes('Trab')) {
+        retVal = 'Trab';
+      }
+      if (columnName.includes('Franco')) {
+        retVal = 'M. Franco';
+      }
+      if (columnName.includes('Masters')) {
+        retVal = 'Masters';
+      }
+      if (columnName.includes('Champions')) {
+        retVal = 'Champions';
+      }
+      if (columnName.includes('Totale')) {
+        retVal = columnName;
+      }
+      if (columnName.includes('Nickname')) {
+        retVal = columnName;
+      }
+    }
+
+    return retVal;
+
+  }
+
+  resetClassifica() {
+
+    this.showClassifica = false;
+    this.stagioneSelect = null;
 
   }
 
