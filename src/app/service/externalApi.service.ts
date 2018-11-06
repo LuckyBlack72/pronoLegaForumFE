@@ -39,18 +39,22 @@ export class ExternalApiService {
     urlToCall = '';
     for (let i = 0; i < competizioni.length; i++) {
 
-      urlToCall = 'https://soccer.sportsopendata.net/v1/leagues/' +
-      competizioni[i].nome_pronostico +
-      '/seasons/' +
-      stagioneCall;
-      if (competizioni[i].tipo_competizione === 'SCO' ) {
-        urlToCall += '/topscorers';
-      } else {
-        urlToCall += '/standings';
-      }
+      if (competizioni[i].tipo_pronostici === 'E') {
 
-      urlsToCall.push(urlToCall);
-      urlToCall = '';
+        urlToCall = 'https://soccer.sportsopendata.net/v1/leagues/' +
+        competizioni[i].nome_pronostico +
+        '/seasons/' +
+        stagioneCall;
+        if (competizioni[i].tipo_competizione === 'SCO' ) {
+          urlToCall += '/topscorers';
+        } else {
+          urlToCall += '/standings';
+        }
+
+        urlsToCall.push(urlToCall);
+        urlToCall = '';
+
+      }
 
     }
 
