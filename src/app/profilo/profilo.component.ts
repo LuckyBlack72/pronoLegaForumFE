@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+
 import { PronosticiService } from '../service/pronostici.service';
 import { FiltroAnagraficaPartecipanti, AnagraficaPartecipanti } from '../../models/models';
-import { UtilService } from '../service/util.service';
 
 @Component({
   selector: 'app-profilo',
@@ -12,13 +13,16 @@ import { UtilService } from '../service/util.service';
 })
 export class ProfiloComponent implements OnInit {
 
-  nicknameV: string;
-  passwordV: string;
-  passwordConfV: string;
-  emailV: string;
+  constructor(
+                private activatedRoute: ActivatedRoute,
+                private pronosticiService: PronosticiService
+              ) {
+
+  }
+
   loading = false;
   loginbutton = false;
-  @ViewChild('f') form: any;
+
   searchParameter: FiltroAnagraficaPartecipanti = { nickname: '' };
   dataToSave: AnagraficaPartecipanti = {
                                           nickname: '',
@@ -27,35 +31,32 @@ export class ProfiloComponent implements OnInit {
                                         };
   anagraficaPartecipante: AnagraficaPartecipanti[];
 
-  constructor(private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private pronosticiService: PronosticiService,
-              private utilService: UtilService) { }
+  // i contenitori degli input sulla pagina
+  profileForm: FormGroup;
 
+  get f() { return this.profileForm.controls; }
 
   ngOnInit() {
 
-      this.anagraficaPartecipante = this.activatedRoute.snapshot.data.anagraficaPartecipante;
-      this.nicknameV = this.anagraficaPartecipante[0].nickname;
-      this.emailV = this.anagraficaPartecipante[0].email_address;
+    this.anagraficaPartecipante = this.activatedRoute.snapshot.data.anagraficaPartecipante;
+
+    this.profileForm = new FormGroup({
+      nicknameFormControl: new FormControl({value: this.anagraficaPartecipante[0].nickname, disabled: true}, Validators.required),
+      emailFormControl: new FormControl(this.anagraficaPartecipante[0].email_address, [Validators.required, Validators.email]),
+      currentPasswordFormControl: new FormControl('', Validators.required),
+      newPasswordFormControl: new FormControl('', Validators.required),
+      repeatNewPasswordFormControl: new FormControl('', Validators.required),
+    });
 
   }
 
-  async checkPasswordToConfirmSave() {
+  checkPasswordToConfirmSave() {
 
-    const {value: password} = await Swal({
-      title: 'Conferma Modifiche Profilo',
-      input: 'password',
-      inputPlaceholder: 'Inserisci la tua password',
-      inputAttributes: {
-        autocapitalize: 'off',
-        autocorrect: 'off'
-      },
-      showCancelButton: true
-    });
-
-    if (password) {
-      this.pronosticiService.checkPassword(this.nicknameV, password).subscribe(
+    if (this.profileForm.valid) {
+      this.pronosticiService.checkPassword(
+                                            this.profileForm.controls.nicknameFormControl.value,
+                                            this.profileForm.controls.currentPasswordFormControl.value
+                                          ).subscribe(
         data => {
           this.saveData();
         }
@@ -63,7 +64,7 @@ export class ProfiloComponent implements OnInit {
         error => Swal({
           allowOutsideClick: false,
           allowEscapeKey: false,
-          title: 'Password Errata',
+          title: 'Password Corrente Errata',
           type: 'error'
         })
       );
@@ -73,20 +74,16 @@ export class ProfiloComponent implements OnInit {
 
   saveData() {
 
-    let checkPassword = true;
-    let checkEmail = true;
+    let checkNewPassword = true;
 
-    if (this.form.valid) {
+    checkNewPassword = this.checkNewPassword();
 
-      checkPassword = this.checkPassword();
-      checkEmail = this.checkEmail();
-
-      if (checkPassword && checkEmail) {
+      if (checkNewPassword) {
 
         this.loading = true;
-        this.dataToSave.nickname = this.nicknameV;
-        this.dataToSave.email_address = this.emailV;
-        this.dataToSave.password_value = this.passwordV === undefined || this.passwordV === '' ? 'ZYZYZY' : this.passwordV;
+        this.dataToSave.nickname = this.profileForm.controls.nicknameFormControl.value;
+        this.dataToSave.email_address = this.profileForm.controls.emailFormControl.value;
+        this.dataToSave.password_value = this.profileForm.controls.newPasswordFormControl.value;
         this.pronosticiService.updateAnagraficaPartecipanti(this.dataToSave)
         .subscribe(
           dataSaved => {
@@ -101,7 +98,14 @@ export class ProfiloComponent implements OnInit {
           },
           error => {
             this.loading = false;
-            this.form.reset();
+            this.profileForm = new FormGroup({
+              nicknameFormControl: new FormControl(this.anagraficaPartecipante[0].nickname, Validators.required),
+              emailPasswordFormControl: new FormControl(this.anagraficaPartecipante[0].email_address,
+                                                        [Validators.required, Validators.email]),
+              currentPasswordFormControl: new FormControl('', Validators.required),
+              newPasswordFormControl: new FormControl('', Validators.required),
+              repeatNewPasswordFormControl: new FormControl('', Validators.required),
+            });
             Swal({
               allowOutsideClick: false,
               allowEscapeKey: false,
@@ -111,21 +115,19 @@ export class ProfiloComponent implements OnInit {
           }
         );
       } else {
-        checkPassword ? this.emailV = '' : this.passwordConfV = '';
         Swal({
           allowOutsideClick: false,
           allowEscapeKey: false,
-          title: checkPassword ? 'Indirizzo email non valido' : 'Le password non coincidono',
+          title: 'Le nuove password non coincidono',
           type: 'error'
         });
       }
-    }
   }
 
-  checkPassword (): boolean {
+  checkNewPassword (): boolean {
 
-    const pVcheck = this.passwordV === undefined || this.passwordV === '' ? 'ZYZYZY' : this.passwordV;
-    const pcVcheck = this.passwordConfV === undefined || this.passwordConfV === '' ? 'ZYZYZY' : this.passwordV;
+    const pVcheck = this.profileForm.controls.newPasswordFormControl.value;
+    const pcVcheck = this.profileForm.controls.repeatNewPasswordFormControl.value;
 
     let retVal = true;
 
@@ -134,13 +136,6 @@ export class ProfiloComponent implements OnInit {
     }
 
     return retVal;
-
-  }
-
-
-  checkEmail (): boolean {
-
-    return this.utilService.checkEmail(this.emailV);
 
   }
 

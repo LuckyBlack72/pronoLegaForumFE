@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { PronosticiService } from '../service/pronostici.service';
@@ -12,13 +13,10 @@ import { UtilService } from '../service/util.service';
 })
 export class RegistrazioneComponent implements OnInit {
 
-  nicknameV: string;
-  passwordV: string;
-  passwordConfV: string;
-  emailV: string;
+  constructor(private router: Router, private pronosticiService: PronosticiService, private utilService: UtilService) { }
+
   loading = false;
   loginbutton = false;
-  @ViewChild('f') form: any;
   searchParameter: FiltroAnagraficaPartecipanti = { nickname: '' };
   dataToSave: AnagraficaPartecipanti = {
                                           nickname: '',
@@ -26,85 +24,90 @@ export class RegistrazioneComponent implements OnInit {
                                           password_value: ''
                                         };
 
-  constructor(private router: Router, private pronosticiService: PronosticiService, private utilService: UtilService) { }
+    // i contenitori degli input sulla pagina
+    registrazioneForm: FormGroup;
+
+    get f() { return this.registrazioneForm.controls; }
 
   ngOnInit() {
+
+    this.registrazioneForm = new FormGroup({
+      nicknameFormControl: new FormControl('', Validators.required),
+      emailFormControl: new FormControl('', [Validators.required, Validators.email]),
+      passwordFormControl: new FormControl('', Validators.required),
+      repeatPasswordFormControl: new FormControl('', Validators.required),
+    });
   }
 
   onSubmit() {
 
-    let checkPassword = true;
-    let checkEmail = true;
+    if (this.registrazioneForm.valid) {
 
-     if (this.form.valid) {
+      this.loading = true;
+      this.searchParameter.nickname = this.f.nicknameFormControl.value;
+      this.pronosticiService.getAnagraficaPartecipanti(this.searchParameter).subscribe(
+      data => {
+        if (data.length > 0) {
 
-      checkPassword = this.checkPassword();
-      checkEmail = this.checkEmail();
+          this.loading = false;
+          Swal({
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            title: 'Nickname già presente',
+            type: 'error'
+          });
 
-      if (checkPassword && checkEmail) {
+        } else {
 
-        this.loading = true;
-        this.searchParameter.nickname = this.nicknameV;
-        this.pronosticiService.getAnagraficaPartecipanti(this.searchParameter)
-            .subscribe(
-                data => {
-                  if (data.length > 0) {
-                    this.loading = false;
-                    Swal({
-                      allowOutsideClick: false,
-                      allowEscapeKey: false,
-                      title: 'Nickname già presente',
-                      type: 'error'
-                    });
-                  } else {
-
-                    this.dataToSave.nickname = this.nicknameV;
-                    this.dataToSave.email_address = this.emailV;
-                    this.dataToSave.password_value = this.passwordV;
-                    this.pronosticiService.saveAnagraficaPartecipanti(this.dataToSave)
-                    .subscribe(
-                      dataSaved => {
-                        this.loginbutton = true;
-                        this.loading = false;
-                        Swal({
-                          allowOutsideClick: false,
-                          allowEscapeKey: false,
-                          title: 'Registrazione Effettuata con successo',
-                          type: 'success'
-                        });
-                      },
-                      error => {
-                        this.loading = false;
-                        this.form.reset();
-                        Swal({
-                          allowOutsideClick: false,
-                          allowEscapeKey: false,
-                          title: 'Errore applicazione' + '[' + error + ']',
-                          type: 'error'
-                        });
-                    });
-                  }
-                },
-                error => {
-                    this.loading = false;
-                    this.form.reset();
-                    Swal({
-                      allowOutsideClick: false,
-                      allowEscapeKey: false,
-                      title: 'Errore applicazione' + '[' + error + ']',
-                      type: 'error'
-                    });
-                });
-      } else {
-        checkPassword ? this.emailV = '' : this.passwordConfV = '';
-        Swal({
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          title: checkPassword ? 'Indirizzo email non valido' : 'Le password non coincidono',
-          type: 'error'
-        });
-      }
+          this.dataToSave.nickname = this.f.nicknameFormControl.value;
+          this.dataToSave.email_address = this.f.emailFormControl.value;
+          this.dataToSave.password_value = this.f.passwordFormControl.value;
+          this.pronosticiService.saveAnagraficaPartecipanti(this.dataToSave)
+          .subscribe(
+            dataSaved => {
+              this.loginbutton = true;
+              this.loading = false;
+              Swal({
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                title: 'Registrazione Effettuata con successo',
+                type: 'success'
+              });
+            },
+            error => {
+              this.loading = false;
+              this.registrazioneForm = new FormGroup({
+                nicknameFormControl: new FormControl('', Validators.required),
+                emailFormControl: new FormControl('', [Validators.required, Validators.email]),
+                passwordFormControl: new FormControl('', Validators.required),
+                repeatPasswordFormControl: new FormControl('', Validators.required),
+              });
+              Swal({
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                title: 'Errore applicazione' + '[' + error + ']',
+                type: 'error'
+              });
+          });
+        }
+      },
+      error => {
+          this.loading = false;
+          this.registrazioneForm = new FormGroup({
+            nicknameFormControl: new FormControl('', Validators.required),
+            emailFormControl: new FormControl('', [Validators.required, Validators.email]),
+            passwordFormControl: new FormControl('', Validators.required),
+            repeatPasswordFormControl: new FormControl('', Validators.required),
+          });
+          Swal({
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            title: 'Errore applicazione' + '[' + error + ']',
+            type: 'error'
+          });
+      });
     }
+
   }
 
   gotoLogin() {
@@ -112,24 +115,5 @@ export class RegistrazioneComponent implements OnInit {
     this.router.navigate(['/index-page']) ;
 
   }
-
-  checkPassword (): boolean {
-
-    let retVal = true;
-
-    if (this.passwordV !== this.passwordConfV) {
-      retVal = false;
-    }
-
-    return retVal;
-
-  }
-
-  checkEmail (): boolean {
-
-    return this.utilService.checkEmail(this.emailV);
-
-  }
-
 
 }

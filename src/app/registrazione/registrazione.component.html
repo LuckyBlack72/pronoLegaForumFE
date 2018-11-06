@@ -1,3 +1,4 @@
+<!--
 <div class="w-100 h-100 m-0 py-3">
   <div class="container-fluid">
     <div class="row">
@@ -41,5 +42,115 @@
     </div>
   </div>
 </div>
+-->
+
+<div class="w-100 h-100 m-0 py-3">
+
+  <div class="container-fluid">
+
+    <form [formGroup]="registrazioneForm" name="form" (ngSubmit)="onSubmit()">
+
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Nickname" formControlName="nicknameFormControl">
+            <mat-error *ngIf="f.nicknameFormControl.hasError('required')">
+                Nickname Obbligatorio
+            </mat-error>            
+          </mat-form-field>  
+        </div>  
+        <div class="col-md-3"></div>
+      </div>
+
+      <div class="row">
+          <div class="col-md-12">&nbsp;</div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <mat-form-field class="full-width">
+            <input matInput type="email" placeholder="Indirizzo Email" formControlName="emailFormControl">
+            <mat-error *ngIf="f.emailFormControl.hasError('required')">
+              Indirizzo Email Obbligatorio
+            </mat-error>
+            <mat-error *ngIf="f.emailFormControl.hasError('email')">
+                Formato indirizzo Email non corretto
+            </mat-error>
+          </mat-form-field> 
+        </div> 
+        <div class="col-md-3"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">&nbsp;</div>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+          <mat-form-field class="full-width">
+            <input matInput type="password" placeholder="Password" formControlName="passwordFormControl">
+            <mat-error *ngIf="f.passwordFormControl.hasError('required')">
+              Password Obbligatoria
+            </mat-error>
+          </mat-form-field>   
+        </div>
+        <div class="col-md-3">
+          <mat-form-field class="full-width">
+            <input matInput type="password" placeholder="Ripeti Password" formControlName="repeatPasswordFormControl">
+            <mat-error *ngIf="f.repeatPasswordFormControl.hasError('required')">
+              Password Obbligatoria
+            </mat-error>
+          </mat-form-field>                
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">&nbsp;</div>
+      </div>      
+
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <button  
+          *ngIf="!loginbutton"
+          class="mat-button"
+          [disabled]="loading"
+          mat-raised-button color="primary"
+          title="Salva"
+          >
+            Salva
+          </button>
+          <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />            
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+
+    </form>
+
+    <div class="row">
+        <div class="col-md-3">
+          <button 
+            *ngIf="loginbutton" 
+            class="mat-button" 
+            mat-raised-button color="primary"
+            (click)="gotoLogin()"
+            title="Torna alla Login"
+          >
+            Torna alla Login
+          </button>
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-3"></div>
+    </div>
+  
+  
+  </div>
+  
+</div>
+
 
 
