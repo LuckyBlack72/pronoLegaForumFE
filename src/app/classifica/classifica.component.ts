@@ -292,7 +292,10 @@ export class ClassificaComponent implements OnInit {
         if (pronostici.id_competizione === valoriClassifica[i].id_competizione ) {
           for (let x = 0; x < pronostici.pronostici.length; x++) {
             for (let y = 0 ; y < valoriClassifica[i].valori_pronostici_classifica.length; y++) {
-              if ( pronostici.pronostici[x] === valoriClassifica[i].valori_pronostici_classifica[y] ) {
+              if (
+                    pronostici.pronostici[x] !== 'XXX' &&
+                    pronostici.pronostici[x] === valoriClassifica[i].valori_pronostici_classifica[y]
+                ) {
                 if ( x === y ) { // stessa posizione
                   retVal += valoriClassifica[i].punti_esatti;
                 } else { // posizioni differenti
@@ -303,9 +306,9 @@ export class ClassificaComponent implements OnInit {
                         retVal += valoriClassifica[i].punti_esatti;
                       } else {
                         retVal += valoriClassifica[i].punti_lista;
-                      }
                     }
                   }
+                }
                 break;
               }
             }
@@ -320,7 +323,10 @@ export class ClassificaComponent implements OnInit {
         if (pronostici.id_competizione === valoriClassifica[i].id_competizione ) {
           for (let x = 0; x < pronostici.pronostici.length; x++) {
             for (let y = 0 ; y < valoriClassifica[i].valori_pronostici_classifica.length; y++) {
-              if ( pronostici.pronostici[x] === valoriClassifica[i].valori_pronostici_classifica[y] ) {
+              if (
+                    pronostici.pronostici[x] !== 'XXX' &&
+                    pronostici.pronostici[x] === valoriClassifica[i].valori_pronostici_classifica[y]
+                  ) {
                 if ( x === y ) { // stessa posizione
                   retVal += valoriClassifica[i].punti_esatti;
                 } else { // posizioni differenti
