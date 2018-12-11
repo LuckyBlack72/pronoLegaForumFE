@@ -122,7 +122,6 @@
                       placeholder="Competizione"
                       [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
                       [(ngModel)]="lega.value"
-                      (selectionChange)="loadValoriPronostici(lega.value, stagioneCompetizione, competizioneToSave.tipo_competizione)"
                     >
                       <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
                       <mat-option class="mat-body-1" *ngFor="let lega of leagueList" [value]="lega.value">{{ lega.name }}</mat-option>
@@ -139,7 +138,6 @@
                     placeholder="Stagione"
                     [(ngModel)]="stagioneCompetizione"
                     [disabled]="createUpdateViewCompetizione === 'U'"
-                    (selectionChange)="loadValoriPronostici(lega.value, stagioneCompetizione, competizioneToSave.tipo_competizione)"
                   >
                     <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
                     <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioniCompetizione" [value]="stagione">{{ stagione }}</mat-option>
@@ -148,7 +146,44 @@
               </div>
               <div class="col-md-6"></div>
             </div>            
-        
+
+            <div class="row">
+              <div class="col-md-6">
+                <button  
+                  class="mat-button"
+                  [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
+                  mat-raised-button color="primary"
+                  (click)="loadValoriPronostici(lega.value, stagioneCompetizione, competizioneToSave.tipo_competizione,competizioneToSave.tipo_pronostici)" 
+                  title="Importa da Sito Esterno"
+                >
+                  Importa dati da Sito Esterno
+                </button>                
+              </div>
+              <div class="col-md-6"></div>
+            </div>    
+
+            <div class="row">
+                <div class="col-md-6">
+                  &nbsp;
+                </div>
+                <div class="col-md-6"></div>
+            </div>  
+
+            <div class="row">
+              <div class="col-md-6">
+                  <button  
+                  class="mat-button"
+                  [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
+                  mat-raised-button color="primary"
+                  (click)="importDataFromExcel()" 
+                  title="Importa dati da Foglio Excel"
+                >
+                  Importa dati da Foglio Excel
+                </button>                
+              </div>
+              <div class="col-md-6"></div>
+            </div>                
+
           </div>
 
           <div class="col-md-2">

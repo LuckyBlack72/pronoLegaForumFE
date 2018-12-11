@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatPaginator, MatTableDataSource, MatSort, MatRadioChange } from '@angular/material';
 
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 import { SessionStorage, LocalStorage, LocalStorageService, SessionStorageService } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
@@ -879,6 +880,47 @@ console.log(this.lega);
       this.activatedRoute.snapshot.data.leagueList,
       this.datiLegaForum
     );
+
+  }
+
+  async importDataFromExcel () { // async come le promise
+
+    const dataSourceData: any[] = [];
+
+    const {value: file} = await Swal({ // await impedisce al codice sottostante di essere sereguito fino al fullfillment della promise
+      title: 'Importa valori da file Excel' ,
+      input: 'file',
+      inputAttributes: {
+        accept: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      },
+      showCancelButton: true
+    });
+
+    if (file) {
+      Swal.showLoading();
+      const reader = new FileReader;
+      reader.onload = (e) => {
+
+        const fileData = reader.result;
+
+        /* creo il WorkBook*/
+        const wb = XLSX.read(fileData, {type : 'binary'});
+        /* Get worksheet */
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const wsRows = XLSX.utils.sheet_to_json(ws);
+        for (let i = 0; i < wsRows.length; i++) {
+          for (let [key, value] of Object.entries(wsRows[i])) { // loop sulle righe del file
+            if (key === 'Valore Pronostico') {
+
+              dataSourceData.push({prono: value});
+
+            }
+          }
+        }
+        this.dataSourceValoriPronostici.data = dataSourceData;
+      };
+      reader.readAsBinaryString(file);
+    }
 
   }
 
