@@ -50,7 +50,7 @@ import { CrudCompetizioniResolver } from '../resolvers/crudcompetizioni-resolver
 import { LogAggiornamentiResolver } from '../resolvers/logaggiornamenti-resolver';
 import { LeagueListResolver } from '../resolvers/leaguelist-resolver';
 import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
-
+import { StatisticheComponent } from './statistiche/statistiche.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +64,8 @@ import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
     ToolbarComponent,
     ProfiloComponent,
     CrudCompetizioneComponent,
-    PronoUserComponent
+    PronoUserComponent,
+    StatisticheComponent
   ],
   imports: [
     BrowserModule,

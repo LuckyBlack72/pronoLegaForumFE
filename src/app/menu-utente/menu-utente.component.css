@@ -11,3 +11,10 @@
     height: 400px;  
     width: 400px;
 }
+
+#button-statistiche {
+    background-image: url('../../assets/statistiche.jpg');
+    background-size: 400px 400px;
+    height: 400px;  
+    width: 400px;
+}

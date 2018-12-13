@@ -8,6 +8,7 @@ import { MenuUtenteComponent } from './menu-utente/menu-utente.component';
 import { ClassificaComponent } from './classifica/classifica.component';
 import { ProfiloComponent } from './profilo/profilo.component';
 import { CrudCompetizioneComponent } from './crud-competizione/crud-competizione.component';
+import { StatisticheComponent } from './statistiche/statistiche.component';
 
 import { CompetizioniResolver } from '../resolvers/competizioni-resolver';
 import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
@@ -64,14 +65,22 @@ const routes: Routes = [
   },
   { path: 'crud-competizione',
   component: CrudCompetizioneComponent,
-  resolve: {
-    listaCompetizioni: CrudCompetizioniResolver,
-    tipiCompetizione: TipoCompetizioneResolver,
-    leagueList: LeagueListResolver,
-    valoriPronostici: ValoriPronosticiResolver,
-    datiLegaForum: DatiLegaForumResolver
+    resolve: {
+      listaCompetizioni: CrudCompetizioniResolver,
+      tipiCompetizione: TipoCompetizioneResolver,
+      leagueList: LeagueListResolver,
+      valoriPronostici: ValoriPronosticiResolver,
+      datiLegaForum: DatiLegaForumResolver
+    }
+  },
+  { path: 'statistiche',
+    component: StatisticheComponent,
+    resolve: {
+              listaCompetizioni: CompetizioniResolver,
+              valoriPronostici: ValoriPronosticiResolver,
+              pronostici: PronosticiResolver
+            }
   }
-},
 ];
 
 @NgModule({

@@ -6,13 +6,17 @@
   
   <div class="row">
     <div class="col-md-1"></div> 
-    <div class="col-md-4">
+    <div class="col-md-2">
       <button  id="button-pronostici" (click)="navigatePage('p')" title="pronostici"></button>
     </div> 
     <div class="col-md-2"></div> 
-    <div class="col-md-4">
+    <div class="col-md-2">
         <button id="button-classifica" (click)="navigatePage('c')" title="classifica"></button>
     </div> 
+    <div class="col-md-2"></div> 
+    <div class="col-md-2">
+        <button id="button-statistiche" (click)="navigatePage('s')" title="statistiche"></button>
+    </div>     
     <div class="col-md-1"></div> 
   </div>
 
@@ -41,6 +45,18 @@
     <div class="col-sm-2"></div> 
     <div class="col-sm-8">
       <button class="btn-block btn-lg" mat-raised-button color="primary" (click)="navigatePage('c')" title="classifica">Classifica</button>
+    </div> 
+    <div class="col-sm-2"></div> 
+  </div>
+
+  <div class="row">
+      &nbsp;
+  </div>
+    
+  <div class="row">
+    <div class="col-sm-2"></div> 
+    <div class="col-sm-8">
+      <button class="btn-block btn-lg" mat-raised-button color="accent" (click)="navigatePage('s')" title="classifica">Statistiche</button>
     </div> 
     <div class="col-sm-2"></div> 
   </div>
