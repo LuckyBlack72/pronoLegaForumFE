@@ -17,7 +17,6 @@
             [(ngModel)]="stagioneToCheck"
             (selectionChange)="setCompetizioni(stagioneToCheck)"
             >
-              <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
               <mat-option class="mat-body-1" *ngFor="let stagione of stagioni" [value]="stagione.stagione">
                   {{ stagione.stagione }}
               </mat-option>
@@ -33,7 +32,6 @@
             [(ngModel)]="idCompetizioneToFill"
             (selectionChange)="setPosizioniCompetizione(idCompetizioneToFill)"
             >
-              <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
               <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
                 <mat-option class="mat-body-1" *ngFor="let competizione of competizioneGroup.competizioni" [value]="competizione.id">
                     {{ competizione.competizione }}
@@ -50,7 +48,6 @@
             placeholder="Posizione"
             [(ngModel)]="posizioneToCheck"
             >
-              <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
               <mat-option class="mat-body-1" *ngFor="let posizione of numeroPronostici" [value]="posizione">
                   {{ posizione }}
               </mat-option>
@@ -152,7 +149,6 @@
           [(ngModel)]="stagioneToCheck"
           (selectionChange)="setCompetizioni(stagioneToCheck)"
           >
-            <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
             <mat-option class="mat-body-1" *ngFor="let stagione of stagioni" [value]="stagione.stagione">
                 {{ stagione.stagione }}
             </mat-option>
@@ -178,7 +174,6 @@
             [(ngModel)]="idCompetizioneToFill"
             (selectionChange)="setPosizioniCompetizione(idCompetizioneToFill)"
             >
-              <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
               <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
                 <mat-option class="mat-body-1" *ngFor="let competizione of competizioneGroup.competizioni" [value]="competizione.id">
                     {{ competizione.competizione }}
@@ -205,7 +200,6 @@
             placeholder="Posizione"
             [(ngModel)]="posizioneToCheck"
             >
-              <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
               <mat-option class="mat-body-1" *ngFor="let posizione of numeroPronostici" [value]="posizione">
                   {{ posizione }}
               </mat-option>

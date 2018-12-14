@@ -131,13 +131,7 @@ export class StatisticheComponent implements OnInit {
     let scelta = 0;
     let scelteTotali = 0;
 
-    console.log(idCompetizione + ' - ' + posizione + ' - ' + stagione);
-
-    if (
-          ( idCompetizione != '0' && idCompetizione ) &&
-          ( posizione != '0' && posizione ) &&
-          ( stagione != '0' && stagione )
-        ) {
+    if ( idCompetizione && posizione && stagione ) {
 
       for (let i = 0; i < this.pronostici.length; i++) {
 
