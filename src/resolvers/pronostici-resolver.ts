@@ -25,11 +25,23 @@ export class PronosticiResolver implements Resolve<Pronostici[]> {
         state: RouterStateSnapshot
     ): Observable<Pronostici[]> {
 
-        const searchParameters: FiltroPronostici = {
-                                                    stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
-                                                    idPartecipanti: this.applicationParameter.idPartecipante
-                                                    };
-        return this.pronosticiService.getPronostici(searchParameters);
+
+        if (state.url === '/statistiche') {
+
+            return this.pronosticiService.getPronostici({});
+
+        } else {
+
+            const searchParameters: FiltroPronostici = {
+                stagione: parseInt(this.utils.getStagione().substring(0, 4), 10),
+                idPartecipanti: this.applicationParameter.idPartecipante
+                };
+
+            return this.pronosticiService.getPronostici(searchParameters);
+
+        }
+
+
 
     }
 }
