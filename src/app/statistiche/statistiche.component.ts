@@ -182,8 +182,10 @@ export class StatisticheComponent implements OnInit {
     const retVal: any[] = [];
     for (let i = 0; i < valori.length; i++) {
       element['Pronostico'] = valori[i];
-      element['Scelte'] = scelte[i] + '/' + scelteTotali;
-      element['Percentuale'] = ( scelte[i] / scelteTotali ) * 100;
+      element['Scelte'] = scelte[i] < 10
+                        ? '0' + scelte[i] + '/' + scelteTotali
+                        : scelte[i] + '/' + scelteTotali;
+      element['Percentuale'] = (( scelte[i] / scelteTotali ) * 100).toFixed(2);
       retVal.push(element);
       element = {};
     }
