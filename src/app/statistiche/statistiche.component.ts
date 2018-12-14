@@ -65,7 +65,7 @@ export class StatisticheComponent implements OnInit {
   }
 
   dataSourceStatistiche = new MatTableDataSource([]);
-  displayedColumns = ['prono', 'scelte', 'percentuale'];
+  displayedColumns = ['Pronostico', 'Scelte', 'Percentuale'];
 
   ngOnInit() {
 

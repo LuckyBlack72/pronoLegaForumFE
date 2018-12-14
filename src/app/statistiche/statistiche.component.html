@@ -86,19 +86,19 @@
         <mat-table 
           #table matSort 
           [dataSource]="dataSourceStatistiche"
-          matSortActive="percentuale" 
+          matSortActive="Percentuale" 
           matSortDirection="desc" 
           matSortDisableClear        
         >
     
-          <ng-container matColumnDef="prono" >
+          <ng-container matColumnDef="Pronostico" >
             <mat-header-cell *matHeaderCellDef mat-sort-header>
               Pronostico
             </mat-header-cell>
             <mat-cell *matCellDef="let element">{{element.Pronostico}}</mat-cell>
           </ng-container>
 
-          <ng-container matColumnDef="scelte" >
+          <ng-container matColumnDef="Scelte" >
             <mat-header-cell *matHeaderCellDef mat-sort-header>
               Scelte
             </mat-header-cell>
