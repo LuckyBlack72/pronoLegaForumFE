@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
+
 import { DeviceDetectorService } from 'ngx-device-detector';
+import Swal from 'sweetalert2';
 
 import { CrudCompetizioneService } from '../service/crudCompetizione.service';
 import { UtilService } from '../service/util.service';
@@ -11,7 +14,8 @@ import {
   ValoriPronostici,
   Pronostici,
   AnagraficaCompetizioniGrouped,
-  DeviceInfo
+  DeviceInfo,
+  Stagioni
 } from '../../models/models';
 
 @Component({
@@ -31,6 +35,7 @@ export class StatisticheComponent implements OnInit {
   competizioni: AnagraficaCompetizioni[];
   valoriPronostici: ValoriPronostici[];
   pronostici: Pronostici[];
+  stagioni: Stagioni[];
 
   deviceInfo: DeviceInfo;
   isMobile: boolean;
@@ -42,6 +47,25 @@ export class StatisticheComponent implements OnInit {
   numeroPronostici: number[] =  [];
   posizioneToCheck: number;
   idCompetizioneToFill: number;
+  stagioneToCheck: number;
+
+  paginator: MatPaginator;
+  sort: MatSort;
+
+  @ViewChild(MatSort)
+  set iniSort(sort: MatSort) {
+    this.sort = sort;
+    this.dataSourceStatistiche.sort = this.sort;
+  }
+
+  @ViewChild(MatPaginator)
+  set iniPaginator(paginator: MatPaginator) {
+    this.paginator = paginator;
+    this.dataSourceStatistiche.paginator = this.paginator;
+  }
+
+  dataSourceStatistiche = new MatTableDataSource([]);
+  displayedColumns = ['prono', 'scelte', 'percentuale'];
 
   ngOnInit() {
 
@@ -53,8 +77,32 @@ export class StatisticheComponent implements OnInit {
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
     this.valoriPronostici = this.activatedRoute.snapshot.data.valoriPronostici;
     this.pronostici = this.activatedRoute.snapshot.data.pronostici;
+    this.stagioni = this.activatedRoute.snapshot.data.stagioni;
 
-    this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
+    // this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
+
+  }
+
+  setCompetizioni(stagione: number): void {
+
+    const competizioniToCheck: AnagraficaCompetizioni[] = [];
+
+    for (let i = 0; i < this.competizioni.length; i++) {
+
+      for (let x = 0; x < this.competizioni[i].anni_competizione.length; x++) {
+
+        if (this.competizioni[i].anni_competizione[x] === stagione) {
+
+          competizioniToCheck.push(this.competizioni[i]);
+          break;
+
+        }
+
+      }
+
+    }
+
+    this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(competizioniToCheck);
 
   }
 
@@ -76,6 +124,80 @@ export class StatisticheComponent implements OnInit {
 
   }
 
+  calcolaPercentuali(idCompetizione: number, posizione: number, stagione: number): void {
+
+    const prono = [];
+    const scelte = [];
+    let scelta = 0;
+    let scelteTotali = 0;
+
+    console.log(idCompetizione + ' - ' + posizione + ' - ' + stagione);
+
+    if (
+          ( idCompetizione != '0' && idCompetizione ) &&
+          ( posizione != '0' && posizione ) &&
+          ( stagione != '0' && stagione )
+        ) {
+
+      for (let i = 0; i < this.pronostici.length; i++) {
+
+        if (
+              this.pronostici[i].id_competizione === idCompetizione &&
+              this.pronostici[i].stagione === stagione
+            ) {
+
+              if (this.pronostici[i].pronostici[(posizione - 1)] !== 'XXX') {
+
+                if ( prono.indexOf(this.pronostici[i].pronostici[(posizione - 1)]) !== -1) {
+
+                  scelta = scelte[prono.indexOf(this.pronostici[i].pronostici[(posizione - 1)])];
+                  scelta++;
+                  scelte[prono.indexOf(this.pronostici[i].pronostici[(posizione - 1)])] = scelta;
+                  scelteTotali++;
+
+                } else {
+
+                  prono.push((this.pronostici[i].pronostici[(posizione - 1)]));
+                  scelte.push(1);
+                  scelteTotali++;
+
+                }
+
+              }
+          }
+      }
+
+      this.dataSourceStatistiche.data = this.buildDataSource(prono, scelte, scelteTotali);
+
+    } else {
+
+      Swal({
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        title: 'Tutti i parametri di ricerca devono essere riempiti',
+        type: 'error'
+      });
+    }
+
+
+  }
+
+  private buildDataSource(valori: any[], scelte: any[], scelteTotali: number): any[] {
+
+    let element: {[x: string]: any} = {};
+    const retVal: any[] = [];
+    for (let i = 0; i < valori.length; i++) {
+      element['Pronostico'] = valori[i];
+      element['Scelte'] = scelte[i] + '/' + scelteTotali;
+      element['Percentuale'] = ( scelte[i] / scelteTotali ) * 100;
+      retVal.push(element);
+      element = {};
+    }
+
+    return retVal;
+
+  }
+
   logout() {
 
     this.utilService.logout();
@@ -86,6 +208,10 @@ export class StatisticheComponent implements OnInit {
 
     this.utilService.back();
 
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSourceStatistiche.filter = filterValue.trim().toLowerCase();
   }
 
 }

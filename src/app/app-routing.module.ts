@@ -78,7 +78,8 @@ const routes: Routes = [
     resolve: {
               listaCompetizioni: CompetizioniResolver,
               valoriPronostici: ValoriPronosticiResolver,
-              pronostici: PronosticiResolver
+              pronostici: PronosticiResolver,
+              stagioni : StagioniResolver
             }
   }
 ];

@@ -13,6 +13,22 @@
           <mat-form-field>
             <mat-select 
             #selComp
+            placeholder="Stagione"
+            [(ngModel)]="stagioneToCheck"
+            (selectionChange)="setCompetizioni(stagioneToCheck)"
+            >
+              <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+              <mat-option class="mat-body-1" *ngFor="let stagione of stagioni" [value]="stagione.stagione">
+                  {{ stagione.stagione }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>    
+          
+          &nbsp;&nbsp;&nbsp;&nbsp;
+
+          <mat-form-field>
+            <mat-select 
+            #selComp
             placeholder="Competizione"
             [(ngModel)]="idCompetizioneToFill"
             (selectionChange)="setPosizioniCompetizione(idCompetizioneToFill)"
@@ -46,7 +62,7 @@
           <button  
           class="mat-button"
           mat-raised-button color="primary"
-          (click)="CalcolaPercentuali()" 
+          (click)="calcolaPercentuali(idCompetizioneToFill,posizioneToCheck,stagioneToCheck)" 
           title="Calcola Percentuali"
           >
             Calcola Percentuali
@@ -63,8 +79,8 @@
     </div>    
 
     <div class="row"> <!-- Tabella Riassuntiva -->
-      
-      <div class="col-md-12">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
               
         <mat-form-field>
           <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
@@ -82,21 +98,21 @@
             <mat-header-cell *matHeaderCellDef mat-sort-header>
               Pronostico
             </mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.prono}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{element.Pronostico}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="scelte" >
             <mat-header-cell *matHeaderCellDef mat-sort-header>
               Scelte
             </mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.scelte}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{element.Scelte}}</mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="percentuale" >
             <mat-header-cell *matHeaderCellDef mat-sort-header>
               Percentuale
             </mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.percentuale}}</mat-cell>
+            <mat-cell *matCellDef="let element">{{element.Percentuale}}</mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
@@ -111,6 +127,7 @@
         ></mat-paginator>
 
       </div>
+      <div class="col-md-2"></div>
 
     </div>
 
@@ -119,9 +136,163 @@
 </div> <!-- fine div desktopMode -->
 
 <!-- Tablet e Mobile -->
-<!--
+
 <div *ngIf="!isDesktopDevice">
+
   <div class="container-fluid">
+
+    <div class='row'>
+
+      <div class='col-sm-1'></div>
+      <div class='col-sm-10'>
+        <mat-form-field>
+          <mat-select 
+          #selComp
+          placeholder="Stagione"
+          [(ngModel)]="stagioneToCheck"
+          (selectionChange)="setCompetizioni(stagioneToCheck)"
+          >
+            <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+            <mat-option class="mat-body-1" *ngFor="let stagione of stagioni" [value]="stagione.stagione">
+                {{ stagione.stagione }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>            
+      </div>
+      <div class='col-sm-1'></div>
+    
+    </div>
+
+    <div class='row'>
+        <div class='col-sm-12'>&nbsp;</div>
+    </div>
+
+    <div class='row'>
+
+      <div class='col-sm-1'></div>
+      <div class='col-sm-10'>
+        <mat-form-field>
+            <mat-select 
+            #selComp
+            placeholder="Competizione"
+            [(ngModel)]="idCompetizioneToFill"
+            (selectionChange)="setPosizioniCompetizione(idCompetizioneToFill)"
+            >
+              <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+              <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
+                <mat-option class="mat-body-1" *ngFor="let competizione of competizioneGroup.competizioni" [value]="competizione.id">
+                    {{ competizione.competizione }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>  
+      </div>
+      <div class='col-sm-1'></div>
+    
+    </div>    
+
+    <div class='row'>
+        <div class='col-sm-12'>&nbsp;</div>
+    </div>
+
+    <div class='row'>
+
+        <div class='col-sm-1'></div>
+        <div class='col-sm-10'>
+          <mat-form-field>
+            <mat-select 
+            #selComp
+            placeholder="Posizione"
+            [(ngModel)]="posizioneToCheck"
+            >
+              <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+              <mat-option class="mat-body-1" *ngFor="let posizione of numeroPronostici" [value]="posizione">
+                  {{ posizione }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class='col-sm-1'></div>
+      
+      </div>    
+
+      <div class='row'>
+          <div class='col-sm-12'>&nbsp;</div>
+      </div>
+
+      <div class='row'>
+
+          <div class='col-sm-1'></div>
+          <div class='col-sm-10'>
+            <button  
+            class="mat-button"
+            mat-raised-button color="primary"
+            (click)="calcolaPercentuali(idCompetizioneToFill,posizioneToCheck,stagioneToCheck)" 
+            title="Calcola Percentuali"
+            >
+              Calcola Percentuali
+            </button>     
+          </div>
+          <div class='col-sm-1'></div>
+        
+        </div>    
+        
+        <div class='row'>
+            <div class='col-sm-12'>&nbsp;</div>
+        </div>
+
+        <div class='row'>
+
+          <div class="col-sm-12">
+            
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
+              </mat-form-field>
+              
+              <mat-table 
+                #table matSort 
+                [dataSource]="dataSourceStatistiche"
+                matSortActive="percentuale" 
+                matSortDirection="desc" 
+                matSortDisableClear        
+              >
+          
+                <ng-container matColumnDef="prono" >
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Pronostico
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.Pronostico}}</mat-cell>
+                </ng-container>
+      
+                <ng-container matColumnDef="scelte" >
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Scelte
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.Scelte}}</mat-cell>
+                </ng-container>
+      
+                <ng-container matColumnDef="percentuale" >
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Percentuale
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element">{{element.Percentuale}}</mat-cell>
+                </ng-container>
+      
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+            
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                
+              </mat-table>
+                
+              <mat-paginator 
+                [pageSizeOptions]="[5,10]" 
+                showFirstLastButtons
+              ></mat-paginator>
+      
+            </div>          
+
+        </div>
+
   </div>
+
 </div>
--->
