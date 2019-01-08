@@ -17,10 +17,22 @@ export class Utils {
     let stagione: any;
     let annoIntero: string;
     let anno: any;
+    let annoCorrente: number;
 
     stagione = new Date(Date.now());
 
-    annoIntero = stagione.getFullYear().toString();
+    annoCorrente = +stagione.getFullYear().toString(); // Trasforma stringa in numero
+
+    if ( annoCorrente % 2 === 0 ) {
+
+      annoIntero = stagione.getFullYear().toString();
+
+    } else {
+
+      annoIntero = ( annoCorrente - 1 ).toString();
+
+    }
+
     anno = stagione.getFullYear().toString().substr(2);
     anno = +anno + 1;
 
