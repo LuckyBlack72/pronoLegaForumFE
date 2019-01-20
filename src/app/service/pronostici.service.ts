@@ -110,6 +110,12 @@ export class PronosticiService {
 
   }
 
+  getStagioneCorrente (): Observable<Stagioni> {
+
+    return this.http.post<Stagioni>(environment.backEndURL + '/classifica/getStagioneCorrente', {});
+
+  }
+
   getValoriPronosticiCalcoloClassifica ( searchParameters: FiltroValoriPronostici ): Observable<ValoriPronosticiClassifica[]> {
 
     return this.http.post<ValoriPronosticiClassifica[]>
