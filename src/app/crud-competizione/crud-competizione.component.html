@@ -151,7 +151,7 @@
               <div class="col-md-6">
                 <button  
                   class="mat-button"
-                  [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
+                  [disabled]="createUpdateViewCompetizione === 'V'"
                   mat-raised-button color="primary"
                   (click)="loadValoriPronostici(lega.value, stagioneCompetizione, competizioneToSave.tipo_competizione,competizioneToSave.tipo_pronostici)" 
                   title="Importa da Sito Esterno"
@@ -173,7 +173,7 @@
               <div class="col-md-6">
                   <button  
                   class="mat-button"
-                  [disabled]="createUpdateViewCompetizione === 'U' || createUpdateViewCompetizione === 'V'"
+                  [disabled]="createUpdateViewCompetizione === 'V'"
                   mat-raised-button color="primary"
                   (click)="importDataFromExcel()" 
                   title="Importa dati da Foglio Excel"
