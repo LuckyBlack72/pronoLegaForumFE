@@ -52,7 +52,7 @@ export class IndexPageComponent implements OnInit {
 
     this.log_aggiornamenti = this.activatedRoute.snapshot.data.logAggiornamenti;
     this.stagioneCorrente = this.activatedRoute.snapshot.data.stagioneCorrente;
-
+    this.sessionStorageService.set('stagioneCorrente', this.stagioneCorrente);
     // creo l'oggetto per il session storage da propagare in tutta l'applicazione
     // viene distrutto quando si chiude il tab del browser con l'applicazione
     // è nella memoria locale del browser
@@ -76,7 +76,7 @@ export class IndexPageComponent implements OnInit {
       this.pronosticiService.checkPassword(this.nicknameFormControl.value, this.passwordFormControl.value)
           .subscribe(
               data => {
-                  this.applicationParameter.nickname = this.nicknameFormControl.value;
+                this.applicationParameter.nickname = this.nicknameFormControl.value;
                   this.applicationParameter.idPartecipante = data;
                   this.loading = false;
                   this.nicknameFormControl.setValue(null);

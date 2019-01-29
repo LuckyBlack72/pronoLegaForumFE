@@ -53,9 +53,10 @@ export class Utils {
     let annoIntero: string;
     let anno: any;
 
-    annoIntero = this.stagioneCorrente.stagione.toString();
+    annoIntero = this.stagioneCorrente[0].stagione_corrente.toString();
 
-    anno = this.stagioneCorrente.stagione.toString().substr(2);
+    anno = this.stagioneCorrente[0].stagione_corrente.toString().substr(2);
+
     anno = +anno + 1;
 
     return annoIntero + '/' + anno;
