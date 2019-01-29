@@ -6,7 +6,7 @@ import { SessionStorage, LocalStorage, LocalStorageService, SessionStorageServic
 
 import { PronosticiService } from '../service/pronostici.service';
 // import { DataService } from '../dataservice.service';
-import { DatePronostici, ApplicationParameter, LogAggiornamenti } from '../../models/models';
+import { DatePronostici, ApplicationParameter, LogAggiornamenti, Stagioni } from '../../models/models';
 import { Utils } from '../../models/utils';
 
 @Component({
@@ -29,6 +29,8 @@ export class IndexPageComponent implements OnInit {
   loading = false;
 
   @SessionStorage() applicationParameter: ApplicationParameter;
+  @SessionStorage() stagioneCorrente: Stagioni;
+
   // @LocalStorage() log_aggiornamentiLS: LogAggiornamenti[];
   log_aggiornamentiLS: LogAggiornamenti[];
 
@@ -49,6 +51,7 @@ export class IndexPageComponent implements OnInit {
     */
 
     this.log_aggiornamenti = this.activatedRoute.snapshot.data.logAggiornamenti;
+    this.stagioneCorrente = this.activatedRoute.snapshot.data.stagioneCorrente;
 
     // creo l'oggetto per il session storage da propagare in tutta l'applicazione
     // viene distrutto quando si chiude il tab del browser con l'applicazione

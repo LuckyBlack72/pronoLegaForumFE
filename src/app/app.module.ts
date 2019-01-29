@@ -51,6 +51,8 @@ import { LogAggiornamentiResolver } from '../resolvers/logaggiornamenti-resolver
 import { LeagueListResolver } from '../resolvers/leaguelist-resolver';
 import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
 import { StatisticheComponent } from './statistiche/statistiche.component';
+
+import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver';
 @NgModule({
   declarations: [
     AppComponent,
@@ -106,6 +108,7 @@ import { StatisticheComponent } from './statistiche/statistiche.component';
               LogAggiornamentiResolver,
               LeagueListResolver,
               DatiLegaForumResolver,
+              StagioneCorrenteResolver,
               {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},
             ],
   entryComponents: [PronoUserComponent],

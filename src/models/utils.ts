@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 
+import { Stagioni } from '../models/models';
+import { PronosticiService } from '../app/service/pronostici.service';
+import { SessionStorage } from 'ngx-store';
+
 @Injectable()
 export class Utils {
 
@@ -10,8 +14,11 @@ export class Utils {
   // BASE_URL_BACKEND = 'http://sorteggiolegaforum.herokuapp.com'; //On Line Heroku
   BASE_URL_BACKEND = environment.backEndURL;
 
-  constructor() { }
+  constructor( private pronosticiService: PronosticiService ) { }
 
+  @SessionStorage() stagioneCorrente: Stagioni;
+
+  /*
   getStagione (): string {
 
     let stagione: any;
@@ -34,6 +41,21 @@ export class Utils {
     }
 
     anno = stagione.getFullYear().toString().substr(2);
+    anno = +anno + 1;
+
+    return annoIntero + '/' + anno;
+
+  }
+  */
+
+  getStagione (): string {
+
+    let annoIntero: string;
+    let anno: any;
+
+    annoIntero = this.stagioneCorrente.stagione.toString();
+
+    anno = this.stagioneCorrente.stagione.toString().substr(2);
     anno = +anno + 1;
 
     return annoIntero + '/' + anno;
