@@ -11,7 +11,9 @@ import { UtilService } from '../service/util.service';
 import { PronosticiService } from '../service/pronostici.service';
 import { CommandService, Command } from '../service/command.service';
 
-import { ApplicationParameter, DeviceInfo, DatePronostici } from '../../models/models';
+import { ApplicationParameter, DeviceInfo, Stagioni, DatePronostici } from '../../models/models';
+
+import { Utils } from '../../models/utils';
 
 
 @Component({
@@ -38,6 +40,7 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
     private commandService: CommandService,
     private localStorageService: LocalStorageService,
     private sessionStorageService: SessionStorageService,
+    private utils: Utils,
 
   ) {
 
@@ -47,6 +50,8 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
 
   @SessionStorage() applicationParameter: ApplicationParameter;
   // @LocalStorage() datePronostici: DatePronostici;
+
+  @SessionStorage() stagioneCorrente: Stagioni;
 
   ngOnInit() {
 
@@ -108,8 +113,11 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
   handleCommand(command: Command) {
 
     switch (command.name) {
-      case 'MenuUtenteComponent.SetAdmin':
+      case 'MenuUtenteComponent.SetAdmin': // Ctrl + up
         this.checkAdminPassword();
+        break;
+        case 'MenuUtenteComponent.AggiornaStagione': // Ctrl + left
+        this.nuovaStagione();
         break;
       default:
         break;
@@ -135,6 +143,52 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
         data => {
           this.applicationParameter.menu_utente_page = true;
           this.router.navigate(['crud-competizione']);
+          }
+        ,
+        error => Swal({
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          title: 'Password Errata',
+          type: 'error'
+        })
+      );
+    }
+  }
+
+  async nuovaStagione() {
+
+    const {value: password} = await Swal({
+      title: 'Administrator Login',
+      input: 'password',
+      inputPlaceholder: 'Enter Administrator password',
+      inputAttributes: {
+        autocapitalize: 'off',
+        autocorrect: 'off'
+      },
+      showCancelButton: true
+    });
+
+    if (password) {
+      this.pronosticiService.checkAdminPassword(password).subscribe(
+        data => {
+          this.pronosticiService.updateStagioneCorrente().subscribe(
+            updateOk => {
+              this.utils.setStagione();
+              Swal({
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                title: 'Stagione Corrente Aggiornata',
+                type: 'success'
+              });
+            }
+            ,
+            error => Swal({
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              title: 'Aggiornamento Stagione Corrente Fallito',
+              type: 'error'
+            })
+          );
           }
         ,
         error => Swal({

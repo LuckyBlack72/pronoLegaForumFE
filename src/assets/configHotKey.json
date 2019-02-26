@@ -2,7 +2,7 @@
   "hotkeys": {
     "ctrl+up": [ "PronosticiComponent.SetAdmin", "MenuUtenteComponent.SetAdmin" ],
     "ctrl+down": [ "PronosticiComponent.UnsetAdmin" ],
-    "ctrl+left": [ "PronosticiComponent.AggiornaClassifica" ]
+    "ctrl+left": [ "PronosticiComponent.AggiornaClassifica","MenuUtenteComponent.AggiornaStagione" ]
   }
 
 }

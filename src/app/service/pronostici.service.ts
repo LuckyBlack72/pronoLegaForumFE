@@ -164,5 +164,11 @@ export class PronosticiService {
 
   }
 
+  updateStagioneCorrente (): Observable<string> {
+
+    return this.http.post<string>(environment.backEndURL + '/classifica/updateStagioneCorrente', {});
+
+  }
+
 
 }
