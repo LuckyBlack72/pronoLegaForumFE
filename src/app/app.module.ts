@@ -16,6 +16,10 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { CommandService } from './service/command.service';
 // HotKeys
 
+// Grafici
+import { ChartsModule } from 'ng2-charts';
+// Grafici
+
 import { WebStorageModule } from 'ngx-store'; // gestione sessionstorage / localstorage
 
 import { AppComponent } from './app.component';
@@ -86,7 +90,8 @@ import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver
     CountdownTimerModule.forRoot(),
     HotkeyModule.forRoot(),
     WebStorageModule,
-    DeviceDetectorModule.forRoot()
+    DeviceDetectorModule.forRoot(),
+    ChartsModule
   ],
   // tslint:disable-next-line:max-line-length
   providers: [

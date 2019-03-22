@@ -6,12 +6,6 @@ import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import Swal from 'sweetalert2';
 
-// Grafici
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-import { Label } from 'ng2-charts';
-// Grafici
-
 import { CrudCompetizioneService } from '../service/crudCompetizione.service';
 import { UtilService } from '../service/util.service';
 
@@ -72,26 +66,6 @@ export class StatisticheComponent implements OnInit {
 
   dataSourceStatistiche = new MatTableDataSource([]);
   displayedColumns = ['Pronostico', 'Scelte', 'Percentuale'];
-
-  // Grafici
-  barChartOptions: ChartOptions = {
-    responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
-    }
-  };
-  barChartLabels: Label[] = [];
-  barChartType: ChartType = 'horizontalBar';
-  barChartLegend = true;
-  barChartPlugins = [pluginDataLabels];
-
-  barChartData: ChartDataSets[] = [];
-  // Grafici
 
   ngOnInit() {
 
@@ -188,7 +162,6 @@ export class StatisticheComponent implements OnInit {
       }
 
       this.dataSourceStatistiche.data = this.buildDataSource(prono, scelte, scelteTotali);
-      this.buildGraphicData(prono, scelte, scelteTotali);
 
     } else {
 
@@ -218,11 +191,6 @@ export class StatisticheComponent implements OnInit {
     }
 
     return retVal;
-
-  }
-
-  private buildGraphicData(valori: any[], scelte: any[], scelteTotali: number): void {
-
 
   }
 

@@ -75,19 +75,54 @@
         <div class= "col-md-12">&nbsp;</div>
     </div>    
 
-    <div class="row"> <!-- Grafico -->
+    <div class="row"> <!-- Tabella Riassuntiva -->
       <div class="col-md-2"></div>
       <div class="col-md-8">
-        <div style="display: block">
-          <canvas baseChart
-            [datasets]="barChartData"
-            [labels]="barChartLabels"
-            [options]="barChartOptions"
-            [plugins]="barChartPlugins"
-            [legend]="barChartLegend"
-            [chartType]="barChartType">
-          </canvas>
-        </div>
+              
+        <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
+        </mat-form-field>
+        
+        <mat-table 
+          #table matSort 
+          [dataSource]="dataSourceStatistiche"
+          matSortActive="Percentuale" 
+          matSortDirection="desc" 
+          matSortDisableClear        
+        >
+    
+          <ng-container matColumnDef="Pronostico" >
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Pronostico
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.Pronostico}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Scelte" >
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Scelte
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.Scelte}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="Percentuale" >
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              Percentuale
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.Percentuale}}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+      
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          
+        </mat-table>
+          
+        <mat-paginator 
+          [pageSizeOptions]="[5,10]" 
+          showFirstLastButtons
+        ></mat-paginator>
+
       </div>
       <div class="col-md-2"></div>
 
