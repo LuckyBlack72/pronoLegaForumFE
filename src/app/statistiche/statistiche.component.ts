@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort, MatRadioChange } from '@angular/material';
 
 import { DeviceDetectorService } from 'ngx-device-detector';
 import Swal from 'sweetalert2';
@@ -77,7 +77,9 @@ export class StatisticheComponent implements OnInit {
   barChartOptions: ChartOptions = {
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{}], yAxes: [{}] },
+    scales: { xAxes: [{ticks: { min: 0, max : 100 }}],
+              yAxes: [{}]
+            },
     plugins: {
       datalabels: {
         anchor: 'end',
@@ -85,12 +87,14 @@ export class StatisticheComponent implements OnInit {
       }
     }
   };
-  barChartLabels: Label[] = [];
+  barChartLabels: Label[] = ['Squadre'];
   barChartType: ChartType = 'horizontalBar';
   barChartLegend = true;
   barChartPlugins = [pluginDataLabels];
 
-  barChartData: ChartDataSets[] = [];
+  barChartData: ChartDataSets[] = [{data: [0], label: ''}];
+  isGrafico: boolean;
+  tipoVisualizzazione: string;
   // Grafici
 
   ngOnInit() {
@@ -106,6 +110,9 @@ export class StatisticheComponent implements OnInit {
     this.stagioni = this.activatedRoute.snapshot.data.stagioni;
 
     // this.competizioniGrouped = this.crudCompetizioneService.buildCompetizioniGrouped(this.competizioni);
+
+    this.isGrafico = false;
+    this.tipoVisualizzazione = 'T';
 
   }
 
@@ -223,28 +230,29 @@ export class StatisticheComponent implements OnInit {
 
   private buildGraphicData(valori: any[], scelte: any[], scelteTotali: number): void {
 
-    // Logica Per Riempire con i miei dati
+    let element: {[x: string]: any} = {};
+    let data: any[] = [];
+    this.barChartData = [];
+    this.barChartLabels = ['Squadre'];
+    for (let i = 0; i < valori.length; i++) {
+      // this.barChartLabels.push(valori[i]);
+      data.push((( scelte[i] / scelteTotali ) * 100).toFixed(2));
+      element['data'] = data;
+      element['label'] = valori[i];
+      this.barChartData.push(element);
+      element = {};
+      data = [];
+    }
 
-    // Esempio
-    this.barChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+  }
 
-    this.barChartData = [
-      { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-      { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
-    ];
+  changeTipoVisualizzazione($event: MatRadioChange) {
 
-    const clone = JSON.parse(JSON.stringify(this.barChartData));
-    const data = [
-      Math.round(Math.random() * 100),
-      59,
-      80,
-      (Math.random() * 100),
-      56,
-      (Math.random() * 100),
-      40];
-    clone[0].data = data;
-    this.barChartData = clone;
-    // Esempio
+    if (this.tipoVisualizzazione === 'T') {
+      this.isGrafico = false;
+    } else {
+      this.isGrafico = true;
+    }
 
   }
 
