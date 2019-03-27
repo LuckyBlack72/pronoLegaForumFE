@@ -77,8 +77,9 @@ export class StatisticheComponent implements OnInit {
   barChartOptions: ChartOptions = {
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{ticks: { min: 0, max : 100 }}],
-              yAxes: [{}]
+      scales: { xAxes: [{ticks: { min: 0, max : 100 }}], // V1
+    // scales: { xAxes: [{ticks: { min: 0}}], // V2
+      yAxes: [{}]
             },
     plugins: {
       datalabels: {
@@ -228,6 +229,7 @@ export class StatisticheComponent implements OnInit {
 
   }
 
+  // V1 1 Label e più Dataset
   private buildGraphicData(valori: any[], scelte: any[], scelteTotali: number): void {
 
     let element: {[x: string]: any} = {};
@@ -245,6 +247,25 @@ export class StatisticheComponent implements OnInit {
     }
 
   }
+
+  // V2 1 Dataset e Più Label
+  /*
+  private buildGraphicData(valori: any[], scelte: any[], scelteTotali: number): void {
+
+  const element: {[x: string]: any} = {};
+  const data: any[] = [];
+  this.barChartData = [];
+  this.barChartLabels = [];
+  for (let i = 0; i < valori.length; i++) {
+    this.barChartLabels.push(valori[i]);
+    data.push((( scelte[i] / scelteTotali ) * 100).toFixed(2));
+    element['data'] = data;
+  }
+  element['label'] = 'Squadre';
+  this.barChartData.push(element);
+
+}
+*/
 
   changeTipoVisualizzazione($event: MatRadioChange) {
 

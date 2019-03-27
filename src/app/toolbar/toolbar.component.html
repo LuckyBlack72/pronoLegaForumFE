@@ -11,7 +11,7 @@
         
             <div class="p-2">
               
-              <strong>Benvenuto : </strong> 
+              <!-- NO Material Buttons
               <button type="button" class="btn btn-success btn-sm active" title="Modifica Profilo" (click)="editProfile()">
                 <span>{{nickname}} &nbsp; &nbsp; </span><i class="fa fa-user-circle-o bg-primary"></i> 
               </button>  
@@ -21,7 +21,20 @@
               <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
                 <i class="fa fa-sign-out"></i> 
               </button>  
-      
+              -->     
+              <button mat-raised-button color="primary" title="Modifica Profilo" aria-label="Modifica Profilo" (click)="editProfile()">
+                {{nickname}}
+                <mat-icon>account_circle</mat-icon>
+              </button>  
+              &nbsp; 
+              <button *ngIf="backActive" mat-raised-button color="accent" title="Torna Indietro" aria-label="Torna Indietro" (click)="back()">
+                <mat-icon>arrow_back</mat-icon>
+              </button>                
+              &nbsp;  
+              <button mat-raised-button color="warn" title="Esci" aria-label="Esci" (click)="logout()">
+                <mat-icon>exit_to_app</mat-icon>
+              </button>
+
             </div>
 
 <!--
@@ -55,7 +68,7 @@
       <div class="d-flex justify-content mb-1">
 
         <div class="p-2">
-              
+          <!-- NO Material Button
           <strong>Benvenuto : </strong> 
           <button type="button" class="btn btn-success btn-sm active" title="Modifica Profilo" (click)="editProfile()">
             <span>{{nickname}} &nbsp; &nbsp; </span><i class="fa fa-user-circle-o bg-primary"></i> 
@@ -68,8 +81,19 @@
           <button type="button" class="btn btn-danger btn-sm active" title="Esci" (click)="logout()">
             <i class="fa fa-sign-out"></i> 
           </button>  
-    
-        </div>
+        -->
+        <button mat-raised-button color="primary" title="Modifica Profilo" aria-label="Modifica Profilo" (click)="editProfile()">
+          {{nickname}}
+          <mat-icon>account_circle</mat-icon>
+        </button>  
+        &nbsp; 
+        <button *ngIf="backActive" mat-raised-button color="accent" title="Torna Indietro" aria-label="Torna Indietro" (click)="back()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>                
+        &nbsp;  
+        <button mat-raised-button color="warn" title="Esci" aria-label="Esci" (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+        </button>
       
       </div>
     
