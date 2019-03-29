@@ -25,6 +25,7 @@ import {
           DialogClassificaData,
           DialogPronoTableData
       } from '../../models/models';
+import { getLocaleExtraDayPeriodRules } from '@angular/common';
 
 @Component({
   selector: 'app-classifica',
@@ -533,7 +534,12 @@ export class PronoUserComponent implements OnInit {
                                                 classifica: this.data.valoriClassifica[idxValoriClassifica].valori_pronostici_classifica[x]
                                                 .replace('XXX', 'Non Disponibile'),
                                                 pronostico: this.data.pronostici[i].pronostici[x]
-                                                .replace('XXX', 'Non Pronosticato')
+                                                .replace('XXX', 'Non Pronosticato'),
+                                                colore: this.getColoreProno(
+                                                                        this.data.valoriClassifica[idxValoriClassifica],
+                                                                        this.data.pronostici[i].pronostici[x],
+                                                                        x
+                                                                      )
                                               }
                                             );
         }
@@ -541,6 +547,40 @@ export class PronoUserComponent implements OnInit {
       }
     }
     this.dataSourcePronostici.data = this.dataSourcePronosticiData;
+
+  }
+
+  getColoreProno( valoriClassifica: ValoriPronosticiClassifica,  pronostici: string, indicePronostico: number ): string {
+
+    let retVal: string;
+
+    retVal = 'red';
+
+    for (let y = 0 ; y < valoriClassifica.valori_pronostici_classifica.length; y++) {
+      if (
+            pronostici !== 'XXX' &&
+            pronostici === valoriClassifica.valori_pronostici_classifica[y]
+        ) {
+          if ( indicePronostico === y ) { // stessa posizione
+            retVal = 'green';
+          } else { // posizioni differenti
+            if ( valoriClassifica.tipo_competizione === 'CMP' ) { // campionati
+              retVal = 'red';
+            } else if ( valoriClassifica.tipo_competizione === 'SCO' ) {
+              retVal = 'orange';
+            } else { // coppe
+              if ( indicePronostico > 1 && y > 1 ) { // nelle coppe 3 e 4 sono esatti anche se invertiti
+                  retVal = 'green';
+                } else {
+                  retVal = 'orange';
+              }
+            }
+          }
+          break;
+      }
+    }
+
+    return retVal;
 
   }
 

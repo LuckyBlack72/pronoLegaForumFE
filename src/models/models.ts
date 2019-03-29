@@ -169,4 +169,5 @@ export interface DialogPronoTableData {
   posizione?: number;
   classifica?: string;
   pronostico?: string;
+  colore?: string;
 }

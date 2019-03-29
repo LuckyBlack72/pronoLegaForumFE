@@ -30,7 +30,12 @@
 
         <ng-container matColumnDef="Pronostico" >
             <mat-header-cell *matHeaderCellDef >Pronostico</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.pronostico}}</mat-cell>
+            <mat-cell 
+                *matCellDef="let element" 
+                [ngStyle]="{'color':element.colore}"
+            >
+                {{element.pronostico}}
+            </mat-cell>
         </ng-container>
         
         <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
