@@ -565,14 +565,18 @@ export class PronoUserComponent implements OnInit {
             retVal = 'green';
           } else { // posizioni differenti
             if ( valoriClassifica.tipo_competizione === 'CMP' ) { // campionati
-              retVal = 'red';
+              if ( valoriClassifica.punti_lista > 0) {
+                retVal = 'blue';
+              } else {
+                retVal = 'red';
+              }
             } else if ( valoriClassifica.tipo_competizione === 'SCO' ) {
-              retVal = 'orange';
+              retVal = 'blue';
             } else { // coppe
               if ( indicePronostico > 1 && y > 1 ) { // nelle coppe 3 e 4 sono esatti anche se invertiti
                   retVal = 'green';
                 } else {
-                  retVal = 'orange';
+                  retVal = 'blue';
               }
             }
           }
