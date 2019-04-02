@@ -166,7 +166,7 @@ private decodeTeamName(teamToDecode: string): string {
       decodedTeamName = 'Manchester City';
       break;
     case 'Man Utd':
-      decodedTeamName = 'Manchester United';
+      decodedTeamName = 'Manchester Utd';
       break;
     case 'Leicester City':
       decodedTeamName = 'Leicester';
