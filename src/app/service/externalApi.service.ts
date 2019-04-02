@@ -114,8 +114,22 @@ export class ExternalApiService {
         if ( apiData[i].data.topscorers.length > 0 ) {
           competizioniAggiornate.push(datiCompetizioni[i].competizione);
           for (let x = 1; x <= datiCompetizioni[i].numero_pronostici; x++ ) {
+            console.log('Scorer Length : [' + x + ']' + 'Name : [' + apiData[i].data.topscorers[(x - 1)].fullname + ']' );
             pronostici.push(this.decodePlayerName(datiCompetizioni[i].id, apiData[i].data.topscorers[(x - 1)].fullname, valoriPronostici));
           }
+/*
+          console.log('Scorer Length : [' + 0 + ']' + 'Name : [' + apiData[i].data.topscorers[(0)].fullname + ']' );
+          console.log('Scorer Length : [' + 1 + ']' + 'Name : [' + apiData[i].data.topscorers[(1)].fullname + ']' );
+          console.log('Scorer Length : [' + 2 + ']' + 'Name : [' + apiData[i].data.topscorers[(2)].fullname + ']' );
+          console.log('Scorer Length : [' + 3 + ']' + 'Name : [' + apiData[i].data.topscorers[(3)].fullname + ']' );
+          console.log('Scorer Length : [' + 4 + ']' + 'Name : [' + apiData[i].data.topscorers[(4)].fullname + ']' );
+          console.log('Scorer Length : [' + 5 + ']' + 'Name : [' + apiData[i].data.topscorers[(5)].fullname + ']' );
+          console.log('Scorer Length : [' + 6 + ']' + 'Name : [' + apiData[i].data.topscorers[(6)].fullname + ']' );
+          console.log('Scorer Length : [' + 7 + ']' + 'Name : [' + apiData[i].data.topscorers[(7)].fullname + ']' );
+          console.log('Scorer Length : [' + 8 + ']' + 'Name : [' + apiData[i].data.topscorers[(8)].fullname + ']' );
+          console.log('Scorer Length : [' + 9 + ']' + 'Name : [' + apiData[i].data.topscorers[(9)].fullname + ']' );
+          console.log('Scorer Length : [' + 10 + ']' + 'Name : [' + apiData[i].data.topscorers[(10)].fullname + ']' );
+*/
         } else {
           competizioniNonAggiornate.push(datiCompetizioni[i].competizione);
         }
@@ -161,11 +175,12 @@ export class ExternalApiService {
 private decodeTeamName(teamToDecode: string): string {
   let decodedTeamName = '';
 
+  console.log('Team Name : [' + teamToDecode + ']' );
   switch (teamToDecode) {
     case 'Man City':
       decodedTeamName = 'Manchester City';
       break;
-    case 'Man Utd':
+    case 'Man United':
       decodedTeamName = 'Manchester Utd';
       break;
     case 'Leicester City':
@@ -202,6 +217,7 @@ private decodePlayerName(idCompetizione: number, playerNameToDecode: string, val
     if (valoriPronostici[i].id_competizione === idCompetizione) {
       for (let x = 0; x < valoriPronostici[i].valori_pronostici.length; x++ ) {
         if (valoriPronostici[i].valori_pronostici[x].search(upperCaseNameToDecode) !== -1) {
+          console.log('Api Name : [' + upperCaseNameToDecode + '] Prono Name : [' + valoriPronostici[i].valori_pronostici[x] + ']');
           decodedPlayerName = valoriPronostici[i].valori_pronostici[x];
           found = true;
         }
