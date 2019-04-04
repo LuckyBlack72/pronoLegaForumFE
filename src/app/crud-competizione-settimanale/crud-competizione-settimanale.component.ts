@@ -4,7 +4,7 @@ import { MatPaginator, MatTableDataSource, MatSort, MatRadioChange } from '@angu
 
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
-import { SessionStorage, LocalStorage, LocalStorageService, SessionStorageService } from 'ngx-store';
+import { SessionStorage, LocalStorageService, SessionStorageService } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { ExternalApiService } from '../service/externalApi.service';
@@ -14,13 +14,9 @@ import { CrudCompetizioneService } from '../service/crudCompetizione.service';
 import { Utils } from '../../models/utils';
 
 import {
-  ValoriPronostici,
   ApplicationParameter,
   DeviceInfo,
-  TipoCompetizione,
-  DatiSquadraLegaForum,
   DatePronostici,
-  AnagraficaCompetizioniGrouped,
   FiltroValoriPronostici,
   AnagraficaCompetizioniSettimanali,
   AnagraficaCompetizioniSettimanaliGrouped
@@ -38,8 +34,6 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private utils: Utils,
     private externalApiService: ExternalApiService,
-    private localStorageService: LocalStorageService,
-    private sessionStorageService: SessionStorageService,
     private schedineService: SchedineService,
     private crudCompetizioneService: CrudCompetizioneService
 
