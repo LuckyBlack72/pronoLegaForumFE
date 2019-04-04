@@ -5,22 +5,12 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
-import { ValoriPronostici,
-        FiltroValoriPronostici,
-        AnagraficaCompetizioni,
-        AnagraficaPartecipanti,
-        FiltroAnagraficaPartecipanti,
-        Pronostici,
+import {
         FiltroPronostici,
-        DatePronostici,
-        FiltroStagione,
-        Stagioni,
-        ValoriPronosticiClassifica,
-        TipoCompetizione,
-        LogAggiornamenti,
         AnagraficaCompetizioniSettimanali,
         AnagraficaCompetizioniSettimanaliGrouped,
-        PronosticiSettimanali} from '../../models/models';
+        PronosticiSettimanali
+      } from '../../models/models';
 
 @Injectable()
 export class SchedineService {
@@ -35,6 +25,13 @@ export class SchedineService {
 
   }
 
+  getNewSettimanaSchedine ( stagione: number ): Observable<number> {
+
+    const postData = { stagione: stagione };
+
+    return this.http.post<number>(environment.backEndURL + '/schedine/getNewSettimanaSchedine', postData);
+
+  }
 
   getPronosticiSettimanali ( searchParameters: FiltroPronostici ): Observable<PronosticiSettimanali[]> {
 
@@ -49,7 +46,6 @@ export class SchedineService {
     return this.http.post<string>(environment.backEndURL + '/schedine/savePronosticiSettimanali', postData);
 
   }
-
 
   saveAnagraficaSchedine ( dataToSave: AnagraficaCompetizioniSettimanali, tipo_ddl: string): Observable<string> {
 
@@ -83,6 +79,25 @@ export class SchedineService {
     }
 
     return retVal;
+
+}
+
+checkDataToSave(dataToSave: AnagraficaCompetizioniSettimanali): boolean {
+
+  let retVal: boolean;
+  retVal = true;
+
+      if ( dataToSave.punti_esatti === 0) {
+        retVal = false;
+      }
+
+      if ( dataToSave.numero_pronostici !== dataToSave.pronostici.length) {
+        retVal = false;
+      }
+
+
+  return retVal;
+
 
 }
 

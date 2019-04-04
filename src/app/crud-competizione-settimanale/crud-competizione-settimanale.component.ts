@@ -1,10 +1,10 @@
 import { Component, OnInit, ElementRef, ViewChild  } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatPaginator, MatTableDataSource, MatSort, MatRadioChange } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
-import { SessionStorage, LocalStorageService, SessionStorageService } from 'ngx-store';
+import { SessionStorage } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { ExternalApiService } from '../service/externalApi.service';
@@ -364,5 +364,62 @@ console.log(this.lega);
     }
 
   }
+
+  saveData(): void {
+
+    const checkData = this.schedineService.checkDataToSave(this.competizioneToSave);
+
+    if (checkData) { // controlli ok
+
+      this.date_competizione.stagione = this.stagioneCompetizione.toString();
+      this.competizioneToSave.date_competizione[0] = this.date_competizione;
+
+      this.schedineService.getNewSettimanaSchedine(this.stagioneCompetizione).subscribe(
+        settimana => {
+                        this.schedineService.saveAnagraficaSchedine(this.competizioneToSave, 'I').subscribe(
+                          data => {
+                                    this.resetDataValues('S');
+                                    Swal({
+                                      allowOutsideClick: false,
+                                      allowEscapeKey: false,
+                                      title: 'Schedina Salvata',
+                                      type: 'success'
+                                    });
+                          }
+                          ,
+                          error => {
+                                      this.resetDataValues('R');
+                                      Swal({
+                                            allowOutsideClick: false,
+                                            allowEscapeKey: false,
+                                            title: 'Errore salvataggio Dati',
+                                          type: 'error'
+                                          });
+                          }
+                        );
+        }
+        ,
+        error => {
+          Swal({
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                title: 'Errore Comunicazione Riprovare',
+              type: 'error'
+              });
+        }
+
+      );
+
+    } else {
+      Swal({
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        title: 'Dati Schedina Mancanti o Errati',
+        type: 'error'
+      });
+    }
+
+  }
+
 
 }
