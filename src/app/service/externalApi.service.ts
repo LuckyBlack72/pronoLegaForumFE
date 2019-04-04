@@ -279,5 +279,22 @@ getDatiSorteggioLegaForum(stagione: number): Observable<DatiSquadraLegaForum[][]
 
 }
 
+getValoriPronosticiSchedine (competizione: string, stagione: string, giornata: string): Observable<any> {
+
+  const annoNum = parseInt(stagione, 10) - 2000;
+  const annoNumNext = annoNum + 1;
+  const stagioneCall = annoNum.toString(10) + '-' + annoNumNext.toString(10);
+
+  const urlToCall =
+  'https://soccer.sportsopendata.net/v1/leagues/' +
+  competizione + // Es: serie-a
+  '/seasons/' +
+  stagioneCall + // Es: 18-19
+  '/rounds/' +
+  giornata; // Es: round-1
+  return  this.http.get<any>(urlToCall, {});
+
+}
+
 
 }

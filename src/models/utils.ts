@@ -78,4 +78,10 @@ export class Utils {
 
   }
 
+  getStagioneCorrente (): number {
+
+    return this.stagioneCorrente[0].stagione_corrente;
+
+  }
+
 }

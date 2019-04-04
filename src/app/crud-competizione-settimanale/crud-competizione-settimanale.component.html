@@ -1,0 +1,412 @@
+<app-toolbar></app-toolbar>
+
+<div class="container-fluid">
+  <div class="row"> <!-- riga per scelta nuova esistente -->
+      <div class="col-md-1"></div>
+      <div class="col-md-8 text-left" >
+        <mat-radio-group [(ngModel)]="createUpdateViewCompetizione" [disabled]="fillCompetizioneData">
+          <mat-radio-button class="mat-body-1" value="C">Nuova Schedina &nbsp;&nbsp;&nbsp;</mat-radio-button>
+          <mat-radio-button class="mat-body-1" value="V">Visualizza Schedina &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
+        </mat-radio-group>
+        <mat-form-field>
+          <mat-select 
+            #selComp
+            placeholder="Schedina"
+            [(ngModel)]="idCompetizioneToEdit"
+            [disabled]="fillCompetizioneData || setEnabledDisabledDropDownCompetizione()"
+          >
+            <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+            <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
+              <mat-option class="mat-body-1" *ngFor="let competizione of competizioneGroup.competizioni" [value]="competizione.id">{{ competizione.settimana }}</mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-2">
+        <button  
+          class="mat-button"
+          [disabled]="fillCompetizioneData || setEnabledDisabledScegliButton()"
+          mat-raised-button color="primary"
+          (click)="createUpdateViewCompetizioneData(createUpdateViewCompetizione)" 
+          title="Scegli"
+        >
+          Scegli
+        </button>
+      </div>
+    <div class="col-md-1"></div>
+  </div>
+
+  <div class="row">
+    <div class= "col-md-1"></div>
+    <div class= "col-md-10">
+      <mat-divider></mat-divider>
+    </div>
+    <div class= "col-md-1"></div>
+  </div>
+
+  <div class="row">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+
+  <div class="row" *ngIf="fillCompetizioneData"> <!-- slider per valori numerici -->
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-subheading-1">
+            Parametri Configurazione (Numero Pronostici, Punti Esatti, Punti Lista)
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="row">
+            <div class="col-md-4">
+              <p class="text-center">
+                <span 
+                  class="mat-body-2"
+                  matBadge="{{competizioneToSave.numero_pronostici}}" 
+                  matBadgeOverlap="false"
+                >
+                  Numero Pronostici
+                </span>
+              </p>
+            </div>
+            <div class="col-md-4">
+              <p class="text-center">
+                <span
+                  class="mat-body-2"
+                  matBadge="{{competizioneToSave.punti_esatti}}" 
+                  matBadgeOverlap="false"
+                >
+                Punti Pronostico Posizione Esatta
+                </span>
+              </p>
+            </div>
+            <div class="col-md-4">
+              <p class="text-center">
+                <span 
+                  class="mat-body-2"
+                  matBadge="{{competizioneToSave.punti_lista}}" 
+                  matBadgeOverlap="false"
+                >
+                Punti Pronostico Esatto Posizione Errata
+                </span>
+              </p>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <mat-slider
+              class="mat-body-2"
+              [disabled]="createUpdateViewCompetizione === 'V'"
+              [(ngModel)]="competizioneToSave.numero_pronostici"
+              thumbLabel
+              tickInterval="1"
+              min="1"
+              max="10"
+            >
+            </mat-slider>              
+          </div>
+          <div class="col-md-4">
+            <mat-slider
+              class="mat-body-2"
+              [disabled]="createUpdateViewCompetizione === 'V'"
+              [(ngModel)]="competizioneToSave.punti_esatti"
+              thumbLabel
+              tickInterval="1"
+              min="1"
+              max="20"
+            >
+            </mat-slider>              
+          </div>
+          <div class="col-md-4">
+            <mat-slider
+              class="mat-body-2"
+              [disabled]="createUpdateViewCompetizione === 'V'"
+              [(ngModel)]="competizioneToSave.punti_lista"
+              thumbLabel
+              tickInterval="1"
+              min="0"
+              max="20"  
+            >
+            </mat-slider>              
+          </div>
+          <div class="col-md-3"></div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+    <div class="col-md-1"></div>
+  
+  </div> <!-- fine slider per valori numerici -->
+
+  <div class="row">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+
+  <div class="row" *ngIf="fillCompetizioneData"> <!-- Competizione : Nome - Valori Pronostici section -->
+    
+    <div class="col-md-1"></div>
+   
+    <div class="col-md-10">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-subheading-1">
+            Competizione : Nome - Tipo - Stagione - Valori Pronostici
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        
+        <div class="row">
+          
+          <div class="col-md-2"> <!--scelta lega -->
+
+            <div class="row">
+              <div class="col-md-6">
+                  <mat-form-field>
+                    <mat-select 
+                      placeholder="Lega"
+                      [disabled]="createUpdateViewCompetizione === 'V'"
+                      [(ngModel)]="lega.value"
+                    >
+                      <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                      <mat-option class="mat-body-1" *ngFor="let lega of leagueList" [value]="lega.value">{{ lega.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+              </div>
+              <div class="col-md-6"></div>
+            </div>     
+
+            <div class="row">
+              <div class="col-md-6">
+                  <mat-form-field>
+                    <mat-select 
+                      placeholder="Giornata"
+                      [disabled]="createUpdateViewCompetizione === 'V'"
+                      [(ngModel)]="giornataToLoad"
+                    >
+                      <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                      <mat-option class="mat-body-1" *ngFor="let round of roundList" [value]="round.value">{{ round.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+              </div>
+              <div class="col-md-6"></div>
+            </div>    
+
+            <div class="row">
+              <div class="col-md-6">
+                <button  
+                  class="mat-button"
+                  [disabled]="createUpdateViewCompetizione === 'V'"
+                  mat-raised-button color="primary"
+                  (click)="loadValoriPronostici(lega.value, stagioneCompetizione, giornataToLoad)" 
+                  title="Carica Partite da Scegliere"
+                >
+                  Carica Partite da Scegliere
+                </button>                
+              </div>
+              <div class="col-md-6"></div>
+            </div>   
+
+            <div class="row">
+              <div class= "col-md-12">&nbsp;</div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <button  
+                  class="mat-button"
+                  [disabled]="createUpdateViewCompetizione === 'V'"
+                  mat-raised-button color="warn"
+                  (click)="ClearSchedina()" 
+                  title="Annulla"
+                >
+                  Annulla
+                </button>                
+              </div>
+              <div class="col-md-6"></div>
+            </div>   
+          
+          </div> <!--scelta lega -->
+
+          <div class="col-md-1">
+            <div class="row">
+              <div class= "col-md-12">&nbsp;</div>
+            </div>
+          </div>
+
+          <div class="col-md-4"> <!--Tabella per scegliere i prono -->
+            
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
+            </mat-form-field>
+            
+            <mat-table 
+              #table matSort 
+              [dataSource]="dataSourceValoriPronostici"
+              matSortActive="prono" 
+              matSortDirection="asc" 
+              matSortDisableClear        
+            >
+      
+              <ng-container matColumnDef="prono" >
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                  Valori Pronostico
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.prono}}</mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+          
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              
+            </mat-table>
+            
+            <mat-paginator 
+              [pageSizeOptions]="[5,10]" 
+              showFirstLastButtons
+            ></mat-paginator>
+    
+          </div> <!--fine Tabella per scegliere i prono -->
+
+          <div class="col-md-1">
+            <div class="row">
+              <div class= "col-md-12">&nbsp;</div>
+            </div>
+          </div>
+
+          <div class="col-md-4"> <!--Tabella della schedina -->
+            <mat-card>Pronostici {{schedina.length}} / {{competizioneToSave.numero_pronostici}} </mat-card>
+            <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical">
+              <mat-chip  
+                color="accent" 
+                selected 
+                disabled
+                *ngFor="let partita of schedina"                 
+              >
+                {{ partita }}
+              </mat-chip>
+            </mat-chip-list>
+          </div> <!--Tabella della schedina -->
+
+        </div>
+      </mat-expansion-panel>
+    </div>
+    
+    <div class="col-md-1"></div>
+  
+  </div> <!-- Competizione : Nome - Tipo - Stagione - Valori Pronostici section -->
+
+  <div class="row">
+      <div class= "col-md-12">&nbsp;</div>
+  </div>
+
+  <div class="row" *ngIf="fillCompetizioneData">  <!-- Date [Apertura Chiusura Calcolo Classifica] -->
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-10">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title class="mat-subheading-1">
+            Date Apertura Pronostici - Chiusura Pronostici - Calcolo Classifica
+          </mat-panel-title>
+          <mat-panel-description>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field>
+              <input
+                matInput
+                [matDatepicker]="ap"
+                placeholder="Apertura Pronostici"
+                [(ngModel)]="date_competizione.data_apertura"
+                disabled
+              >
+              <mat-datepicker-toggle matSuffix [for]="ap"></mat-datepicker-toggle>
+              <mat-datepicker #ap [disabled]="createUpdateViewCompetizione === 'V'"></mat-datepicker>
+            </mat-form-field>          
+          </div>
+          <div class="col-md-4">
+            <mat-form-field>
+              <input
+                matInput
+                [matDatepicker]="cp"
+                placeholder="Chiusura Pronostici"
+                [(ngModel)]="date_competizione.data_chiusura"
+                disabled
+              >
+              <mat-datepicker-toggle matSuffix [for]="cp"></mat-datepicker-toggle>
+              <mat-datepicker #cp [disabled]="createUpdateViewCompetizione === 'V'"></mat-datepicker>
+            </mat-form-field>          
+          </div>
+          <div class="col-md-4">
+            <mat-form-field>
+              <input
+                matInput
+                [matDatepicker]="cc"
+                placeholder="Calcolo Classifica"
+                [(ngModel)]="date_competizione.data_calcolo_classifica"
+                disabled
+              >
+              <mat-datepicker-toggle matSuffix [for]="cc"></mat-datepicker-toggle>
+              <mat-datepicker #cc [disabled]="createUpdateViewCompetizione === 'V'"></mat-datepicker>
+            </mat-form-field>          
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </div>
+
+    <div class="col-md-1"></div>
+
+  </div>  <!-- Fine Date [Apertura Chiusura Calcolo Classifica] -->
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-1"></div>
+    <div class= "col-md-10">
+      <mat-divider></mat-divider>
+    </div>
+    <div class= "col-md-1"></div>
+  </div>
+
+  <div class="row" *ngIf="fillCompetizioneData">
+    <div class= "col-md-12">&nbsp;</div>
+  </div>
+
+  <div class ="row" *ngIf="fillCompetizioneData"> <!-- bottoni salva / annulla -->
+    <div class=col-md-1></div>
+    <div class=col-md-1>
+      <button  
+        class="mat-button"
+        [disabled]="!fillCompetizioneData || createUpdateViewCompetizione === 'V'"
+        mat-raised-button color="primary"
+        (click)="saveData()" 
+        title="Salva"
+      >
+        Salva
+      </button>
+    </div>
+    <div class=col-md-1>
+      <button  
+        class="mat-button"
+        [disabled]="!fillCompetizioneData"
+        mat-raised-button color="warn"
+        (click)="resetData()" 
+        title="Annulla"
+      >
+        Annulla
+      </button>
+    </div>
+    <div class=col-md-9></div>
+  </div> <!-- fine bottoni salva / annulla -->
+
+</div> <!--fine container fluid -->

@@ -9,6 +9,7 @@ import { ClassificaComponent } from './classifica/classifica.component';
 import { ProfiloComponent } from './profilo/profilo.component';
 import { CrudCompetizioneComponent } from './crud-competizione/crud-competizione.component';
 import { StatisticheComponent } from './statistiche/statistiche.component';
+import { CrudCompetizioneSettimanaleComponent } from './crud-competizione-settimanale/crud-competizione-settimanale.component';
 
 import { CompetizioniResolver } from '../resolvers/competizioni-resolver';
 import { DatePronosticiResolver } from '../resolvers/datepronostici-resolver';
@@ -22,6 +23,7 @@ import { LogAggiornamentiResolver } from '../resolvers/logaggiornamenti-resolver
 import { LeagueListResolver } from '../resolvers/leaguelist-resolver';
 import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
 import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver';
+import { ListaSchedineResolver } from '../resolvers/listaschedine-resolver';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -83,6 +85,13 @@ const routes: Routes = [
               pronostici: PronosticiResolver,
               stagioni : StagioniResolver
             }
+  },
+  { path: 'crud-competizione-settimanale',
+  component: CrudCompetizioneSettimanaleComponent,
+    resolve: {
+      listaCompetizioni: ListaSchedineResolver,
+      leagueList: LeagueListResolver
+    }
   }
 ];
 

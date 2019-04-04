@@ -55,8 +55,11 @@ import { LogAggiornamentiResolver } from '../resolvers/logaggiornamenti-resolver
 import { LeagueListResolver } from '../resolvers/leaguelist-resolver';
 import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
 import { StatisticheComponent } from './statistiche/statistiche.component';
-
 import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver';
+import { CrudCompetizioneSettimanaleComponent } from './crud-competizione-settimanale/crud-competizione-settimanale.component';
+import { SchedineService } from './service/schedine.service';
+import { ListaSchedineResolver } from '../resolvers/listaschedine-resolver';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,7 +74,8 @@ import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver
     ProfiloComponent,
     CrudCompetizioneComponent,
     PronoUserComponent,
-    StatisticheComponent
+    StatisticheComponent,
+    CrudCompetizioneSettimanaleComponent
   ],
   imports: [
     BrowserModule,
@@ -97,6 +101,7 @@ import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver
   providers: [
               Utils,
               PronosticiService,
+              SchedineService,
               UtilService,
               // DataService,
               CompetizioniResolver,
@@ -114,6 +119,7 @@ import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver
               LeagueListResolver,
               DatiLegaForumResolver,
               StagioneCorrenteResolver,
+              ListaSchedineResolver,
               {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},
             ],
   entryComponents: [PronoUserComponent],

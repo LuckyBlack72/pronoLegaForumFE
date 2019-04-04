@@ -116,8 +116,11 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
       case 'MenuUtenteComponent.SetAdmin': // Ctrl + up
         this.checkAdminPassword();
         break;
-        case 'MenuUtenteComponent.AggiornaStagione': // Ctrl + left
+      case 'MenuUtenteComponent.AggiornaStagione': // Ctrl + left
         this.nuovaStagione();
+        break;
+      case 'MenuUtenteComponent.CreaSchedine': // Ctrl + right
+        this.nuovaSchedina();
         break;
       default:
         break;
@@ -200,5 +203,36 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
       );
     }
   }
+
+  async nuovaSchedina() {
+
+    const {value: password} = await Swal({
+      title: 'Administrator Login',
+      input: 'password',
+      inputPlaceholder: 'Enter Administrator password',
+      inputAttributes: {
+        autocapitalize: 'off',
+        autocorrect: 'off'
+      },
+      showCancelButton: true
+    });
+
+    if (password) {
+      this.pronosticiService.checkAdminPassword(password).subscribe(
+        data => {
+          this.applicationParameter.menu_utente_page = true;
+          this.router.navigate(['crud-competizione-settimanale']);
+          }
+        ,
+        error => Swal({
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          title: 'Password Errata',
+          type: 'error'
+        })
+      );
+    }
+  }
+
 
 }

@@ -171,3 +171,28 @@ export interface DialogPronoTableData {
   pronostico?: string;
   colore?: string;
 }
+
+export interface AnagraficaCompetizioniSettimanali {
+  id?: number;
+  stagione?: number;
+  settimana?: number;
+  pronostici?: string[];
+  valori_pronostici?: string[];
+  date_competizione?: DatePronostici[];
+  numero_pronostici?: number;
+  punti_esatti?: number;
+  punti_lista?: number;
+}
+
+export interface PronosticiSettimanali {
+  id?: number;
+  stagione?: number;
+  settimana?: number;
+  idPartecipanti?: number;
+  pronostici?: string[];
+}
+
+export interface AnagraficaCompetizioniSettimanaliGrouped {
+  group?: string;
+  competizioni?: AnagraficaCompetizioniSettimanali[];
+}
