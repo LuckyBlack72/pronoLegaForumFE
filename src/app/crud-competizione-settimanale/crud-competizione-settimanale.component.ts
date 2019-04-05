@@ -105,6 +105,9 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
   roundList: any[] = [];
   giornataToLoad: string;
 
+  selectableChip = true;
+  removableChip  = true;
+
   ngOnInit() {
 
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
@@ -292,6 +295,7 @@ console.log(this.lega);
     this.date_competizione = { };
     this.fillCompetizioneData = false;
     this.idCompetizioneToEdit = null;
+    this.schedina = [];
     this.createUpdateViewCompetizione = 'C';
 
     if (resetType === 'S') {
@@ -307,7 +311,6 @@ console.log(this.lega);
         // this.sessionStorageService.set('competizioni', data);
         this.competizioni = data;
         this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioni);
-        const searchParameters: FiltroValoriPronostici = {stagione: parseInt(this.utils.getStagione().substring(0, 4), 10)};
       }
     );
 
@@ -367,15 +370,21 @@ console.log(this.lega);
 
   saveData(): void {
 
-    const checkData = this.schedineService.checkDataToSave(this.competizioneToSave);
+    let checkData: boolean;
+
+    this.competizioneToSave.pronostici = this.schedina;
+
+    checkData = this.schedineService.checkDataToSave(this.competizioneToSave);
 
     if (checkData) { // controlli ok
 
       this.date_competizione.stagione = this.stagioneCompetizione.toString();
+      this.competizioneToSave.stagione = this.stagioneCompetizione;
       this.competizioneToSave.date_competizione[0] = this.date_competizione;
 
-      this.schedineService.getNewSettimanaSchedine(this.stagioneCompetizione).subscribe(
+      this.schedineService.getNewSettimanaSchedina(this.stagioneCompetizione).subscribe(
         settimana => {
+                        this.competizioneToSave.settimana = settimana[0].settimana;
                         this.schedineService.saveAnagraficaSchedine(this.competizioneToSave, 'I').subscribe(
                           data => {
                                     this.resetDataValues('S');
@@ -421,5 +430,45 @@ console.log(this.lega);
 
   }
 
+  addProno(tableRow: any): void {
+
+    if ( this.schedina.length < this.competizioneToSave.numero_pronostici ) {
+
+        if ( this.schedina.indexOf(tableRow.prono) === -1)  {
+
+          this.schedina.push(tableRow.prono);
+
+        } else {
+
+          Swal({
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            title: 'Pronostico già inserito',
+            type: 'error'
+          });
+
+        }
+
+    } else {
+
+      Swal({
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        title: 'Hai già inserito tutti i pronostici necessari',
+        type: 'error'
+      });
+
+    }
+
+  }
+
+  removeProno(partita: any): void {
+
+    const index = this.schedina.indexOf(partita);
+    if (index >= 0) {
+      this.schedina.splice(index, 1);
+    }
+
+  }
 
 }

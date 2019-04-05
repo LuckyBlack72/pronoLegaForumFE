@@ -151,7 +151,7 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title class="mat-subheading-1">
-            Competizione : Nome - Tipo - Stagione - Valori Pronostici
+            Competizione : Pronostici
           </mat-panel-title>
           <mat-panel-description>
           </mat-panel-description>
@@ -218,7 +218,7 @@
                   class="mat-button"
                   [disabled]="createUpdateViewCompetizione === 'V'"
                   mat-raised-button color="warn"
-                  (click)="ClearSchedina()" 
+                  (click)="clearSchedina()" 
                   title="Annulla"
                 >
                   Annulla
@@ -258,7 +258,7 @@
 
               <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
           
-              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="addProno(row)"></mat-row>
               
             </mat-table>
             
@@ -276,17 +276,21 @@
           </div>
 
           <div class="col-md-4"> <!--Tabella della schedina -->
-            <mat-card>Pronostici {{schedina.length}} / {{competizioneToSave.numero_pronostici}} </mat-card>
-            <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical">
-              <mat-chip  
-                color="accent" 
-                selected 
-                disabled
-                *ngFor="let partita of schedina"                 
-              >
-                {{ partita }}
-              </mat-chip>
-            </mat-chip-list>
+            <mat-card>
+              Pronostici {{schedina.length}} / {{competizioneToSave.numero_pronostici}} 
+              <div>
+                <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical">
+                  <mat-chip  
+                    color="accent"
+                    selected 
+                    disabled  
+                    *ngFor="let partita of schedina"
+                  >   
+                    {{ partita }}
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+            </mat-card>
           </div> <!--Tabella della schedina -->
 
         </div>

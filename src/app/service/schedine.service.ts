@@ -25,11 +25,11 @@ export class SchedineService {
 
   }
 
-  getNewSettimanaSchedine ( stagione: number ): Observable<number> {
+  getNewSettimanaSchedina ( stagione: number ): Observable<number> {
 
     const postData = { stagione: stagione };
 
-    return this.http.post<number>(environment.backEndURL + '/schedine/getNewSettimanaSchedine', postData);
+    return this.http.post<number>(environment.backEndURL + '/schedine/getNewSettimanaSchedina', postData);
 
   }
 
