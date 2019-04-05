@@ -24,6 +24,8 @@ import { LeagueListResolver } from '../resolvers/leaguelist-resolver';
 import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
 import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver';
 import { ListaSchedineResolver } from '../resolvers/listaschedine-resolver';
+import { SchedineComponent } from './schedine/schedine.component';
+import { PronosticiSchedineResolver } from 'src/resolvers/pronosticischedine-resolver';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -92,6 +94,13 @@ const routes: Routes = [
       listaCompetizioni: ListaSchedineResolver,
       leagueList: LeagueListResolver
     }
+  },
+  { path: 'schedine',
+    component: SchedineComponent,
+    resolve: {
+              listaCompetizioni: ListaSchedineResolver,
+              pronosticiSaved: PronosticiSchedineResolver
+            }
   }
 ];
 

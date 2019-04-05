@@ -5,19 +5,27 @@
 <div *ngIf="!isMobile" class="container-fluid">
   
   <div class="row">
-    <div class="col-md-1"></div> 
+
     <div class="col-md-2">
       <button  id="button-pronostici" (click)="navigatePage('p')" title="pronostici"></button>
     </div> 
-    <div class="col-md-2"></div> 
+    <div class="col-md-1"></div> 
+
+    <div class="col-md-2">
+      <button  id="button-schedina" (click)="navigatePage('x')" title="schedine settimanali"></button>
+    </div> 
+    <div class="col-md-1"></div> 
+
     <div class="col-md-2">
         <button id="button-classifica" (click)="navigatePage('c')" title="classifica"></button>
     </div> 
-    <div class="col-md-2"></div> 
+    <div class="col-md-1"></div> 
+
     <div class="col-md-2">
         <button id="button-statistiche" (click)="navigatePage('s')" title="statistiche"></button>
     </div>     
     <div class="col-md-1"></div> 
+
   </div>
 
 </div>
@@ -40,6 +48,19 @@
   <div class="row">
     &nbsp;
   </div>
+
+  <div class="row">
+    <div class="col-sm-2"></div> 
+    <div class="col-sm-8">
+      <button  class="btn-block btn-lg" mat-raised-button color="accent" (click)="navigatePage('x')" title="Schedine settimanali">Schedine settimanali</button>
+    </div> 
+    <div class="col-sm-2"></div> 
+  </div>
+  
+  <div class="row">
+    &nbsp;
+  </div>
+
   
   <div class="row">
     <div class="col-sm-2"></div> 

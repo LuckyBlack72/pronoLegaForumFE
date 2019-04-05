@@ -5,6 +5,13 @@
     width: 300px;
 }
 
+#button-schedina {
+    background-image: url('../../assets/schedina.jpg');
+    background-size: 300px 300px;
+    height: 300px;  
+    width: 300px;
+}
+
 #button-classifica {
     background-image: url('../../assets/classifica.jpg');
     background-size: 300px 300px;
