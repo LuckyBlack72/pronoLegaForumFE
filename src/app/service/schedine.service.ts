@@ -95,9 +95,7 @@ checkDataToSave(dataToSave: AnagraficaCompetizioniSettimanali): boolean {
         retVal = false;
       }
 
-
   return retVal;
-
 
 }
 

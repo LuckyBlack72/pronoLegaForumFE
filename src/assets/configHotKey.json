@@ -1,7 +1,7 @@
 {
   "hotkeys": {
-    "ctrl+up": [ "PronosticiComponent.SetAdmin", "MenuUtenteComponent.SetAdmin" ],
-    "ctrl+down": [ "PronosticiComponent.UnsetAdmin" ],
+    "ctrl+up": [ "PronosticiComponent.SetAdmin", "MenuUtenteComponent.SetAdmin","SchedineComponent.SetAdmin" ],
+    "ctrl+down": [ "PronosticiComponent.UnsetAdmin", "SchedineComponent.UnsetAdmin"],
     "ctrl+left": [ "PronosticiComponent.AggiornaClassifica","MenuUtenteComponent.AggiornaStagione" ],
     "ctrl+right": [ "MenuUtenteComponent.CreaSchedine" ]
   }

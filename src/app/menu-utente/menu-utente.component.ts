@@ -97,6 +97,11 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
         this.router.navigate(['/statistiche']);
         break;
 
+      case 'x' :
+        this.applicationParameter.menu_utente_page = true;
+        this.router.navigate(['/schedine']);
+        break;
+
       default :
         break;
 

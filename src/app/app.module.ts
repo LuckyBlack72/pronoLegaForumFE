@@ -60,7 +60,7 @@ import { CrudCompetizioneSettimanaleComponent } from './crud-competizione-settim
 import { SchedineService } from './service/schedine.service';
 import { ListaSchedineResolver } from '../resolvers/listaschedine-resolver';
 import { SchedineComponent } from './schedine/schedine.component';
-import { PronosticiSchedineResolver } from 'src/resolvers/pronosticischedine-resolver';
+import { PronosticiSchedineResolver } from '../resolvers/pronosticischedine-resolver';
 
 @NgModule({
   declarations: [

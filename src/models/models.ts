@@ -190,6 +190,7 @@ export interface PronosticiSettimanali {
   settimana?: number;
   idPartecipanti?: number;
   pronostici?: string[];
+  valori_pronostici?: string[];
 }
 
 export interface AnagraficaCompetizioniSettimanaliGrouped {

@@ -25,7 +25,7 @@ import { DatiLegaForumResolver } from '../resolvers/datilegaforum-resolver';
 import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver';
 import { ListaSchedineResolver } from '../resolvers/listaschedine-resolver';
 import { SchedineComponent } from './schedine/schedine.component';
-import { PronosticiSchedineResolver } from 'src/resolvers/pronosticischedine-resolver';
+import { PronosticiSchedineResolver } from '../resolvers/pronosticischedine-resolver';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [

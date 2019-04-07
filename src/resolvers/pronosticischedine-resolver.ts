@@ -5,7 +5,7 @@ import { SessionStorage } from 'ngx-store';
 
 import { Utils } from '../models/utils';
 import { FiltroPronostici, ApplicationParameter, PronosticiSettimanali } from '../models/models';
-import { SchedineService } from 'src/app/service/schedine.service';
+import { SchedineService } from '../app/service/schedine.service';
 // import { DataService } from '../app/dataservice.service';
 
 @Injectable()
