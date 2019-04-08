@@ -39,7 +39,7 @@ export class SchedineService {
 
   }
 
-  savePronosticiSettimanali ( dataToSave: PronosticiSettimanali[], nickname: string, id_partecipanti: number ): Observable<string> {
+  savePronosticiSettimanali ( dataToSave: PronosticiSettimanali, nickname: string, id_partecipanti: number ): Observable<string> {
 
     const postData = { pronostici: dataToSave, id_partecipanti: id_partecipanti, nickname: nickname };
 

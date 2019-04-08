@@ -188,7 +188,7 @@ export interface PronosticiSettimanali {
   id?: number;
   stagione?: number;
   settimana?: number;
-  idPartecipanti?: number;
+  id_partecipanti?: number;
   pronostici?: string[];
   valori_pronostici?: string[];
 }

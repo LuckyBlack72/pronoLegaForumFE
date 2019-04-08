@@ -111,7 +111,7 @@ export class SchedineComponent implements OnInit, OnDestroy {
           prono.push('XXX');
         }
         const pronostico: PronosticiSettimanali = {
-          idPartecipanti: this.idPartecipante,
+          id_partecipanti: this.idPartecipante,
           stagione: this.utils.getStagioneCorrente(),
           settimana: this.competizioni[i].settimana,
           pronostici: this.competizioni[i].pronostici,
@@ -140,7 +140,7 @@ export class SchedineComponent implements OnInit, OnDestroy {
             prono.push('XXX');
           }
           const pronostico: PronosticiSettimanali = {
-            idPartecipanti: this.idPartecipante,
+            id_partecipanti: this.idPartecipante,
             stagione: this.utils.getStagioneCorrente(),
             settimana: this.competizioni[i].settimana,
             pronostici: this.competizioni[i].pronostici,
@@ -171,7 +171,7 @@ export class SchedineComponent implements OnInit, OnDestroy {
       this.numberPronostici = [];
       this.numberPronosticiGt10 = [];
       this.pronosticiGt10 = false;
-      this.idCompToselect = 0;
+      this.idCompToselect = idCompetizione; // id della competizione selezionata
       this.logo = '';
 
       let np = numero_pronostici;
@@ -258,24 +258,37 @@ export class SchedineComponent implements OnInit, OnDestroy {
 
     } else {
 
-      this.schedineService.savePronosticiSettimanali(
-                                                      this.valoriPronosticiToSave,
-                                                      this.applicationParameter.nickname,
-                                                      this.applicationParameter.idPartecipante
-                                                    ).subscribe(
-                                                                data => Swal({
-                                                                  allowOutsideClick: false,
-                                                                  allowEscapeKey: false,
-                                                                  title: 'Dati Salvati con Successo',
-                                                                  type: 'success'
-                                                                }),
-                                                                error => Swal({
-                                                                  allowOutsideClick: false,
-                                                                  allowEscapeKey: false,
-                                                                  title: 'Errore nel Salvataggio Dati',
-                                                                  type: 'error'
-                                                                })
-      );
+      if ( !this.pronoClosed ) {
+
+        this.schedineService.savePronosticiSettimanali(
+          this.valoriPronosticiToSave[this.getIndexCompetizione(this.idCompToselect)],
+          this.applicationParameter.nickname,
+          this.applicationParameter.idPartecipante
+        ).subscribe(
+                    data => Swal({
+                      allowOutsideClick: false,
+                      allowEscapeKey: false,
+                      title: 'Dati Salvati con Successo',
+                      type: 'success'
+                    }),
+                    error => Swal({
+                      allowOutsideClick: false,
+                      allowEscapeKey: false,
+                      title: 'Errore nel Salvataggio Dati',
+                      type: 'error'
+                    })
+        );
+
+      } else {
+
+        Swal({
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          title: 'Schedina Chiusa',
+          type: 'info'
+        });
+
+      }
 
     }
 
@@ -284,12 +297,38 @@ export class SchedineComponent implements OnInit, OnDestroy {
   getIndexCompetizione(idCompetizione: number): number {
 
     let retVal = 0;
+    let stagione: number;
+    let settimana: number;
 
-    for (let i = 0; i < this.valoriPronosticiToSave.length; i++) {
-      if (this.valoriPronosticiToSave[i].id === idCompetizione) {
-        retVal = i;
-        break;
+    if ( this.admin ) {
+
+      for (let y = 0; y < this.competizioni.length; y++) {
+        if ( this.competizioni[y].id === idCompetizione ) {
+          retVal = y;
+          break;
+        }
       }
+
+    } else {
+
+      for (let x = 0; x < this.competizioni.length; x++) {
+        if ( this.competizioni[x].id === idCompetizione ) {
+          stagione = this.competizioni[x].stagione;
+          settimana = this.competizioni[x].settimana;
+          break;
+        }
+      }
+
+      for (let i = 0; i < this.valoriPronosticiToSave.length; i++) {
+        if (
+              this.valoriPronosticiToSave[i].stagione === stagione &&
+              this.valoriPronosticiToSave[i].settimana === settimana
+            ) {
+                retVal = i;
+                break;
+        }
+      }
+
     }
 
     return retVal;
