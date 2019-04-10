@@ -1,0 +1,51 @@
+<app-toolbar></app-toolbar>
+
+<!-- Desktop and tablet -->
+<div *ngIf="!isMobile" class="container-fluid">
+  
+  <div class="row">
+
+    <div class="col-md-1"></div> 
+    <div class="col-md-4">
+      <button  id="button-pronostici" (click)="navigatePage('p')" title="pronostici"></button>
+    </div> 
+    <div class="col-md-2"></div> 
+
+    <div class="col-md-4">
+      <button  id="button-schedina" (click)="navigatePage('s')" title="schedine settimanali"></button>
+    </div> 
+    <div class="col-md-1"></div> 
+  
+  </div>
+
+</div>
+
+<!-- mobile -->
+<div *ngIf="isMobile" class="container-fluid">
+  
+  <div class="row">
+      &nbsp;
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-2"></div> 
+    <div class="col-sm-8">
+      <button  class="btn-block btn-lg" mat-raised-button color="warn" (click)="navigatePage('p')" title="pronostici">Pronostici</button>
+    </div> 
+    <div class="col-sm-2"></div> 
+  </div>
+  
+  <div class="row">
+    &nbsp;
+  </div>
+
+  <div class="row">
+    <div class="col-sm-2"></div> 
+    <div class="col-sm-8">
+      <button  class="btn-block btn-lg" mat-raised-button color="accent" (click)="navigatePage('s')" title="Schedine settimanali">Schedine settimanali</button>
+    </div> 
+    <div class="col-sm-2"></div> 
+  </div>
+
+</div>
+

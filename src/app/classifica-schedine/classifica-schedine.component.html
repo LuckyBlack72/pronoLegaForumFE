@@ -1,0 +1,77 @@
+<app-toolbar></app-toolbar>
+
+<div class="container-fluid">
+    
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-center mb-1">        
+        <div class="form-group">
+          <mat-form-field>
+            <mat-select 
+              placeholder="Stagione"
+              [(ngModel)]="stagioneSelect"
+              (selectionChange)=getClassifica(stagioneSelect)         
+            >
+              <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+              <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioni" [value]="stagione.stagione">{{ stagione.stagione }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          &nbsp;&nbsp;
+          <button 
+          *ngIf="showClassifica"
+          type="button" 
+          class="btn btn-secondary btn-sm active" 
+          title="Export Excel Classifica" 
+          (click)="exportClassificaExcel()"
+          >
+            <i class="fa fa-file-excel-o"></i>  
+          </button>  
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row" *ngIf="showClassifica">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Cerca">
+      </mat-form-field>
+      
+      <mat-table 
+        #table matSort 
+        [dataSource]="dataSourceClassifica"
+        matSortActive="Totale" 
+        matSortDirection="desc" 
+        matSortDisableClear        
+      >
+
+        <ng-container 
+          *ngFor="let columnName of displayedColumns" 
+          matColumnDef="{{columnName}}" 
+          [sticky]="columnName==='Nickname'"
+          [stickyEnd]="columnName==='Totale'"
+        >
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{buildHeaderTableName(columnName)}}</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element[columnName]}}</mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    
+        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showUserProno(row)"></mat-row>
+        
+      </mat-table>
+      
+      <mat-paginator 
+        [pageSizeOptions]="[10, 20, 50]" 
+        showFirstLastButtons
+      ></mat-paginator>
+
+    </div>
+  </div>
+  <div class="col-md-1"></div>
+  
+</div>
+  
+

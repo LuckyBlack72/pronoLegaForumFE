@@ -4,6 +4,8 @@ import { Observable, of } from 'rxjs';
 import { LocalStorage } from 'ngx-store';
 
 import { PronosticiService } from '../app/service/pronostici.service';
+import { SchedineService } from '../app/service/schedine.service';
+
 import { Stagioni } from '../models/models';
 import { Utils } from '../models/utils';
 
@@ -12,6 +14,7 @@ export class StagioniResolver implements Resolve<Stagioni[]> {
 
     constructor(
                 private pronosticiService: PronosticiService,
+                private schedineService: SchedineService,
                 private utils: Utils
             ) {
     }
@@ -57,7 +60,15 @@ export class StagioniResolver implements Resolve<Stagioni[]> {
         state: RouterStateSnapshot,
     ): Observable<Stagioni[]> {
 
-        return this.pronosticiService.getStagioni();
+        if (state.url === '/classifica') {
+
+            return this.pronosticiService.getStagioni();
+
+        } else {
+
+            return this.schedineService.getStagioni();
+
+        }
 
     }
 

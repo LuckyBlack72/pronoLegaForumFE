@@ -61,6 +61,8 @@ import { SchedineService } from './service/schedine.service';
 import { ListaSchedineResolver } from '../resolvers/listaschedine-resolver';
 import { SchedineComponent } from './schedine/schedine.component';
 import { PronosticiSchedineResolver } from '../resolvers/pronosticischedine-resolver';
+import { SceltaClassificaComponent } from './scelta-classifica/scelta-classifica.component';
+import { ClassificaSchedineComponent, PronoSchedineUserComponent } from './classifica-schedine/classifica-schedine.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +80,10 @@ import { PronosticiSchedineResolver } from '../resolvers/pronosticischedine-reso
     PronoUserComponent,
     StatisticheComponent,
     CrudCompetizioneSettimanaleComponent,
-    SchedineComponent
+    SchedineComponent,
+    SceltaClassificaComponent,
+    ClassificaSchedineComponent,
+    PronoSchedineUserComponent
   ],
   imports: [
     BrowserModule,
@@ -126,7 +131,7 @@ import { PronosticiSchedineResolver } from '../resolvers/pronosticischedine-reso
               PronosticiSchedineResolver,
               {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},
             ],
-  entryComponents: [PronoUserComponent],
+  entryComponents: [PronoUserComponent, PronoSchedineUserComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

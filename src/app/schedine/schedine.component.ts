@@ -6,7 +6,6 @@ import Swal from 'sweetalert2';
 import { SessionStorage } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
 
-// import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../service/pronostici.service';
 import { UtilService } from '../service/util.service';
 import { CrudCompetizioneService } from '../service/crudCompetizione.service';

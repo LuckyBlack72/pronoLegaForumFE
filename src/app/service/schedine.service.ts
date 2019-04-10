@@ -9,7 +9,9 @@ import {
         FiltroPronostici,
         AnagraficaCompetizioniSettimanali,
         AnagraficaCompetizioniSettimanaliGrouped,
-        PronosticiSettimanali
+        PronosticiSettimanali,
+        Stagioni,
+        PronosticiSettimanaliPerClassifica
       } from '../../models/models';
 
 @Injectable()
@@ -39,6 +41,15 @@ export class SchedineService {
 
   }
 
+
+  getPronosticiSettimanaliPerClassifica ( searchParameters: FiltroPronostici ): Observable<PronosticiSettimanaliPerClassifica[]> {
+
+    return this.http.post<PronosticiSettimanaliPerClassifica[]>(
+                    environment.backEndURL + '/schedine/getPronosticiSettimanaliPerClassifica',
+                    searchParameters
+                  );
+
+  }
   savePronosticiSettimanali ( dataToSave: PronosticiSettimanali, nickname: string, id_partecipanti: number ): Observable<string> {
 
     const postData = { pronostici: dataToSave, id_partecipanti: id_partecipanti, nickname: nickname };
@@ -51,6 +62,12 @@ export class SchedineService {
 
     const postData = { anagraficaSchedine: dataToSave, tipo_ddl: tipo_ddl};
     return this.http.post<string>(environment.backEndURL + '/schedine/saveAnagraficaSchedine', postData);
+
+  }
+
+  getStagioni (): Observable<Stagioni[]> {
+
+    return this.http.post<Stagioni[]>(environment.backEndURL + '/schedine/getStagioni', {});
 
   }
 

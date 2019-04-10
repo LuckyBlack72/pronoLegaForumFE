@@ -89,7 +89,7 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
 
       case 'c' :
         this.applicationParameter.menu_utente_page = true;
-        this.router.navigate(['/classifica']);
+        this.router.navigate(['/scelta-classifica']);
         break;
 
       case 's' :

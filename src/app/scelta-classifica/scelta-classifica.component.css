@@ -1,0 +1,13 @@
+#button-pronostici {
+    background-image: url('../../assets/prono.jpg');
+    background-size: 500px 500px;
+    height: 500px;  
+    width: 500px;
+}
+
+#button-schedina {
+    background-image: url('../../assets/schedina.jpg');
+    background-size: 500px 500px;
+    height: 500px;  
+    width: 500px;
+}

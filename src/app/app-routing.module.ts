@@ -26,6 +26,8 @@ import { StagioneCorrenteResolver } from '../resolvers/stagionecorrente-resolver
 import { ListaSchedineResolver } from '../resolvers/listaschedine-resolver';
 import { SchedineComponent } from './schedine/schedine.component';
 import { PronosticiSchedineResolver } from '../resolvers/pronosticischedine-resolver';
+import { SceltaClassificaComponent } from './scelta-classifica/scelta-classifica.component';
+import { ClassificaSchedineComponent } from './classifica-schedine/classifica-schedine.component';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -101,7 +103,18 @@ const routes: Routes = [
               listaCompetizioni: ListaSchedineResolver,
               pronosticiSaved: PronosticiSchedineResolver
             }
-  }
+  },
+  { path: 'scelta-classifica',
+    component: SceltaClassificaComponent
+},
+{ path: 'classifica-schedine',
+component: ClassificaSchedineComponent,
+resolve: {
+          listaStagioni: StagioniResolver
+        }
+},
+
+
 ];
 
 @NgModule({

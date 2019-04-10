@@ -197,3 +197,27 @@ export interface AnagraficaCompetizioniSettimanaliGrouped {
   group?: string;
   competizioni?: AnagraficaCompetizioniSettimanali[];
 }
+
+export interface PronosticiSettimanaliPerClassifica {
+  id?: number;
+  id_partecipanti?: number;
+  nickname?: string;
+  stagione?: number;
+  settimana?: number;
+  pronostici?: string[];
+  valori_pronostici?: string[];
+  valori_pronostici_classifica?: string[];
+  punti_esatti?: number;
+}
+export interface DialogClassificaSchedineData {
+  competizioni?: string[];
+  pronostici?: PronosticiSettimanaliPerClassifica[];
+  nickname?: string;
+}
+
+export interface DialogPronoTableSchedineData {
+  partita?: string;
+  risultato?: string;
+  pronostico?: string;
+  colore?: string;
+}
