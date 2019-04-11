@@ -11,7 +11,8 @@ import {
         AnagraficaCompetizioniSettimanaliGrouped,
         PronosticiSettimanali,
         Stagioni,
-        PronosticiSettimanaliPerClassifica
+        PronosticiSettimanaliPerClassifica,
+        NickUtente
       } from '../../models/models';
 
 @Injectable()
@@ -71,11 +72,11 @@ export class SchedineService {
 
   }
 
-  getUtentiConPronosticiSettimanali (stagione: number): Observable<string[]> {
+  getUtentiConPronosticiSettimanali (stagione: number): Observable<NickUtente[]> {
 
     const postData = { stagione: stagione };
 
-    return this.http.post<string[]>(environment.backEndURL + '/schedine/getUtentiConPronosticiSettimanali', postData);
+    return this.http.post<NickUtente[]>(environment.backEndURL + '/schedine/getUtentiConPronosticiSettimanali', postData);
 
   }
 

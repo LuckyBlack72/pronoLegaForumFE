@@ -221,3 +221,7 @@ export interface DialogPronoTableSchedineData {
   pronostico?: string;
   colore?: string;
 }
+
+export interface NickUtente {
+  nickname?: string;
+}

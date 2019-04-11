@@ -20,7 +20,8 @@ import {
           DialogClassificaSchedineData,
           PronosticiSettimanaliPerClassifica,
           DialogPronoTableSchedineData,
-          AnagraficaCompetizioniSettimanali
+          AnagraficaCompetizioniSettimanali,
+          NickUtente
       } from '../../models/models';
 import { SchedineService } from '../service/schedine.service';
 
@@ -223,12 +224,9 @@ export class ClassificaSchedineComponent implements OnInit {
   calcoloClassifica(
                       pronostici: PronosticiSettimanaliPerClassifica[],
                       schedine: AnagraficaCompetizioniSettimanali[],
-                      utenti: string[]
+                      utenti: NickUtente[]
                     ): DatiClassifica[] {
 
-console.log(pronostici);
-console.log(schedine);
-console.log(utenti);
 
     const retVal: DatiClassifica[] = [];
     let puntiCompetizioneArray: PuntiCompetizione[] = [];
@@ -250,7 +248,7 @@ console.log(utenti);
         punti: 0
       });
       retVal.push({
-        nickname: utenti[iU],
+        nickname: utenti[iU].nickname,
         punti: puntiCompetizioneArray
       });
       puntiCompetizioneArray =  [];
