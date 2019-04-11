@@ -19,7 +19,8 @@ import {
           DeviceInfo,
           DialogClassificaSchedineData,
           PronosticiSettimanaliPerClassifica,
-          DialogPronoTableSchedineData
+          DialogPronoTableSchedineData,
+          AnagraficaCompetizioniSettimanali
       } from '../../models/models';
 import { SchedineService } from '../service/schedine.service';
 
@@ -126,17 +127,59 @@ export class ClassificaSchedineComponent implements OnInit {
     if (calcoloClassifica && stagione !== 0) {
 
       this.clearDatiClassifica();
+      this.schedineService.getDataForClassifica(searchParameter).subscribe(
+        dataForClassifica => {
+                          this.dialogData.pronostici = dataForClassifica[2];
+                          this.datiPerClassifica = this.calcoloClassifica(dataForClassifica[2], dataForClassifica[1], dataForClassifica[0]);
+                          this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
+                          this.dataSourceClassifica.data = this.datiperDataSourceClassifica;
+                          this.displayedColumns.push('Nickname');
+                          for (let x = 0; x < this.datiPerClassifica[0].punti.length; x++) {
+                            this.displayedColumns.push(this.datiPerClassifica[0].punti[x].competizione);
+                          }
+                          this.showClassifica = true;
+            }
+            ,
+            error => {
+                        this.stCmb.nativeElement.selectedIndex = 0;
+                        this.showClassifica = false;
+                        Swal({
+                              allowOutsideClick: false,
+                              allowEscapeKey: false,
+                              title: 'Errore applicativo',
+                              type: 'error'
+                            });
+            }
+      );
+
+/*
       this.schedineService.getPronosticiSettimanaliPerClassifica(searchParameter).subscribe(
         pronosticiUtenti => {
-          this.dialogData.pronostici = pronosticiUtenti;
-          this.datiPerClassifica = this.calcoloClassifica(pronosticiUtenti);
-          this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
-          this.dataSourceClassifica.data = this.datiperDataSourceClassifica;
-          this.displayedColumns.push('Nickname');
-          for (let x = 0; x < this.datiPerClassifica[0].punti.length; x++) {
-            this.displayedColumns.push(this.datiPerClassifica[0].punti[x].competizione);
-          }
-          this.showClassifica = true;
+
+          this.schedineService.getAnagraficaSchedine(stagione).subscribe(
+            schedine => {
+                          this.dialogData.pronostici = pronosticiUtenti;
+                          this.datiPerClassifica = this.calcoloClassifica(pronosticiUtenti, schedine);
+                          this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
+                          this.dataSourceClassifica.data = this.datiperDataSourceClassifica;
+                          this.displayedColumns.push('Nickname');
+                          for (let x = 0; x < this.datiPerClassifica[0].punti.length; x++) {
+                            this.displayedColumns.push(this.datiPerClassifica[0].punti[x].competizione);
+                          }
+                          this.showClassifica = true;
+            }
+            ,
+            error => {
+                        this.stCmb.nativeElement.selectedIndex = 0;
+                        this.showClassifica = false;
+                        Swal({
+                              allowOutsideClick: false,
+                              allowEscapeKey: false,
+                              title: 'Errore applicativo',
+                              type: 'error'
+                            });
+            }
+          );
         }
         ,
         error => {
@@ -152,6 +195,7 @@ export class ClassificaSchedineComponent implements OnInit {
 
                   }
       );
+*/
 
     } else {
 
@@ -176,71 +220,74 @@ export class ClassificaSchedineComponent implements OnInit {
 
   }
 
-  calcoloClassifica(pronostici: PronosticiSettimanaliPerClassifica[]): DatiClassifica[] {
+  calcoloClassifica(
+                      pronostici: PronosticiSettimanaliPerClassifica[],
+                      schedine: AnagraficaCompetizioniSettimanali[],
+                      utenti: string[]
+                    ): DatiClassifica[] {
 
-    console.log(pronostici);
+console.log(pronostici);
+console.log(schedine);
+console.log(utenti);
 
     const retVal: DatiClassifica[] = [];
     let puntiCompetizioneArray: PuntiCompetizione[] = [];
-
-    let nickname = 'XXX';
     let puntiCompetizione = 0;
-    let totalePartecipante = 0;
+    let indexNick = 0;
+    let indexSchedina = 0;
+    let indexTotale = 0;
 
-//    console.log(pronostici);
-
-    for (let i = 0; i < pronostici.length; i++) {
-
-      if (nickname === 'XXX') {
-        nickname = pronostici[i].nickname;
+    // Costruisco tutto il ritorno vuoto -------------------
+    for ( let iU = 0; iU < utenti.length; iU++ ) {
+      for ( let iC = 0; iC < schedine.length; iC++ ) {
+          puntiCompetizioneArray.push({
+            competizione: schedine[iC].settimana.toString(),
+            punti: 0
+          });
       }
+      puntiCompetizioneArray.push({
+        competizione: 'Totale',
+        punti: 0
+      });
+      retVal.push({
+        nickname: utenti[iU],
+        punti: puntiCompetizioneArray
+      });
+      puntiCompetizioneArray =  [];
+    }
+    // ------------------------------------------------------
 
-      if (pronostici[i].nickname === nickname) {
+    // Calcolo le classifiche ---------------------------------
+    for (let x = 0; x < pronostici.length; x++) {
 
-        puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[i]);
-        puntiCompetizioneArray.push({
-                                      competizione: pronostici[i].settimana.toString(),
-                                      punti: puntiCompetizione
-                                    });
-        totalePartecipante += puntiCompetizione;
-        puntiCompetizione = 0;
+      puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[x]);
+      // tslint:disable-next-line:no-shadowed-variable
 
-      } else {
+      indexNick = retVal.findIndex(
+                                    (item) =>
+                                    item.nickname === pronostici[x].nickname
+      );
 
-        puntiCompetizioneArray.push({
-                                      competizione: 'Totale',
-                                      punti: totalePartecipante
-                                    });
-        retVal.push({
-                      nickname: nickname,
-                      punti: puntiCompetizioneArray
-                    });
-        puntiCompetizioneArray = [];
-        totalePartecipante = 0;
-        nickname = pronostici[i].nickname;
-        puntiCompetizione = this.calcolaPuntiCompetizione(pronostici[i]);
-        puntiCompetizioneArray.push({
-                                      competizione: pronostici[i].settimana.toString(),
-                                      punti: puntiCompetizione
-                                    });
-        totalePartecipante += puntiCompetizione;
-        puntiCompetizione = 0;
+      indexSchedina = retVal[indexNick].punti.findIndex (
+                                                      // tslint:disable-next-line:no-shadowed-variable
+                                                      (item) =>
+                                                      item.competizione === pronostici[x].settimana.toString()
+                                                    );
+      indexTotale = retVal[indexNick].punti.findIndex (
+                                                      // tslint:disable-next-line:no-shadowed-variable
+                                                      (item) =>
+                                                      item.competizione === 'Totale'
+                                                    );
 
-      }
+      retVal[indexNick].punti[indexSchedina].punti = puntiCompetizione;
+      retVal[indexNick].punti[indexTotale].punti += puntiCompetizione;
+      puntiCompetizione = 0;
+      indexNick = 0;
+      indexSchedina = 0;
+      indexTotale = 0;
 
     }
-
-    // i dati dell'ultimo partecipante
-    puntiCompetizioneArray.push({
-                                  competizione: 'Totale',
-                                  punti: totalePartecipante
-                              });
-    retVal.push({
-                  nickname: nickname,
-                  punti: puntiCompetizioneArray
-    });
-
-//    console.log(retVal);
+    // ---------------------------------------------------------
 
     return retVal;
 

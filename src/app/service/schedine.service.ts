@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
@@ -68,6 +68,48 @@ export class SchedineService {
   getStagioni (): Observable<Stagioni[]> {
 
     return this.http.post<Stagioni[]>(environment.backEndURL + '/schedine/getStagioni', {});
+
+  }
+
+  getUtentiConPronosticiSettimanali (stagione: number): Observable<string[]> {
+
+    const postData = { stagione: stagione };
+
+    return this.http.post<string[]>(environment.backEndURL + '/schedine/getUtentiConPronosticiSettimanali', postData);
+
+  }
+
+  getDataForClassifica ( searchParameters: FiltroPronostici): Observable<any> {
+
+    const dataForClassifica: any[] = [];
+
+    // Anagrafica Partecipanti che hanno pronosticato schedine
+    dataForClassifica.push(
+                            <Observable<any>>
+                            this.http.post<string[]>(
+                            environment.backEndURL + '/schedine/getUtentiConPronosticiSettimanali', 
+                            { stagione: searchParameters.stagione })
+    );
+
+    // Anagrafica Schedine
+    dataForClassifica.push(
+                            <Observable<any>>
+                            this.http.post<AnagraficaCompetizioniSettimanali[]>(
+                            environment.backEndURL + '/schedine/getAnagraficaSchedine',
+                            { stagione: searchParameters.stagione }
+                            )
+                          );
+
+    // Pronostici Schedine
+    dataForClassifica.push(
+                            <Observable<any>>
+                            this.http.post<PronosticiSettimanaliPerClassifica[]>(
+                            environment.backEndURL + '/schedine/getPronosticiSettimanaliPerClassifica',
+                            searchParameters
+                            )
+    );
+
+    return forkJoin(dataForClassifica);
 
   }
 
