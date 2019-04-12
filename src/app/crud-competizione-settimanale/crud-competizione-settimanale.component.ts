@@ -186,13 +186,13 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
             this.competizioneToSave = this.competizioni[x];
             this.schedina = this.competizioni[x].pronostici;
             this.buildleagueListCombo(this.activatedRoute.snapshot.data.leagueList);
-            console.log('this.competizioneToSave');
-            console.log(this.competizioneToSave);
+//            console.log('this.competizioneToSave');
+//            console.log(this.competizioneToSave);
             // this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
 
-console.log(this.leagueList);
+// console.log(this.leagueList);
 
-console.log(this.lega);
+// console.log(this.lega);
 
             this.stagioneCompetizione =
             this.competizioneToSave.stagione;
@@ -225,8 +225,8 @@ console.log(this.lega);
 
     const retVal: any[] = [];
 
-    console.log('internal data');
-    console.log(internalData);
+//    console.log('internal data');
+//    console.log(internalData);
 
     if ( dataType === 'I' ) { // dati interni
       for (let i = 0; i < internalData.length; i++) {
@@ -447,7 +447,7 @@ console.log(this.lega);
             type: 'error'
           });
 
-        }
+        } 
 
     } else {
 
@@ -470,5 +470,47 @@ console.log(this.lega);
     }
 
   }
+
+  async importDataFromExcel () { // async come le promise
+
+    const dataSourceData: any[] = [];
+
+    const {value: file} = await Swal({ // await impedisce al codice sottostante di essere sereguito fino al fullfillment della promise
+      title: 'Importa partite da file Excel' ,
+      input: 'file',
+      inputAttributes: {
+        accept: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      },
+      showCancelButton: true
+    });
+
+    if (file) {
+      Swal.showLoading();
+      const reader = new FileReader;
+      reader.onload = (e) => {
+
+        const fileData = reader.result;
+
+        /* creo il WorkBook*/
+        const wb = XLSX.read(fileData, {type : 'binary'});
+        /* Get worksheet */
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const wsRows = XLSX.utils.sheet_to_json(ws);
+        for (let i = 0; i < wsRows.length; i++) {
+          for (const [key, value] of Object.entries(wsRows[i])) { // loop sulle righe del file
+            if (key === 'Partita') {
+
+              dataSourceData.push({prono: value});
+
+            }
+          }
+        }
+        this.dataSourceValoriPronostici.data = dataSourceData;
+      };
+      reader.readAsBinaryString(file);
+    }
+
+  }
+
 
 }

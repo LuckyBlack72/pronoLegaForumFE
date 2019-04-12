@@ -8,7 +8,7 @@
           <mat-radio-button class="mat-body-1" value="C">Nuova Schedina &nbsp;&nbsp;&nbsp;</mat-radio-button>
           <mat-radio-button class="mat-body-1" value="V">Visualizza Schedina &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
         </mat-radio-group>
-        <mat-form-field>
+        <mat-form-field> 
           <mat-select 
             #selComp
             placeholder="Schedina"
@@ -151,7 +151,7 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title class="mat-subheading-1">
-            Competizione : Pronostici
+            Scelta Pronostici Schedina
           </mat-panel-title>
           <mat-panel-description>
           </mat-panel-description>
@@ -200,13 +200,32 @@
                   [disabled]="createUpdateViewCompetizione === 'V'"
                   mat-raised-button color="primary"
                   (click)="loadValoriPronostici(lega.value, stagioneCompetizione, giornataToLoad)" 
-                  title="Carica Partite da Scegliere"
+                  title="Carica Partite da Sito Esterno"
                 >
-                  Carica Partite da Scegliere
+                  Carica Partite da Sito Esterno
                 </button>                
               </div>
               <div class="col-md-6"></div>
             </div>   
+
+            <div class="row">
+              <div class= "col-md-12">&nbsp;</div>
+            </div>            
+
+            <div class="row">
+              <div class="col-md-6">
+                  <button  
+                  class="mat-button"
+                  [disabled]="createUpdateViewCompetizione === 'V'"
+                  mat-raised-button color="accent"
+                  (click)="importDataFromExcel()" 
+                  title="Carica Partite da Foglio Excel"
+                >
+                  Carica Partite da Foglio Excel
+                </button>                
+              </div>
+              <div class="col-md-6"></div>
+            </div>                
 
             <div class="row">
               <div class= "col-md-12">&nbsp;</div>
