@@ -7,7 +7,7 @@ import { SchedineService } from '../app/service/schedine.service';
 import { AnagraficaCompetizioniSettimanali } from '../models/models';
 
 @Injectable()
-export class ListaSchedineResolver implements Resolve<AnagraficaCompetizioniSettimanali[]> {
+export class ListaSchedineLfResolver implements Resolve<AnagraficaCompetizioniSettimanali[]> {
 
     constructor(private schedineService: SchedineService, private utils: Utils) {
     }
@@ -19,7 +19,7 @@ export class ListaSchedineResolver implements Resolve<AnagraficaCompetizioniSett
 
 
         // 0 prende tutte le competizioni del DB a prescirdere dalla stagione
-        return this.schedineService.getAnagraficaSchedine(0, 'E');
+        return this.schedineService.getAnagraficaSchedine(0, 'L');
 
     }
 }

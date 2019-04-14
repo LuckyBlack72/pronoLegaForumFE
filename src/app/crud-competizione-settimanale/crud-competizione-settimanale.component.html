@@ -8,6 +8,17 @@
           <mat-radio-button class="mat-body-1" value="C">Nuova Schedina &nbsp;&nbsp;&nbsp;</mat-radio-button>
           <mat-radio-button class="mat-body-1" value="V">Visualizza Schedina &nbsp;&nbsp;&nbsp;&nbsp;</mat-radio-button>
         </mat-radio-group>
+        &nbsp;&nbsp;
+        <mat-radio-group
+        [(ngModel)]="tipo_pronostici" 
+        [disabled]="fillCompetizioneData"        
+        (change)="setComboCompetizioni(competizioni, competizioniLf, tipo_pronostici)"
+        >
+            <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+            <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+        </mat-radio-group>
+        &nbsp;&nbsp;
+
         <mat-form-field> 
           <mat-select 
             #selComp
@@ -161,7 +172,7 @@
           
           <div class="col-md-2"> <!--scelta lega -->
 
-            <div class="row">
+            <div class="row" *ngIf="tipo_pronostici === 'E'">
               <div class="col-md-6">
                   <mat-form-field>
                     <mat-select 
@@ -177,7 +188,7 @@
               <div class="col-md-6"></div>
             </div>     
 
-            <div class="row">
+            <div class="row" *ngIf="tipo_pronostici === 'E'">
               <div class="col-md-6">
                   <mat-form-field>
                     <mat-select 
@@ -193,7 +204,7 @@
               <div class="col-md-6"></div>
             </div>    
 
-            <div class="row">
+            <div class="row" *ngIf="tipo_pronostici === 'E'">
               <div class="col-md-6">
                 <button  
                   class="mat-button"
@@ -208,7 +219,7 @@
               <div class="col-md-6"></div>
             </div>   
 
-            <div class="row">
+            <div class="row" *ngIf="tipo_pronostici === 'E'">
               <div class= "col-md-12">&nbsp;</div>
             </div>            
 

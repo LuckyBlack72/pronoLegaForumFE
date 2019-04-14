@@ -10,13 +10,20 @@
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <mat-card> 
-                       
+                <mat-radio-group
+                [(ngModel)]="tipo_pronostici" 
+                (change)="resetSchedina()"
+                >
+                    <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+                    <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+                </mat-radio-group>
+                &nbsp;&nbsp;
                 <mat-form-field>
                     <mat-select 
                     #selComp
                     placeholder="Schedina"
                     [(ngModel)]="idCompetizioneToFill"
-                    (selectionChange)="fillPronostici(0, idCompetizioneToFill)"
+                    (selectionChange)="fillPronostici(0, idCompetizioneToFill, tipo_pronostici)"
                     >
                         <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
                         <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
@@ -81,13 +88,13 @@
               <mat-card *ngFor="let e of numberPronostici">
                 <div class="row">
                     <div class= "col-md-6 text-left">
-                        {{valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]}}
+                        {{valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronostici)].pronostici[(e - 1)]}}
                     </div>
                     <div class= "col-md-2">&nbsp;</div>
                     <div class= "col-md-4">
                         <mat-button-toggle-group 
                             name="prono" aria-label="Pronostici"
-                            [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].valori_pronostici[(e - 1)]"
+                            [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronosticitipo_pronostici)].valori_pronostici[(e - 1)]"
                         >
                             <mat-button-toggle value="1" [disabled]="pronoClosed">1</mat-button-toggle>
                             <mat-button-toggle value="X" [disabled]="pronoClosed">X</mat-button-toggle>
@@ -101,13 +108,13 @@
               <mat-card *ngFor="let e of numberPronostici">
                 <div class="row">
                         <div class= "col-md-6 text-left">
-                        {{cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]}}
+                        {{cCCToSaveToPronostici[getIndexCompetizione(idCompToselect, tipo_pronostici)].pronostici[(e - 1)]}}
                     </div>
                     <div class= "col-md-2">&nbsp;</div>
                     <div class= "col-md-4">
                         <mat-button-toggle-group 
                             name="prono" aria-label="Pronostici"
-                            [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].valori_pronostici_classifica[(e - 1)]"
+                            [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect, tipo_pronostici)].valori_pronostici_classifica[(e - 1)]"
                         >
                             <mat-button-toggle value="1" [disabled]="pronoClosed && !admin">1</mat-button-toggle>
                             <mat-button-toggle value="X" [disabled]="pronoClosed && !admin">X</mat-button-toggle>
@@ -123,13 +130,13 @@
               <mat-card *ngFor="let e of numberPronosticiGt10">
                 <div class="row">
                         <div class= "col-md-6 text-left">
-                        {{valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]}}
+                        {{valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronostici)].pronostici[(e - 1)]}}
                     </div>
                     <div class= "col-md-2">&nbsp;</div>
                     <div class= "col-md-4">
                         <mat-button-toggle-group 
                             name="prono" aria-label="Pronostici"
-                            [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].valori_pronostici[(e - 1)]"
+                            [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronostici)].valori_pronostici[(e - 1)]"
                         >
                             <mat-button-toggle value="1" [disabled]="pronoClosed">1</mat-button-toggle>
                             <mat-button-toggle value="X" [disabled]="pronoClosed">X</mat-button-toggle>
@@ -143,13 +150,13 @@
                 <mat-card *ngFor="let e of numberPronosticiGt10">
                     <div class="row">
                             <div class= "col-md-6 text-left">
-                            {{cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]}}
+                            {{cCCToSaveToPronostici[getIndexCompetizione(idCompToselect, tipo_pronostici)].pronostici[(e - 1)]}}
                         </div>
                         <div class= "col-md-2">&nbsp;</div>
                         <div class= "col-md-4">
                             <mat-button-toggle-group 
                                 name="prono" aria-label="Pronostici"
-                                [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].valori_pronostici_classifica[(e - 1)]"
+                                [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect, tipo_pronostici)].valori_pronostici_classifica[(e - 1)]"
                             >
                                 <mat-button-toggle value="1" [disabled]="pronoClosed && !admin">1</mat-button-toggle>
                                 <mat-button-toggle value="X" [disabled]="pronoClosed && !admin">X</mat-button-toggle>
@@ -174,13 +181,27 @@
     <div class="row"> <!-- Riga con la dropdown competizioni -->
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
+            <mat-radio-group
+            [(ngModel)]="tipo_pronostici" 
+            (change)="resetSchedina()"
+            >
+                <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+                <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+
+    <div class="row"> <!-- Riga con la dropdown competizioni -->
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
 
             <mat-form-field>
                 <mat-select 
                 #st
                 placeholder="Schedina"
                 [(ngModel)]="idCompetizioneToFill"
-                (selectionChange)="fillPronostici(0, idCompetizioneToFill)"
+                (selectionChange)="fillPronostici(0, idCompetizioneToFill, tipo_pronostici)"
                 >
                     <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
                     <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
@@ -255,13 +276,13 @@
                 <mat-card *ngFor="let e of numberPronostici">
                     <div class="row">
                         <div class= "col-md-6 text-left">
-                            {{valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]}}
+                            {{valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronostici)].pronostici[(e - 1)]}}
                         </div>
                         <div class= "col-md-2">&nbsp;</div>
                         <div class= "col-md-4">
                             <mat-button-toggle-group 
                                 name="prono" aria-label="Pronostici"
-                                [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].valori_pronostici[(e - 1)]"
+                                [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronostici)].valori_pronostici[(e - 1)]"
                             >
                                 <mat-button-toggle value="1" [disabled]="pronoClosed">1</mat-button-toggle>
                                 <mat-button-toggle value="X" [disabled]="pronoClosed">X</mat-button-toggle>
@@ -275,13 +296,13 @@
                 <mat-card *ngFor="let e of numberPronostici">
                     <div class="row">
                         <div class= "col-md-6 text-left">
-                            {{cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]}}
+                            {{cCCToSaveToPronostici[getIndexCompetizione(idCompToselect, tipo_pronostici)].pronostici[(e - 1)]}}
                         </div>
                         <div class= "col-md-2">&nbsp;</div>
                         <div class= "col-md-4">
                             <mat-button-toggle-group 
                                 name="prono" aria-label="Pronostici"
-                                [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].valori_pronostici_classifica[(e - 1)]"
+                                [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect, tipo_pronostici)].valori_pronostici_classifica[(e - 1)]"
                             >
                                 <mat-button-toggle value="1" [disabled]="pronoClosed && !admin">1</mat-button-toggle>
                                 <mat-button-toggle value="X" [disabled]="pronoClosed && !admin">X</mat-button-toggle>
@@ -295,7 +316,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12">&nbsp;</div>
+        <div class="col-sm-12">&nbsp;</div> 
     </div>
     
     <div *ngIf="pronosticiGt10" class="row"> <!-- con i prono > 10 -->
@@ -304,13 +325,13 @@
                 <mat-card *ngFor="let e of numberPronosticiGt10">
                     <div class="row">
                         <div class= "col-md-6 text-left">
-                            {{valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]}}
+                            {{valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronostici)].pronostici[(e - 1)]}}
                         </div>
                         <div class= "col-md-2">&nbsp;</div>
                         <div class= "col-md-4">
                             <mat-button-toggle-group 
                                 name="prono" aria-label="Pronostici"
-                                [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect)].valori_pronostici[(e - 1)]"
+                                [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronostici)].valori_pronostici[(e - 1)]"
                             >
                                 <mat-button-toggle value="1" [disabled]="pronoClosed">1</mat-button-toggle>
                                 <mat-button-toggle value="X" [disabled]="pronoClosed">X</mat-button-toggle>
@@ -324,13 +345,13 @@
                 <mat-card *ngFor="let e of numberPronosticiGt10">
                     <div class="row">
                         <div class= "col-md-6 text-left">
-                            {{cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].pronostici[(e - 1)]}}
+                            {{cCCToSaveToPronostici[getIndexCompetizione(idCompToselect, tipo_pronostici)].pronostici[(e - 1)]}}
                         </div>
                         <div class= "col-md-2">&nbsp;</div>
                         <div class= "col-md-4">
                             <mat-button-toggle-group 
                                 name="prono" aria-label="Pronostici"
-                                [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect)].valori_pronostici_classifica[(e - 1)]"
+                                [(ngModel)]="cCCToSaveToPronostici[getIndexCompetizione(idCompToselect, tipo_pronostici)].valori_pronostici_classifica[(e - 1)]"
                             >
                                 <mat-button-toggle value="1" [disabled]="pronoClosed && !admin">1</mat-button-toggle>
                                 <mat-button-toggle value="X" [disabled]="pronoClosed && !admin">X</mat-button-toggle>

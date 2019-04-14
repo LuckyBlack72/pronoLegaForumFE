@@ -63,6 +63,9 @@ import { SchedineComponent } from './schedine/schedine.component';
 import { PronosticiSchedineResolver } from '../resolvers/pronosticischedine-resolver';
 import { SceltaClassificaComponent } from './scelta-classifica/scelta-classifica.component';
 import { ClassificaSchedineComponent, PronoSchedineUserComponent } from './classifica-schedine/classifica-schedine.component';
+import { ListaSchedineLfResolver } from '../resolvers/listaschedinelf-resolver';
+import { PronosticiSchedineLfResolver } from '../resolvers/pronosticischedinelf-resolver';
+import { StagioniLfResolver } from '../resolvers/stagionilf-resolver';
 
 @NgModule({
   declarations: [
@@ -129,6 +132,9 @@ import { ClassificaSchedineComponent, PronoSchedineUserComponent } from './class
               StagioneCorrenteResolver,
               ListaSchedineResolver,
               PronosticiSchedineResolver,
+              ListaSchedineLfResolver,
+              PronosticiSchedineLfResolver,
+              StagioniLfResolver,
               {provide: MAT_DATE_LOCALE, useValue: 'it-IT'},
             ],
   entryComponents: [PronoUserComponent, PronoSchedineUserComponent],

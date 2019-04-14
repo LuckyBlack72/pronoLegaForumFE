@@ -6,8 +6,17 @@
     <div class="col-md-12">
       <div class="d-flex justify-content-center mb-1">        
         <div class="form-group">
+          <mat-radio-group
+          [(ngModel)]="tipo_pronostici" 
+          (change)="resetClassifica()"
+          >
+            <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+            <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+          </mat-radio-group>
+          &nbsp;&nbsp;
           <mat-form-field>
             <mat-select 
+              #st id="st"
               placeholder="Stagione"
               [(ngModel)]="stagioneSelect"
               (selectionChange)=getClassifica(stagioneSelect)         

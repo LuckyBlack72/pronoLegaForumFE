@@ -10,7 +10,7 @@ import { Stagioni } from '../models/models';
 import { Utils } from '../models/utils';
 
 @Injectable()
-export class StagioniResolver implements Resolve<Stagioni[]> {
+export class StagioniLfResolver implements Resolve<Stagioni[]> {
 
     constructor(
                 private pronosticiService: PronosticiService,
@@ -60,15 +60,7 @@ export class StagioniResolver implements Resolve<Stagioni[]> {
         state: RouterStateSnapshot,
     ): Observable<Stagioni[]> {
 
-        if (state.url === '/classifica') {
-
-            return this.pronosticiService.getStagioni();
-
-        } else {
-
-            return this.schedineService.getStagioni('E');
-
-        }
+        return this.schedineService.getStagioni('L');
 
     }
 

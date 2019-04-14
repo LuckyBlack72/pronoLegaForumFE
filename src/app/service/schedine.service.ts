@@ -20,17 +20,17 @@ export class SchedineService {
 
   constructor ( private http: HttpClient ) { }
 
-  getAnagraficaSchedine ( stagione: number ): Observable<AnagraficaCompetizioniSettimanali[]> {
+  getAnagraficaSchedine ( stagione: number, tipo_pronostici: string ): Observable<AnagraficaCompetizioniSettimanali[]> {
 
-    const postData = { stagione: stagione };
+    const postData = { stagione: stagione, tipo_pronostici: tipo_pronostici };
 
     return this.http.post<AnagraficaCompetizioniSettimanali[]>(environment.backEndURL + '/schedine/getAnagraficaSchedine', postData);
 
   }
 
-  getNewSettimanaSchedina ( stagione: number ): Observable<number> {
+  getNewSettimanaSchedina ( stagione: number, tipo_pronostici: string ): Observable<number> {
 
-    const postData = { stagione: stagione };
+    const postData = { stagione: stagione, tipo_pronostici: tipo_pronostici };
 
     return this.http.post<number>(environment.backEndURL + '/schedine/getNewSettimanaSchedina', postData);
 
@@ -51,24 +51,29 @@ export class SchedineService {
                   );
 
   }
-  savePronosticiSettimanali ( dataToSave: PronosticiSettimanali, nickname: string, id_partecipanti: number ): Observable<string> {
+  savePronosticiSettimanali (
+                              dataToSave: PronosticiSettimanali,
+                              nickname: string,
+                              id_partecipanti: number,
+                              tipo_pronostici: string
+                            ): Observable<string> {
 
-    const postData = { pronostici: dataToSave, id_partecipanti: id_partecipanti, nickname: nickname };
+    const postData = { pronostici: dataToSave, id_partecipanti: id_partecipanti, nickname: nickname, tipo_pronostici: tipo_pronostici };
 
     return this.http.post<string>(environment.backEndURL + '/schedine/savePronosticiSettimanali', postData);
 
   }
 
-  saveAnagraficaSchedine ( dataToSave: AnagraficaCompetizioniSettimanali, tipo_ddl: string): Observable<string> {
+  saveAnagraficaSchedine ( dataToSave: AnagraficaCompetizioniSettimanali, tipo_ddl: string, tipo_pronostici: string ): Observable<string> {
 
-    const postData = { anagraficaSchedine: dataToSave, tipo_ddl: tipo_ddl};
+    const postData = { anagraficaSchedine: dataToSave, tipo_ddl: tipo_ddl, tipo_pronostici: tipo_pronostici };
     return this.http.post<string>(environment.backEndURL + '/schedine/saveAnagraficaSchedine', postData);
 
   }
 
-  getStagioni (): Observable<Stagioni[]> {
+  getStagioni (tipo_pronostici: string ): Observable<Stagioni[]> {
 
-    return this.http.post<Stagioni[]>(environment.backEndURL + '/schedine/getStagioni', {});
+    return this.http.post<Stagioni[]>(environment.backEndURL + '/schedine/getStagioni', { tipo_pronostici: tipo_pronostici });
 
   }
 
@@ -88,8 +93,8 @@ export class SchedineService {
     dataForClassifica.push(
                             <Observable<any>>
                             this.http.post<string[]>(
-                            environment.backEndURL + '/schedine/getUtentiConPronosticiSettimanali', 
-                            { stagione: searchParameters.stagione })
+                            environment.backEndURL + '/schedine/getUtentiConPronosticiSettimanali',
+                            { stagione: searchParameters.stagione, tipo_pronostici: searchParameters.tipo_pronostici })
     );
 
     // Anagrafica Schedine
@@ -97,7 +102,7 @@ export class SchedineService {
                             <Observable<any>>
                             this.http.post<AnagraficaCompetizioniSettimanali[]>(
                             environment.backEndURL + '/schedine/getAnagraficaSchedine',
-                            { stagione: searchParameters.stagione }
+                            { stagione: searchParameters.stagione, tipo_pronostici: searchParameters.tipo_pronostici }
                             )
                           );
 

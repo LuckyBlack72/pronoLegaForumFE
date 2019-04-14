@@ -16,6 +16,7 @@
           &nbsp;&nbsp;
           <mat-form-field>
             <mat-select 
+              #st id="st"
               placeholder="Stagione"
               [(ngModel)]="stagioneSelect"
               (selectionChange)=getClassifica(stagioneSelect)         

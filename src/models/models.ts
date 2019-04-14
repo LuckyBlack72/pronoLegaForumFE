@@ -79,6 +79,7 @@ export interface FiltroPronostici {
   idPartecipanti?: number;
   nickname?: string;
   idCompetizione?: number;
+  tipo_pronostici?: string;
 }
 
 export interface ValoriPronosticiComboFiller {

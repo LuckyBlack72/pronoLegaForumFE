@@ -53,6 +53,7 @@ export class SchedineComponent implements OnInit, OnDestroy {
   @SessionStorage() applicationParameter: ApplicationParameter;
 
   competizioni: AnagraficaCompetizioniSettimanali[];
+  competizioniLf: AnagraficaCompetizioniSettimanali[];
 
   showProno: boolean;
   numberPronostici: number[] = [];
@@ -61,6 +62,12 @@ export class SchedineComponent implements OnInit, OnDestroy {
   valoriPronosticiToShow: ValoriPronosticiComboFiller[] = [];
   valoriPronosticiToSave: PronosticiSettimanali[];
   valoriPronosticiSaved: PronosticiSettimanali[];
+
+  valoriPronosticiToSaveLf: PronosticiSettimanali[];
+  valoriPronosticiSavedLf: PronosticiSettimanali[];
+  valoriPronosticiToSaveEx: PronosticiSettimanali[];
+  valoriPronosticiSavedEx: PronosticiSettimanali[];
+
   nickname: string;
   idPartecipante: number;
   idCompToselect: number;
@@ -74,6 +81,7 @@ export class SchedineComponent implements OnInit, OnDestroy {
   cCCToSaveToPronostici: AnagraficaCompetizioniSettimanali[];
 
   competizioniGrouped: AnagraficaCompetizioniSettimanaliGrouped[];
+
   idCompetizioneToFill: number;
   dataChiusuraProno: string;
   dateCompetizioneInCorso: DatePronostici = {
@@ -84,6 +92,8 @@ export class SchedineComponent implements OnInit, OnDestroy {
   };
   logoImage: any;
 
+  tipo_pronostici: string;
+
   ngOnInit() {
 
     this.deviceInfo = this.deviceDetectorService.getDeviceInfo();
@@ -91,64 +101,53 @@ export class SchedineComponent implements OnInit, OnDestroy {
     this.isTablet = this.deviceDetectorService.isTablet();
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
+    this.tipo_pronostici = 'E';
+
     // prendo i dati dai resolver
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
-    this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioni);
-    this.valoriPronosticiSaved = this.activatedRoute.snapshot.data.pronosticiSaved;
-    this.valoriPronosticiToSave = this.activatedRoute.snapshot.data.pronosticiSaved;
-    this.cCCToSaveToPronostici = [];
-    // ---------------------------
+    this.competizioniLf = this.activatedRoute.snapshot.data.listaCompetizioniLf;
+
+    if ( this.tipo_pronostici === 'E' ) {
+      this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioni);
+    } else {
+      this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioniLf);
+    }
+
+    // --------------
+    this.valoriPronosticiSavedEx = this.activatedRoute.snapshot.data.pronosticiSaved;
+    this.valoriPronosticiToSaveEx = this.activatedRoute.snapshot.data.pronosticiSaved;
+    this.valoriPronosticiSavedLf = this.activatedRoute.snapshot.data.pronosticiSavedLf;
+    this.valoriPronosticiToSaveLf = this.activatedRoute.snapshot.data.pronosticiSavedLf;
 
     this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
     this.idPartecipante = this.applicationParameter.idPartecipante; // mi prendo il valore di id dal servizio
 
-    // setto l'array con i pronostici da salvare in modo che poi basti solo inserire il pronostico
-    if (this.valoriPronosticiSaved.length === 0) {
-      for (let i = 0; i < this.competizioni.length; i++) {
-        const prono = [];
-        for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
-          prono.push('XXX');
-        }
-        const pronostico: PronosticiSettimanali = {
-          id_partecipanti: this.idPartecipante,
-          stagione: this.utils.getStagioneCorrente(),
-          settimana: this.competizioni[i].settimana,
-          pronostici: this.competizioni[i].pronostici,
-          valori_pronostici: prono
-        };
-        this.valoriPronosticiToSave.push(pronostico);
-      }
+    this.valoriPronosticiToSaveEx = this.fillPronoToSaveAndSaved(
+                                                                  this.valoriPronosticiToSaveEx,
+                                                                  this.valoriPronosticiSavedEx,
+                                                                  this.competizioni,
+                                                                  this.utils.getStagioneCorrente(),
+                                                                  this.idPartecipante
+                                                                );
 
-    } else if (this.valoriPronosticiSaved.length !== this.competizioni.length) {
-      let fnd = false;
-      for (let i = 0; i < this.competizioni.length; i++) {
-        for (let x = 0; x < this.valoriPronosticiSaved.length; x++) {
-          if (
-                this.competizioni[i].stagione === this.valoriPronosticiSaved[x].stagione &&
-                this.competizioni[i].settimana === this.valoriPronosticiSaved[x].settimana
-              ) {
-            fnd = true;
-            break;
-          }
-        }
-        if ( fnd ) {
-          fnd = false;
-        } else {
-          const prono = [];
-          for (let x = 1; x <= this.competizioni[i].numero_pronostici; x++) {
-            prono.push('XXX');
-          }
-          const pronostico: PronosticiSettimanali = {
-            id_partecipanti: this.idPartecipante,
-            stagione: this.utils.getStagioneCorrente(),
-            settimana: this.competizioni[i].settimana,
-            pronostici: this.competizioni[i].pronostici,
-            valori_pronostici: prono
-          };
-          this.valoriPronosticiToSave.push(pronostico);
-        }
-      }
+    this.valoriPronosticiToSaveLf = this.fillPronoToSaveAndSaved(
+                                                                  this.valoriPronosticiToSaveLf,
+                                                                  this.valoriPronosticiSavedLf,
+                                                                  this.competizioniLf,
+                                                                  this.utils.getStagioneCorrente(),
+                                                                  this.idPartecipante
+                                                                );
+    // --------------
+    if ( this.tipo_pronostici === 'E' ) {
+      this.valoriPronosticiSaved = this.activatedRoute.snapshot.data.pronosticiSaved;
+      this.valoriPronosticiToSave = this.valoriPronosticiToSaveEx;
+    } else {
+      this.valoriPronosticiSaved = this.activatedRoute.snapshot.data.pronosticiSavedLf;
+      this.valoriPronosticiToSave = this.valoriPronosticiToSaveLf;
     }
+
+    this.cCCToSaveToPronostici = [];
+    // ---------------------------
 
     this.showProno = false;
 
@@ -160,9 +159,19 @@ export class SchedineComponent implements OnInit, OnDestroy {
 
   }
 
-  fillPronostici(numero_pronostici: number, idCompetizione: number) {
+  fillPronostici(numero_pronostici: number, idCompetizione: number, tipo_pronostici: string) {
 
     let datePronosticiCompetizione: DatePronostici[] = [];
+    let competizioni: AnagraficaCompetizioniSettimanali[] = [];
+    let logoImageSchedine = '';
+
+    if (tipo_pronostici === 'E') {
+      competizioni = this.competizioni;
+      logoImageSchedine = 'schedina.jpg';
+    } else {
+      competizioni = this.competizioniLf;
+      logoImageSchedine = 'logoLF.gif';
+    }
 
     if (idCompetizione !== 0) { // non ho selezionato scegli una competizione dalla dropdown
 
@@ -175,14 +184,14 @@ export class SchedineComponent implements OnInit, OnDestroy {
 
       let np = numero_pronostici;
       if (np === 0) {
-        for (let y = 0; y < this.competizioni.length; y++) {
-          if ( this.competizioni[y].id === idCompetizione ) {
-            np = this.competizioni[y].numero_pronostici;
+        for (let y = 0; y < competizioni.length; y++) {
+          if ( competizioni[y].id === idCompetizione ) {
+            np = competizioni[y].numero_pronostici;
             datePronosticiCompetizione =
-            this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(this.competizioni[y].date_competizione.toString(), true);
+            this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(competizioni[y].date_competizione.toString(), true);
             this.dateCompetizioneInCorso =
             datePronosticiCompetizione[(datePronosticiCompetizione.length - 1)];
-            this.crudCompetizioneService.loadLogo('schedina.jpg').subscribe(
+            this.crudCompetizioneService.loadLogo(logoImageSchedine).subscribe(
               logoImage => {
                 this.createImageFromBlob(logoImage);
               },
@@ -210,8 +219,7 @@ export class SchedineComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.logo = 'schedina.jpg';
-
+      this.logo = logoImageSchedine;
 
       np > 10 ? this.pronosticiGt10 = true : this.pronosticiGt10 = false;
 
@@ -240,7 +248,7 @@ export class SchedineComponent implements OnInit, OnDestroy {
           }
         }
 
-        this.schedineService.saveAnagraficaSchedine(dataToSaveArray, 'U').subscribe( // TODO
+        this.schedineService.saveAnagraficaSchedine(dataToSaveArray, 'U', this.tipo_pronostici).subscribe( // TODO
         data => Swal({
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -260,9 +268,10 @@ export class SchedineComponent implements OnInit, OnDestroy {
       if ( !this.pronoClosed ) {
 
         this.schedineService.savePronosticiSettimanali(
-          this.valoriPronosticiToSave[this.getIndexCompetizione(this.idCompToselect)],
+          this.valoriPronosticiToSave[this.getIndexCompetizione(this.idCompToselect, this.tipo_pronostici)],
           this.applicationParameter.nickname,
-          this.applicationParameter.idPartecipante
+          this.applicationParameter.idPartecipante,
+          this.tipo_pronostici
         ).subscribe(
                     data => Swal({
                       allowOutsideClick: false,
@@ -293,16 +302,23 @@ export class SchedineComponent implements OnInit, OnDestroy {
 
   }
 
-  getIndexCompetizione(idCompetizione: number): number {
+  getIndexCompetizione(idCompetizione: number, tipo_pronostici: string): number {
 
     let retVal = 0;
     let stagione: number;
     let settimana: number;
+    let competizioni: AnagraficaCompetizioniSettimanali[] = [];
+
+    if (tipo_pronostici === 'E') {
+      competizioni = this.competizioni;
+    } else {
+      competizioni = this.competizioniLf;
+    }
 
     if ( this.admin ) {
 
-      for (let y = 0; y < this.competizioni.length; y++) {
-        if ( this.competizioni[y].id === idCompetizione ) {
+      for (let y = 0; y < competizioni.length; y++) {
+        if ( competizioni[y].id === idCompetizione ) {
           retVal = y;
           break;
         }
@@ -310,10 +326,10 @@ export class SchedineComponent implements OnInit, OnDestroy {
 
     } else {
 
-      for (let x = 0; x < this.competizioni.length; x++) {
-        if ( this.competizioni[x].id === idCompetizione ) {
-          stagione = this.competizioni[x].stagione;
-          settimana = this.competizioni[x].settimana;
+      for (let x = 0; x < competizioni.length; x++) {
+        if ( competizioni[x].id === idCompetizione ) {
+          stagione = competizioni[x].stagione;
+          settimana = competizioni[x].settimana;
           break;
         }
       }
@@ -422,13 +438,50 @@ export class SchedineComponent implements OnInit, OnDestroy {
 
   }
 
+  resetSchedina() {
+
+    if ( this.admin ) {
+      this.cCCToSaveToPronostici = [];
+      if ( this.tipo_pronostici === 'E' ) {
+        this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioni);
+        for ( let x = 0; x < this.competizioni.length; x++ ) {
+          this.cCCToSaveToPronostici.push(this.competizioni[x]);
+        }
+      } else {
+        this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioniLf);
+        for ( let x = 0; x < this.competizioniLf.length; x++ ) {
+          this.cCCToSaveToPronostici.push(this.competizioniLf[x]);
+        }
+      }
+    } else {
+      if ( this.tipo_pronostici === 'E' ) {
+        this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioni);
+        this.valoriPronosticiToSave = this.valoriPronosticiToSaveEx;
+      } else {
+        this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioniLf);
+        this.valoriPronosticiToSave = this.valoriPronosticiToSaveLf;
+      }
+    }
+
+    this.idCompetizioneToFill = 0;
+    this.showProno = false;
+
+  }
+
+
  setAdminEnvironment(): void {
 
     if (this.adminPassword) {
 
       this.cCCToSaveToPronostici = [];
-      for ( let x = 0; x < this.competizioni.length; x++ ) {
+      if ( this.tipo_pronostici === 'E' ) {
+        for ( let x = 0; x < this.competizioni.length; x++ ) {
           this.cCCToSaveToPronostici.push(this.competizioni[x]);
+        }
+      } else {
+        for ( let x = 0; x < this.competizioniLf.length; x++ ) {
+          this.cCCToSaveToPronostici.push(this.competizioniLf[x]);
+        }
       }
 
       this.setAdmin(true);
@@ -459,6 +512,68 @@ export class SchedineComponent implements OnInit, OnDestroy {
     if (image) {
        reader.readAsDataURL(image);
     }
+
+  }
+
+  fillPronoToSaveAndSaved (
+                            valoriPronosticiToSave: PronosticiSettimanali[],
+                            valoriPronosticiSaved: PronosticiSettimanali[],
+                            competizioni: AnagraficaCompetizioniSettimanali[],
+                            stagione: number,
+                            idPartecipante: number
+                          ): PronosticiSettimanali[] {
+
+    const retVal: PronosticiSettimanali[] = valoriPronosticiToSave;
+
+    // setto l'array con i pronostici da salvare in modo che poi basti solo inserire il pronostico
+    if (valoriPronosticiSaved.length === 0) {
+      for (let i = 0; i < competizioni.length; i++) {
+        const prono = [];
+        for (let x = 1; x <= competizioni[i].numero_pronostici; x++) {
+          prono.push('XXX');
+        }
+        const pronostico: PronosticiSettimanali = {
+          id_partecipanti: idPartecipante,
+          stagione: stagione,
+          settimana: competizioni[i].settimana,
+          pronostici: competizioni[i].pronostici,
+          valori_pronostici: prono
+        };
+        retVal.push(pronostico);
+      }
+
+    } else if (valoriPronosticiSaved.length !== competizioni.length) {
+      let fnd = false;
+      for (let i = 0; i < competizioni.length; i++) {
+        for (let x = 0; x < valoriPronosticiSaved.length; x++) {
+          if (
+                competizioni[i].stagione === valoriPronosticiSaved[x].stagione &&
+                competizioni[i].settimana === valoriPronosticiSaved[x].settimana
+              ) {
+            fnd = true;
+            break;
+          }
+        }
+        if ( fnd ) {
+          fnd = false;
+        } else {
+          const prono = [];
+          for (let x = 1; x <= competizioni[i].numero_pronostici; x++) {
+            prono.push('XXX');
+          }
+          const pronostico: PronosticiSettimanali = {
+            id_partecipanti: idPartecipante,
+            stagione: stagione,
+            settimana: competizioni[i].settimana,
+            pronostici: competizioni[i].pronostici,
+            valori_pronostici: prono
+          };
+          retVal.push(pronostico);
+        }
+      }
+    }
+
+    return retVal;
 
   }
 

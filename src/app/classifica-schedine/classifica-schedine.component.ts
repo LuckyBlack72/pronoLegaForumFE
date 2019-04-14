@@ -48,6 +48,8 @@ export class ClassificaSchedineComponent implements OnInit {
   isDesktopDevice: boolean;
 
   @SessionStorage() applicationParameter: ApplicationParameter;
+  listaStagioniEx: Stagioni[];
+  listaStagioniLf: Stagioni[];
   listaStagioni: Stagioni[];
 
   @ViewChild('st') stCmb: ElementRef;
@@ -85,14 +87,19 @@ export class ClassificaSchedineComponent implements OnInit {
     nickname: null
   };
 
+  tipo_pronostici: string;
+
   ngOnInit() {
 
     this.deviceInfo = this.deviceDetectorService.getDeviceInfo();
     this.isMobile  = this.deviceDetectorService.isMobile();
     this.isTablet = this.deviceDetectorService.isTablet();
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
+    this.tipo_pronostici = 'E';
 
-    this.listaStagioni = this.activatedRoute.snapshot.data.listaStagioni;
+    this.listaStagioniEx = this.activatedRoute.snapshot.data.listaStagioni;
+    this.listaStagioniLf = this.activatedRoute.snapshot.data.listaStagioniLf;
+    this.setComboStagioni(this.listaStagioniEx, this.listaStagioniLf, this.tipo_pronostici);
     this.nickname = this.applicationParameter.nickname; // mi prendo il valore di nickname dal servizio
     this.showClassifica = false;
 
@@ -116,20 +123,36 @@ export class ClassificaSchedineComponent implements OnInit {
 
   }
 
+  setComboStagioni(
+                    stagioniEx: Stagioni[],
+                    stagioniLf: Stagioni[],
+                    tipo_pronostici: string
+                  ): void {
+
+    if ( tipo_pronostici === 'E') {
+      this.listaStagioni = stagioniEx;
+    } else {
+      this.listaStagioni = stagioniLf;
+    }
+
+  }
+
+
   getClassifica(stagione: number) {
 
-    // console.log(stagione);
+    console.log(stagione);
 
-    const searchParameter: FiltroPronostici = { stagione: stagione};
+    const searchParameter: FiltroPronostici = { stagione: stagione, tipo_pronostici: this.tipo_pronostici };
     const calcoloClassifica = environment.production
                               ? true // this.utilService.checkDateClassifica(this.dataService.data_calcolo_classifica)
                               : true;
 
-    if (calcoloClassifica && stagione !== 0) {
+    if (calcoloClassifica && stagione != 0) {
 
       this.clearDatiClassifica();
       this.schedineService.getDataForClassifica(searchParameter).subscribe(
         dataForClassifica => {
+
                           this.dialogData.pronostici = dataForClassifica[2];
                           this.datiPerClassifica = this.calcoloClassifica(dataForClassifica[2], dataForClassifica[1], dataForClassifica[0]);
                           this.datiperDataSourceClassifica = this.buildDataSource(this.datiPerClassifica);
@@ -384,6 +407,7 @@ export class ClassificaSchedineComponent implements OnInit {
 
   resetClassifica() {
 
+    this.setComboStagioni(this.listaStagioniEx, this.listaStagioniLf, this.tipo_pronostici);
     this.showClassifica = false;
     this.stagioneSelect = null;
 

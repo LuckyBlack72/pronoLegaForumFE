@@ -21,6 +21,7 @@ import {
   AnagraficaCompetizioniSettimanali,
   AnagraficaCompetizioniSettimanaliGrouped
 } from '../../models/models';
+import { StringifyOptions } from 'querystring';
 
 @Component({
   selector: 'app-crud-competizione-settimanale',
@@ -46,6 +47,7 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
 
   @SessionStorage() applicationParameter: ApplicationParameter;
   competizioni: AnagraficaCompetizioniSettimanali[];
+  competizioniLf: AnagraficaCompetizioniSettimanali[];
 
   createUpdateViewCompetizione: string;
   idCompetizioneToEdit: number;
@@ -108,10 +110,17 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
   selectableChip = true;
   removableChip  = true;
 
+  tipo_pronostici: string;
+
   ngOnInit() {
 
+    this.tipo_pronostici = 'E';
+
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
-    this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioni);
+    this.competizioniLf = this.activatedRoute.snapshot.data.listaCompetizioniLf;
+
+    this.setComboCompetizioni(this.competizioni, this.competizioniLf, this.tipo_pronostici);
+
     this.lega = { value : null, name: null};
     this.buildleagueListCombo(this.activatedRoute.snapshot.data.leagueList);
     this.buildRoundListCombo();
@@ -179,36 +188,49 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
         this.stagioneCompetizione = this.utils.getStagioneCorrente();
         break;
       case 'V':
-        for (let x = 0; x < this.competizioni.length; x++) {
-          if (
-              this.competizioni[x].id === this.idCompetizioneToEdit
-            ) {
-            this.competizioneToSave = this.competizioni[x];
-            this.schedina = this.competizioni[x].pronostici;
-            this.buildleagueListCombo(this.activatedRoute.snapshot.data.leagueList);
-//            console.log('this.competizioneToSave');
-//            console.log(this.competizioneToSave);
-            // this.lega = { value: this.competizioneToSave.nome_pronostico, name: this.competizioneToSave.competizione };
-
-// console.log(this.leagueList);
-
-// console.log(this.lega);
-
-            this.stagioneCompetizione =
-            this.competizioneToSave.stagione;
-            this.competizioneToSave.date_competizione =
-            this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(this.competizioneToSave.date_competizione.toString(), false);
-            this.date_competizione =
-            this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)];
-
-
-//            console.log('this.date_competizione');
-//            console.log(this.date_competizione);
-
-            this.dataSourceValoriPronostici.data = [];
-//            this.buildDataSourceValoriPronostici({}, this.competizioneToSave.pronostici, 'I');
-            break;
+        if ( this.tipo_pronostici === 'E' ) {
+          for (let x = 0; x < this.competizioni.length; x++) {
+            if (
+                this.competizioni[x].id === this.idCompetizioneToEdit
+              ) {
+              this.competizioneToSave = this.competizioni[x];
+              this.schedina = this.competizioni[x].pronostici;
+              this.buildleagueListCombo(this.activatedRoute.snapshot.data.leagueList);
+              this.stagioneCompetizione =
+              this.competizioneToSave.stagione;
+              this.competizioneToSave.date_competizione =
+              this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(
+                                                                                  this.competizioneToSave.date_competizione.toString(),
+                                                                                  false
+                                                                                );
+              this.date_competizione =
+              this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)];
+              this.dataSourceValoriPronostici.data = [];
+              break;
+            }
           }
+        } else {
+          for (let x = 0; x < this.competizioniLf.length; x++) {
+            if (
+                this.competizioniLf[x].id === this.idCompetizioneToEdit
+              ) {
+              this.competizioneToSave = this.competizioniLf[x];
+              this.schedina = this.competizioniLf[x].pronostici;
+              this.buildleagueListCombo(this.activatedRoute.snapshot.data.leagueList);
+              this.stagioneCompetizione =
+              this.competizioneToSave.stagione;
+              this.competizioneToSave.date_competizione =
+              this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(
+                                                                                  this.competizioneToSave.date_competizione.toString(),
+                                                                                  false
+                                                                                );
+              this.date_competizione =
+              this.competizioneToSave.date_competizione[(this.competizioneToSave.date_competizione.length - 1)];
+              this.dataSourceValoriPronostici.data = [];
+              break;
+            }
+          }
+
         }
         break;
       default:
@@ -306,7 +328,7 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
 
   refreshDataCompetizioniValoriPronostici(): void {
 
-    this.schedineService.getAnagraficaSchedine(0).subscribe(
+    this.schedineService.getAnagraficaSchedine( 0, this.tipo_pronostici ).subscribe(
       data => {
         // this.sessionStorageService.set('competizioni', data);
         this.competizioni = data;
@@ -319,8 +341,8 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
   loadValoriPronostici(nome_pronostico: string, stagione: string, giornata: string ): void {
 
     if (
-          (nome_pronostico == null || nome_pronostico == '0') ||
-          (stagione == null || stagione == '0')
+          (nome_pronostico == null || nome_pronostico === '0') ||
+          (stagione == null || stagione === '0')
         ) {
 
       this.dataSourceValoriPronostici.data = [];
@@ -382,10 +404,10 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
       this.competizioneToSave.stagione = this.stagioneCompetizione;
       this.competizioneToSave.date_competizione[0] = this.date_competizione;
 
-      this.schedineService.getNewSettimanaSchedina(this.stagioneCompetizione).subscribe(
+      this.schedineService.getNewSettimanaSchedina(this.stagioneCompetizione, this.tipo_pronostici).subscribe(
         settimana => {
                         this.competizioneToSave.settimana = settimana[0].settimana;
-                        this.schedineService.saveAnagraficaSchedine(this.competizioneToSave, 'I').subscribe(
+                        this.schedineService.saveAnagraficaSchedine(this.competizioneToSave, 'I', this.tipo_pronostici).subscribe(
                           data => {
                                     this.resetDataValues('S');
                                     Swal({
@@ -447,7 +469,7 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
             type: 'error'
           });
 
-        } 
+        }
 
     } else {
 
@@ -512,5 +534,18 @@ export class CrudCompetizioneSettimanaleComponent implements OnInit {
 
   }
 
+  setComboCompetizioni(
+                        competizioniEx: AnagraficaCompetizioniSettimanali[],
+                        competizioniLf: AnagraficaCompetizioniSettimanali[],
+                        tipo_pronostici: string
+                      ): void {
+
+    if ( tipo_pronostici === 'E') {
+      this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(competizioniEx);
+    } else {
+      this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(competizioniLf);
+    }
+
+  }
 
 }

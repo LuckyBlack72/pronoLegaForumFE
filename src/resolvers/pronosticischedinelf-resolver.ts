@@ -9,7 +9,7 @@ import { SchedineService } from '../app/service/schedine.service';
 // import { DataService } from '../app/dataservice.service';
 
 @Injectable()
-export class PronosticiSchedineResolver implements Resolve<PronosticiSettimanali[]> {
+export class PronosticiSchedineLfResolver implements Resolve<PronosticiSettimanali[]> {
 
     constructor(
                 private schedineService: SchedineService,
@@ -35,7 +35,7 @@ export class PronosticiSchedineResolver implements Resolve<PronosticiSettimanali
             const searchParameters: FiltroPronostici = {
                 stagione: this.utils.getStagioneCorrente(),
                 idPartecipanti: this.applicationParameter.idPartecipante,
-                tipo_pronostici: 'E'
+                tipo_pronostici: 'L'
                 };
 
             return this.schedineService.getPronosticiSettimanali(searchParameters);
