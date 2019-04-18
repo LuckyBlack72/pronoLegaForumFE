@@ -375,6 +375,7 @@ export class ClassificaSchedineComponent implements OnInit {
 
   showUserProno(tableRow: any): void {
 
+    this.dialogData.competizioni = [];
     this.dialogData.nickname = tableRow.Nickname;
     for (let i = 1; i < (this.displayedColumns.length - 1); i++) { // la prima e l'ultima colonna non mi servono
       this.dialogData.competizioni.push(this.displayedColumns[i]);
