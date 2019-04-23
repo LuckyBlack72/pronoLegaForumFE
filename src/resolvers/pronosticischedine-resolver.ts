@@ -28,7 +28,7 @@ export class PronosticiSchedineResolver implements Resolve<PronosticiSettimanali
 
         if (state.url === '/statisticheSchedine') {
 
-            return this.schedineService.getPronosticiSettimanali({tipo_pronostici: 'L'});
+            return this.schedineService.getPronosticiSettimanali({tipo_pronostici: 'E'});
 
         } else {
 

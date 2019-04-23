@@ -80,26 +80,24 @@ export class StatisticheSchedineComponent implements OnInit {
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
 
 
-    this.resetStatistiche();
     this.tipo_pronostici = 'E';
-
     this.competizioni = this.activatedRoute.snapshot.data.listaCompetizioni;
     this.competizioniLf = this.activatedRoute.snapshot.data.listaCompetizioniLf;
     this.pronosticiEx = this.activatedRoute.snapshot.data.pronosticiSaved;
     this.pronosticiLf = this.activatedRoute.snapshot.data.pronosticiSavedLf;
 
-    if ( this.tipo_pronostici === 'E' ) {
-      this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioni);
-    } else {
-      this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioniLf);
-    }
-
+    this.resetStatistiche();
 
   }
 
   resetStatistiche(): void {
 
     this.isGrafico = false;
+    if ( this.tipo_pronostici === 'E' ) {
+      this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioni);
+    } else {
+      this.competizioniGrouped = this.schedineService.buildCompetizioniGrouped(this.competizioniLf);
+    }
 
   }
 
@@ -107,6 +105,14 @@ export class StatisticheSchedineComponent implements OnInit {
 
     let competizioni: AnagraficaCompetizioniSettimanali[];
     let prono: PronosticiSettimanali[];
+    let stagione: number;
+    let settimana: number;
+    const barChartData1: ChartDataSets = {data: [], label: '1'};
+    const barChartDataX: ChartDataSets = {data: [], label: 'X'};
+    const barChartData2: ChartDataSets = {data: [], label: '2'};
+    const dataFiller: any[] = [];
+    let pronoTotaliSchedina = 0;
+    let pronoTemp = 0;
 
     // Label sono le partite
     // dataset 3 (1 X 2)
@@ -120,15 +126,94 @@ export class StatisticheSchedineComponent implements OnInit {
     }
 
     this.barChartLabels = [];
+    this.barChartData = [];
 
     for (let i = 0; i < competizioni.length; i++) {
       if ( competizioni[i].id === idCompetizione ) {
-        competizioni[i].pronostici.forEach( pronoValue => {
-          this.barChartLabels.push(pronoValue);
-        });
+        stagione = competizioni[i].stagione;
+        settimana = competizioni[i].settimana;
+        for (let ip = 0; ip < competizioni[i].pronostici.length; ip++) {
+          this.barChartLabels.push(competizioni[i].pronostici[ip]);
+          dataFiller.push(0);
+        }
+        barChartData1.data = dataFiller;
+        barChartDataX.data = dataFiller;
+        barChartData2.data = dataFiller;
+
+        break;
       }
+    }
+
+    for (let x = 0; x < prono.length; x++) {
+//console.log('Stagione : ' + prono[x].stagione + ' - ' + stagione);
+//console.log('Settimana : ' + prono[x].settimana + ' - ' + settimana);
+      if ( prono[x].stagione === stagione && prono[x].settimana === settimana ) {
+        pronoTotaliSchedina += 1;
+        for (let y = 0; y < prono[x].valori_pronostici.length; y++) {
+          pronoTemp = 0;
+console.log('Prono : ' + prono[x].valori_pronostici[y]);
+          switch (prono[x].valori_pronostici[y]) {
+            case '1' : {
+              pronoTemp = +barChartData1.data[y].toString(); // così diventa numero
+console.log(' p1 ' + pronoTemp + ' -  y: ' + y);              
+              pronoTemp += 1;
+              barChartData1.data[y] = pronoTemp;
+console.log('Prono 1 : ' + barChartData1.data);
+              break;
+            }
+            case 'X' : {
+              pronoTemp = +barChartDataX.data[y].toString(); // così diventa numero
+console.log(' pX ' + pronoTemp + ' -  y: ' + y);                            
+              pronoTemp += 1;
+              barChartDataX.data[y] = pronoTemp;
+console.log('Prono X : ' + barChartDataX.data);
+              break;
+            }
+            case '2' : {
+              pronoTemp = +barChartData2.data[y].toString(); // così diventa numero
+console.log(' p2 ' + pronoTemp + ' -  y: ' + y);                                          
+              pronoTemp += 1;
+              barChartData2.data[y] = pronoTemp;
+console.log('Prono 2 : ' + barChartData2.data);              
+              break;
+            }
+            default : {
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    for (let iPerc = 0; iPerc < barChartData1.data.length; iPerc++) { // Calcolo le percentuali
+
+      pronoTemp = 0;
+      pronoTemp = +barChartData1.data[iPerc].toString(); // così diventa numero
+      pronoTemp = +(( pronoTemp / pronoTotaliSchedina ) * 100).toFixed(2);
+      barChartData1.data[iPerc] = pronoTemp;
+
+      pronoTemp = 0;
+      pronoTemp = +barChartDataX.data[iPerc].toString(); // così diventa numero
+      pronoTemp = +(( pronoTemp / pronoTotaliSchedina ) * 100).toFixed(2);
+      barChartDataX.data[iPerc] = pronoTemp;
+
+      pronoTemp = 0;
+      pronoTemp = +barChartData2.data[iPerc].toString(); // così diventa numero
+      pronoTemp = +(( pronoTemp / pronoTotaliSchedina ) * 100).toFixed(2);
+      barChartData2.data[iPerc] = pronoTemp;
 
     }
+
+    console.log(barChartData1);
+    console.log(barChartDataX);
+    console.log(barChartData2);
+
+
+    this.barChartData.push(barChartData1);
+    this.barChartData.push(barChartDataX);
+    this.barChartData.push(barChartData2);
+
+    this.isGrafico = true;
 
   }
 
