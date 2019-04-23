@@ -31,6 +31,8 @@ import { ClassificaSchedineComponent } from './classifica-schedine/classifica-sc
 import { PronosticiSchedineLfResolver } from '../resolvers/pronosticischedinelf-resolver';
 import { ListaSchedineLfResolver } from '../resolvers/listaschedinelf-resolver';
 import { StagioniLfResolver } from '../resolvers/stagionilf-resolver';
+import { SceltaStatisticheComponent } from './scelta-statistiche/scelta-statistiche.component';
+import { StatisticheSchedineComponent } from './statistiche-schedine/statistiche-schedine.component';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -112,15 +114,26 @@ const routes: Routes = [
   },
   { path: 'scelta-classifica',
     component: SceltaClassificaComponent
-},
-{ path: 'classifica-schedine',
-component: ClassificaSchedineComponent,
-resolve: {
-          listaStagioni: StagioniResolver,
-          listaStagioniLf : StagioniLfResolver
-        }
-},
-
+  },
+  { path: 'classifica-schedine',
+    component: ClassificaSchedineComponent,
+    resolve: {
+              listaStagioni: StagioniResolver,
+              listaStagioniLf : StagioniLfResolver
+            }
+  },
+  { path: 'scelta-statistiche',
+    component: SceltaStatisticheComponent
+  },
+  { path: 'statistiche-schedine',
+    component: StatisticheSchedineComponent,
+    resolve: {
+                listaCompetizioni: ListaSchedineResolver,
+                pronosticiSaved: PronosticiSchedineResolver,
+                listaCompetizioniLf: ListaSchedineLfResolver,
+                pronosticiSavedLf: PronosticiSchedineLfResolver
+              }
+  }
 
 ];
 

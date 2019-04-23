@@ -66,6 +66,8 @@ import { ClassificaSchedineComponent, PronoSchedineUserComponent } from './class
 import { ListaSchedineLfResolver } from '../resolvers/listaschedinelf-resolver';
 import { PronosticiSchedineLfResolver } from '../resolvers/pronosticischedinelf-resolver';
 import { StagioniLfResolver } from '../resolvers/stagionilf-resolver';
+import { SceltaStatisticheComponent } from './scelta-statistiche/scelta-statistiche.component';
+import { StatisticheSchedineComponent } from './statistiche-schedine/statistiche-schedine.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +88,9 @@ import { StagioniLfResolver } from '../resolvers/stagionilf-resolver';
     SchedineComponent,
     SceltaClassificaComponent,
     ClassificaSchedineComponent,
-    PronoSchedineUserComponent
+    PronoSchedineUserComponent,
+    SceltaStatisticheComponent,
+    StatisticheSchedineComponent
   ],
   imports: [
     BrowserModule,
