@@ -3,6 +3,7 @@
 <app-pageheader></app-pageheader>
 
 <div style="text-align:center">
+  <div *ngIf="showLoadingIndicator" class="spinner"></div>
   <router-outlet></router-outlet> <!-- tells the router where to display routed views. -->
 </div>
 
