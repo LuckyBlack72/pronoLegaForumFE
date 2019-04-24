@@ -70,118 +70,69 @@
 </div> <!-- fine div desktopMode -->
 
 <!-- Tablet e Mobile -->
-<!--
+
 <div *ngIf="!isDesktopDevice">
 
   <div class="container-fluid">
 
+    <div class="row"> <!-- Date on prono and legaforum prono -->
+      <div class="col-xs-12"> <!-- Dropdown Competizioni -->
+        <mat-radio-group
+        [(ngModel)]="tipo_pronostici" 
+        (change)="resetStatistiche()"
+        >
+          <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+          <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  
     <div class='row'>
-      <div class='col-sm-1'></div>
-      <div class='col-sm-10'>
+      <div class='col-xs-12'>&nbsp;</div>
+    </div>
+
+    <div class='row'>
+      <div class='col-xs-12'>
         <mat-form-field>
           <mat-select 
           #selComp
-          placeholder="Stagione"
-          [(ngModel)]="stagioneToCheck"
-          (selectionChange)="setCompetizioni(stagioneToCheck)"
+          placeholder="Schedina"
+          [(ngModel)]="idCompetizioneToFill"
+          (selectionChange)="createGraph(idCompetizioneToFill, tipo_pronostici)"
           >
-            <mat-option class="mat-body-1" *ngFor="let stagione of stagioni" [value]="stagione.stagione">
-                {{ stagione.stagione }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>            
-      </div>
-      <div class='col-sm-1'></div>
-    </div>
-
-    <div class='row'>
-        <div class='col-sm-12'>&nbsp;</div>
-    </div>
-
-    <div class='row'>
-      <div class='col-sm-1'></div>
-      <div class='col-sm-10'>
-        <mat-form-field>
-            <mat-select 
-            #selComp
-            placeholder="Competizione"
-            [(ngModel)]="idCompetizioneToFill"
-            (selectionChange)="setPosizioniCompetizione(idCompetizioneToFill)"
-            >
-              <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
-                <mat-option class="mat-body-1" *ngFor="let competizione of competizioneGroup.competizioni" [value]="competizione.id">
-                    {{ competizione.competizione }}
-                </mat-option>
-              </mat-optgroup>
-            </mat-select>
-          </mat-form-field>  
-      </div>
-      <div class='col-sm-1'></div>
-    </div>    
-
-    <div class='row'>
-        <div class='col-sm-12'>&nbsp;</div>
-    </div>
-
-    <div class='row'>
-      <div class='col-sm-1'></div>
-      <div class='col-sm-10'>
-        <mat-form-field>
-          <mat-select 
-          #selComp
-          placeholder="Posizione"
-          [(ngModel)]="posizioneToCheck"
-          >
-            <mat-option class="mat-body-1" *ngFor="let posizione of numeroPronostici" [value]="posizione">
-                {{ posizione }}
-            </mat-option>
+            <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+            <mat-optgroup *ngFor="let competizioneGroup of competizioniGrouped" [label]="competizioneGroup.group">
+              <mat-option class="mat-body-1" *ngFor="let competizione of competizioneGroup.competizioni" [value]="competizione.id">
+                {{ competizione.settimana }}
+              </mat-option>                        
+            </mat-optgroup>
           </mat-select>
         </mat-form-field>
       </div>
-      <div class='col-sm-1'></div>
-    </div>    
-
-    <div class='row'>
-        <div class='col-sm-12'>&nbsp;</div>
     </div>
 
-      <div class='row'>
-        <div class='col-sm-1'></div>
-        <div class='col-sm-10'>
-          <button  
-          class="mat-button"
-          mat-raised-button color="primary"
-          (click)="calcolaPercentuali(idCompetizioneToFill,posizioneToCheck,stagioneToCheck)" 
-          title="Calcola Percentuali"
-          >
-            Calcola Percentuali
-          </button>     
-        </div>
-        <div class='col-sm-1'></div>
-      </div>   
-
-      <div class='row'>
-        <div class='col-sm-12'>&nbsp;</div>
-      </div>
+    <div class='row'>
+        <div class='col-xs-12'>&nbsp;</div>
+    </div>
       
-      <div *ngIf=isGrafico>
-        <div class="row"> 
-          <div class="col-sm-12">
-            <div style="display: block">
-              <canvas baseChart
-                [datasets]="barChartData"
-                [labels]="barChartLabels"
-                [options]="barChartOptions"
-                [plugins]="barChartPlugins"
-                [legend]="barChartLegend"
-                [chartType]="barChartType">
-              </canvas>
-            </div>
+    <div *ngIf=isGrafico>
+      <div class="row"> 
+        <div class="col-xs-12">
+          <div style="display: block">
+            <canvas baseChart
+              [datasets]="barChartData"
+              [labels]="barChartLabels"
+              [options]="barChartOptions"
+              [plugins]="barChartPlugins"
+              [legend]="barChartLegend"
+              [chartType]="barChartType">
+            </canvas>
           </div>
         </div>
       </div>
-  
     </div>
+  
+  </div>
 
 </div>
--->
+
