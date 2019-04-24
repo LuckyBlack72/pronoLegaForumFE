@@ -26,7 +26,7 @@ export class PronosticiSchedineResolver implements Resolve<PronosticiSettimanali
     ): Observable<PronosticiSettimanali[]> {
 
 
-        if (state.url === '/statisticheSchedine') {
+        if (state.url === '/statistiche-schedine') {
 
             return this.schedineService.getPronosticiSettimanali({tipo_pronostici: 'E'});
 
