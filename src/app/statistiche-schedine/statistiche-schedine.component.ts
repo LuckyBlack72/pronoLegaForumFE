@@ -107,10 +107,13 @@ export class StatisticheSchedineComponent implements OnInit {
     let prono: PronosticiSettimanali[];
     let stagione: number;
     let settimana: number;
-    const barChartData1: ChartDataSets = {data: [], label: '1'};
-    const barChartDataX: ChartDataSets = {data: [], label: 'X'};
-    const barChartData2: ChartDataSets = {data: [], label: '2'};
-    const dataFiller: any[] = [];
+    let barChartData1: ChartDataSets = {data: [], label: '1'};
+    let barChartDataX: ChartDataSets = {data: [], label: 'X'};
+    let barChartData2: ChartDataSets = {data: [], label: '2'};
+    const dataFiller1: any[] = [];
+    const dataFillerX: any[] = [];
+    const dataFiller2: any[] = [];
+
     let pronoTotaliSchedina = 0;
     let pronoTemp = 0;
 
@@ -134,47 +137,61 @@ export class StatisticheSchedineComponent implements OnInit {
         settimana = competizioni[i].settimana;
         for (let ip = 0; ip < competizioni[i].pronostici.length; ip++) {
           this.barChartLabels.push(competizioni[i].pronostici[ip]);
-          dataFiller.push(0);
+          dataFiller1.push(0);
+          dataFillerX.push(0);
+          dataFiller2.push(0);
         }
-        barChartData1.data = dataFiller;
-        barChartDataX.data = dataFiller;
-        barChartData2.data = dataFiller;
-
+        barChartData1 = { data: dataFiller1 , label: '1'};
+        barChartDataX = { data: dataFillerX , label: 'X'};
+        barChartData2 = { data: dataFiller2 , label: '2'};
+/*
+console.log('-- Prima -----------------');
+console.log(barChartData1.data);
+console.log(barChartDataX.data);
+console.log(barChartData2.data);
+console.log('-- Prima -----------------');
+*/
         break;
       }
     }
 
     for (let x = 0; x < prono.length; x++) {
-//console.log('Stagione : ' + prono[x].stagione + ' - ' + stagione);
-//console.log('Settimana : ' + prono[x].settimana + ' - ' + settimana);
+// console.log('Stagione : ' + prono[x].stagione + ' - ' + stagione);
+// console.log('Settimana : ' + prono[x].settimana + ' - ' + settimana);
       if ( prono[x].stagione === stagione && prono[x].settimana === settimana ) {
         pronoTotaliSchedina += 1;
         for (let y = 0; y < prono[x].valori_pronostici.length; y++) {
           pronoTemp = 0;
-console.log('Prono : ' + prono[x].valori_pronostici[y]);
+// console.log('Prono : ' + prono[x].valori_pronostici[y]);
           switch (prono[x].valori_pronostici[y]) {
             case '1' : {
               pronoTemp = +barChartData1.data[y].toString(); // così diventa numero
-console.log(' p1 ' + pronoTemp + ' -  y: ' + y);              
+// console.log(' p1 ' + pronoTemp + ' -  y: ' + y);
               pronoTemp += 1;
               barChartData1.data[y] = pronoTemp;
-console.log('Prono 1 : ' + barChartData1.data);
+// console.log('Prono 1 : ' + barChartData1.data);
+// console.log(barChartDataX.data);
+// console.log(barChartData2.data);
               break;
             }
             case 'X' : {
               pronoTemp = +barChartDataX.data[y].toString(); // così diventa numero
-console.log(' pX ' + pronoTemp + ' -  y: ' + y);                            
+// console.log(' pX ' + pronoTemp + ' -  y: ' + y);
               pronoTemp += 1;
               barChartDataX.data[y] = pronoTemp;
-console.log('Prono X : ' + barChartDataX.data);
+// console.log('Prono X : ' + barChartDataX.data);
+// console.log(barChartData1.data);
+// console.log(barChartData2.data);
               break;
             }
             case '2' : {
               pronoTemp = +barChartData2.data[y].toString(); // così diventa numero
-console.log(' p2 ' + pronoTemp + ' -  y: ' + y);                                          
+// console.log(' p2 ' + pronoTemp + ' -  y: ' + y);                                          
               pronoTemp += 1;
               barChartData2.data[y] = pronoTemp;
-console.log('Prono 2 : ' + barChartData2.data);              
+// console.log('Prono 2 : ' + barChartData2.data);
+// console.log(barChartData1.data);
+// console.log(barChartDataX.data);
               break;
             }
             default : {
@@ -204,10 +221,13 @@ console.log('Prono 2 : ' + barChartData2.data);
 
     }
 
+    /*
+    console.log('-- DOPO ---');
     console.log(barChartData1);
     console.log(barChartDataX);
     console.log(barChartData2);
-
+    console.log('-- DOPO ---');
+    */
 
     this.barChartData.push(barChartData1);
     this.barChartData.push(barChartDataX);
