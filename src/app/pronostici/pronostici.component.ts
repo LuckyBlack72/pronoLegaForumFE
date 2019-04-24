@@ -526,6 +526,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
                                                               this.competizioni
         );
 
+        Swal.showLoading();
+
         this.externalApiService.getAggiornamentiCompetizione(urlsToCall).subscribe(
 
           apiData => {
@@ -583,6 +585,7 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
                           }
                         }
                         this.showProno = false;
+                        Swal.hideLoading();
                         Swal({
                           allowOutsideClick: false,
                           allowEscapeKey: false,
@@ -592,25 +595,32 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
                         });
                   }
                   ,
-                  error => Swal({
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    title: 'Errore Aggiornamento Automatico Classifiche Competizioni',
-                    type: 'error'
-                  })
+                  error => {
+                    Swal.hideLoading();
+                    Swal({
+                      allowOutsideClick: false,
+                      allowEscapeKey: false,
+                      title: 'Errore Aggiornamento Automatico Classifiche Competizioni',
+                      type: 'error'
+                    });
+                  }
                 );
               }
               ,
-              error => Swal({
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                title: 'Errore Aggiornamento Automatico Classifiche Competizioni',
-                type: 'error'
-              })
+              error => {
+                Swal.hideLoading();
+                Swal({
+                  allowOutsideClick: false,
+                  allowEscapeKey: false,
+                  title: 'Errore Aggiornamento Automatico Classifiche Competizioni',
+                  type: 'error'
+                });
+              }
             );
 
     } else {
 
+      Swal.hideLoading();
       Swal({
         allowOutsideClick: false,
         allowEscapeKey: false,
