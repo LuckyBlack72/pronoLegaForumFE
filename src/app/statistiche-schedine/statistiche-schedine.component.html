@@ -76,7 +76,8 @@
   <div class="container-fluid">
 
     <div class="row"> <!-- Date on prono and legaforum prono -->
-      <div class="col-xs-12"> <!-- Dropdown Competizioni -->
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6"> <!-- Dropdown Competizioni -->
         <mat-radio-group
         [(ngModel)]="tipo_pronostici" 
         (change)="resetStatistiche()"
@@ -85,14 +86,16 @@
           <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
         </mat-radio-group>
       </div>
+      <div class="col-sm-3"></div>
     </div>
   
     <div class='row'>
-      <div class='col-xs-12'>&nbsp;</div>
+      <div class='col-sm-12'>&nbsp;</div>
     </div>
 
     <div class='row'>
-      <div class='col-xs-12'>
+      <div class="col-sm-3"></div>
+      <div class='col-sm-6'>
         <mat-form-field>
           <mat-select 
           #selComp
@@ -109,15 +112,16 @@
           </mat-select>
         </mat-form-field>
       </div>
+      <div class="col-sm-3"></div>
     </div>
 
     <div class='row'>
-        <div class='col-xs-12'>&nbsp;</div>
+        <div class='col-sm-12'>&nbsp;</div>
     </div>
       
     <div *ngIf=isGrafico>
       <div class="row"> 
-        <div class="col-xs-12">
+        <div class="col-sm-12">
           <div style="display: block">
             <canvas baseChart
               [datasets]="barChartData"
