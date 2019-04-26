@@ -94,7 +94,7 @@
                     <div class= "col-md-4">
                         <mat-button-toggle-group 
                             name="prono" aria-label="Pronostici"
-                            [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronosticitipo_pronostici)].valori_pronostici[(e - 1)]"
+                            [(ngModel)]="valoriPronosticiToSave[getIndexCompetizione(idCompToselect, tipo_pronostici)].valori_pronostici[(e - 1)]"
                         >
                             <mat-button-toggle value="1" [disabled]="pronoClosed">1</mat-button-toggle>
                             <mat-button-toggle value="X" [disabled]="pronoClosed">X</mat-button-toggle>
