@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Event, Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
@@ -11,13 +12,15 @@ export class AppComponent {
 
   // per caricare lo spinner sulla navigazione tra pagine
   showLoadingIndicator = true;
-  constructor ( private router: Router) {
+  constructor ( private router: Router, private spinner: NgxSpinnerService) {
     this.router.events.subscribe((routerEvent: Event) => {
       if ( routerEvent instanceof NavigationStart ) {
-        this.showLoadingIndicator = true;
+        // this.showLoadingIndicator = true;
+        this.spinner.show();
       }
       if ( routerEvent instanceof NavigationEnd ) {
-        this.showLoadingIndicator = false;
+        // this.showLoadingIndicator = false;
+        this.spinner.hide();
       }
     });
   }

@@ -10,6 +10,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { CountdownTimerModule } from 'ngx-countdown-timer';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 // Hotkeys
 import { HotkeyModule } from 'angular2-hotkeys';
@@ -110,7 +111,8 @@ import { StatisticheSchedineComponent } from './statistiche-schedine/statistiche
     HotkeyModule.forRoot(),
     WebStorageModule,
     DeviceDetectorModule.forRoot(),
-    ChartsModule
+    ChartsModule,
+    NgxSpinnerModule
   ],
   // tslint:disable-next-line:max-line-length
   providers: [

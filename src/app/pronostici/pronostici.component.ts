@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { SessionStorage, LocalStorage, SessionStorageService, LocalStorageService } from 'ngx-store';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 // import { DataService } from '../dataservice.service';
 import { PronosticiService } from '../service/pronostici.service';
@@ -50,7 +51,8 @@ export class PronosticiComponent implements OnInit, OnDestroy {
               private deviceDetectorService: DeviceDetectorService,
               private localStorageService: LocalStorageService,
               private sessionStorageService: SessionStorageService,
-              private crudCompetizioneService: CrudCompetizioneService
+              private crudCompetizioneService: CrudCompetizioneService,
+              private spinner: NgxSpinnerService
             ) {
     this.subscriptionHotKey = this.commandService.commands.subscribe(c => this.handleCommand(c));
   }
@@ -526,7 +528,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
                                                               this.competizioni
         );
 
-        Swal.showLoading();
+        // Swal.showLoading();
+        this.spinner.show();
 
         this.externalApiService.getAggiornamentiCompetizione(urlsToCall).subscribe(
 
@@ -585,7 +588,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
                           }
                         }
                         this.showProno = false;
-                        Swal.hideLoading();
+                        // Swal.hideLoading();
+                        this.spinner.hide();
                         Swal({
                           allowOutsideClick: false,
                           allowEscapeKey: false,
@@ -596,7 +600,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
                   }
                   ,
                   error => {
-                    Swal.hideLoading();
+                    // Swal.hideLoading();
+                    this.spinner.hide();
                     Swal({
                       allowOutsideClick: false,
                       allowEscapeKey: false,
@@ -608,7 +613,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
               }
               ,
               error => {
-                Swal.hideLoading();
+                // Swal.hideLoading();
+                this.spinner.hide();
                 Swal({
                   allowOutsideClick: false,
                   allowEscapeKey: false,
@@ -620,7 +626,8 @@ setPronosticiInseriti(value: string, index: number, idCompetizione: number) {
 
     } else {
 
-      Swal.hideLoading();
+      // Swal.hideLoading();
+      this.spinner.hide();
       Swal({
         allowOutsideClick: false,
         allowEscapeKey: false,
