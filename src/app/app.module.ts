@@ -69,6 +69,7 @@ import { PronosticiSchedineLfResolver } from '../resolvers/pronosticischedinelf-
 import { StagioniLfResolver } from '../resolvers/stagionilf-resolver';
 import { SceltaStatisticheComponent } from './scelta-statistiche/scelta-statistiche.component';
 import { StatisticheSchedineComponent } from './statistiche-schedine/statistiche-schedine.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { StatisticheSchedineComponent } from './statistiche-schedine/statistiche
     ClassificaSchedineComponent,
     PronoSchedineUserComponent,
     SceltaStatisticheComponent,
-    StatisticheSchedineComponent
+    StatisticheSchedineComponent,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,

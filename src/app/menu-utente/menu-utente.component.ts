@@ -127,6 +127,9 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
       case 'MenuUtenteComponent.CreaSchedine': // Ctrl + right
         this.nuovaSchedina();
         break;
+      case 'MenuUtenteComponent.AdminPanel': // Ctrl + right
+        this.adminPanel();
+        break;
       default:
         break;
     }
@@ -227,6 +230,36 @@ export class MenuUtenteComponent implements OnInit, OnDestroy {
         data => {
           this.applicationParameter.menu_utente_page = true;
           this.router.navigate(['crud-competizione-settimanale']);
+          }
+        ,
+        error => Swal({
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          title: 'Password Errata',
+          type: 'error'
+        })
+      );
+    }
+  }
+
+  async adminPanel() {
+
+    const {value: password} = await Swal({
+      title: 'Administrator Login',
+      input: 'password',
+      inputPlaceholder: 'Enter Administrator password',
+      inputAttributes: {
+        autocapitalize: 'off',
+        autocorrect: 'off'
+      },
+      showCancelButton: true
+    });
+
+    if (password) {
+      this.pronosticiService.checkAdminPassword(password).subscribe(
+        data => {
+          this.applicationParameter.menu_utente_page = true;
+          this.router.navigate(['admin-panel']);
           }
         ,
         error => Swal({

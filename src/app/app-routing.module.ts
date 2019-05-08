@@ -33,6 +33,7 @@ import { ListaSchedineLfResolver } from '../resolvers/listaschedinelf-resolver';
 import { StagioniLfResolver } from '../resolvers/stagionilf-resolver';
 import { SceltaStatisticheComponent } from './scelta-statistiche/scelta-statistiche.component';
 import { StatisticheSchedineComponent } from './statistiche-schedine/statistiche-schedine.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 
 // qui si mettono i resolver per i vari routing
 const routes: Routes = [
@@ -133,8 +134,10 @@ const routes: Routes = [
                 listaCompetizioniLf: ListaSchedineLfResolver,
                 pronosticiSavedLf: PronosticiSchedineLfResolver
               }
+  },
+  { path: 'admin-panel',
+    component: AdminPanelComponent
   }
-
 ];
 
 @NgModule({
