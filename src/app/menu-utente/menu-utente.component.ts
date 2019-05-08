@@ -11,7 +11,11 @@ import { UtilService } from '../service/util.service';
 import { PronosticiService } from '../service/pronostici.service';
 import { CommandService, Command } from '../service/command.service';
 
-import { ApplicationParameter, DeviceInfo, Stagioni, DatePronostici } from '../../models/models';
+import {
+          ApplicationParameter,
+          DeviceInfo,
+          Stagioni
+        } from '../../models/models';
 
 import { Utils } from '../../models/utils';
 

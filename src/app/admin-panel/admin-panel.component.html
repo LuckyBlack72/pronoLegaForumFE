@@ -2,7 +2,26 @@
 
 <!-- Desktop -->
 <div *ngIf="isDesktopDevice" class="container-fluid">
+  <div class="row">
+  
+    <div class="col-md-1"></div>
+    
+    <div class="col-md-2">
+      <button  
+        class="mat-button"
+        mat-raised-button color="primary"
+        (click)="exportExcelUtenti()" 
+        title="Export Excel Utenti"
+      >
+        Export Excel Utenti
+      </button>   
+    </div>   
 
+    <div class="col-md-8"></div>
+
+    <div class="col-md-1"></div>
+  
+  </div>
 </div>
 
 <!-- Tablet e Mobile -->

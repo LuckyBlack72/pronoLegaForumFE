@@ -6,7 +6,7 @@ import * as XLSX from 'xlsx';
 import { SessionStorage, SessionStorageService } from 'ngx-store';
 
 // import { DataService } from './dataservice.service';
-import { Pronostici, ExcelRow, ReloadLocalStorageValues } from '../../models/models';
+import { Pronostici, ExcelRow, ReloadLocalStorageValues, AnagraficaPartecipanti } from '../../models/models';
 import { Utils } from '../../models/utils';
 import { ApplicationParameter, LogAggiornamenti } from '../../models/models';
 
@@ -126,7 +126,7 @@ export class UtilService {
                    '_' +
                    this.utils.getStagione().substring(0, 4) +
                    '_' +
-                    now.getDate() + '-' + now.getMonth() + '-' + now.getFullYear() +
+                    now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() +
                     '.xlsx'
                   ); // scrive il file e di conseguenza te lo fa salvare
 
@@ -209,5 +209,26 @@ export class UtilService {
   return retValObj;
 
   }
+
+  exportUtentiExcel(utenti: AnagraficaPartecipanti[]) {
+
+    const workbook = XLSX.utils.book_new();
+    const now = new Date();
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      XLSX.utils.json_to_sheet(utenti),
+      'Utenti'
+    );
+
+    XLSX.writeFile(workbook,
+                   'Utenti' +
+                   '_' +
+                    now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() +
+                    '.xlsx'
+                  ); // scrive il file e di conseguenza te lo fa salvare
+
+  }
+
 
 }
