@@ -17,7 +17,44 @@
       </button>   
     </div>   
 
-    <div class="col-md-8"></div>
+    <div class="col-md-8">
+      
+      <div class="form-group">
+        
+        <mat-radio-group
+          [(ngModel)]="tipoPronostici" 
+          (change)="changeTipoPronostici()"
+        >
+          <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+          <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+        </mat-radio-group>
+      
+        &nbsp;&nbsp;
+      
+        <mat-form-field>
+          <mat-select 
+            #st id="st"
+            placeholder="Stagione"
+            [(ngModel)]="stagioneSelect"
+          >
+            <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+            <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioni" [value]="stagione.stagione">{{ stagione.stagione }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        &nbsp;&nbsp;
+      
+        <button  
+          class="mat-button"
+          mat-raised-button color="warn"
+          (click)="exportExcelSchedine()" 
+          title="Export Excel Schedine"
+        >
+          Export Excel Schedine
+        </button>   
+
+      </div>
+
+    </div>
 
     <div class="col-md-1"></div>
   

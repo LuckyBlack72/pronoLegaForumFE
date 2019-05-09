@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 
-import { UtilService } from '../service/util.service';
-import { PronosticiService } from '../service/pronostici.service';
-
+import { ActivatedRoute } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import Swal from 'sweetalert2';
 
+import { UtilService } from '../service/util.service';
+import { PronosticiService } from '../service/pronostici.service';
+import { SchedineService } from '../service/schedine.service';
+
 import {
           DeviceInfo,
-          FiltroAnagraficaPartecipanti
+          FiltroAnagraficaPartecipanti,
+          Stagioni
         } from '../../models/models';
 
 @Component({
@@ -25,10 +28,18 @@ export class AdminPanelComponent implements OnInit {
 
   filtroExportPartecipanti: FiltroAnagraficaPartecipanti;
 
+  listaStagioniEx: Stagioni[];
+  listaStagioniLf: Stagioni[];
+  listaStagioni: Stagioni[];
+  tipoPronostici: string;
+  stagioneSelect: number;
+
   constructor(
                 private deviceDetectorService: DeviceDetectorService,
+                private activatedRoute: ActivatedRoute,
                 private utilService: UtilService,
-                private pronosticiService: PronosticiService
+                private pronosticiService: PronosticiService,
+                private schedineService: SchedineService
              ) { }
 
   ngOnInit() {
@@ -37,6 +48,11 @@ export class AdminPanelComponent implements OnInit {
     this.isMobile  = this.deviceDetectorService.isMobile();
     this.isTablet = this.deviceDetectorService.isTablet();
     this.isDesktopDevice = this.deviceDetectorService.isDesktop();
+
+    this.listaStagioniEx = this.activatedRoute.snapshot.data.listaStagioni;
+    this.listaStagioniLf = this.activatedRoute.snapshot.data.listaStagioniLf;
+    this.tipoPronostici = 'E';
+    this.setComboStagioni(this.listaStagioniEx, this.listaStagioniLf, this.tipoPronostici);
 
   }
 
@@ -55,7 +71,44 @@ export class AdminPanelComponent implements OnInit {
       })
     );
 
+  }
+
+  exportExcelSchedine ():  void {
+
+    this.schedineService.getAnagraficaSchedine(this.stagioneSelect, this.tipoPronostici).subscribe(
+      schedine => {
+        this.utilService.exportSchedineExcel(schedine);
+      }
+      ,
+      error => Swal({
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        title: 'Errore Recupero dati',
+        type: 'error'
+      })
+    );
 
   }
+
+  changeTipoPronostici() {
+
+    this.setComboStagioni(this.listaStagioniEx, this.listaStagioniLf, this.tipoPronostici);
+    this.stagioneSelect = null;
+
+  }
+
+  setComboStagioni(
+    stagioniEx: Stagioni[],
+    stagioniLf: Stagioni[],
+    tipoPronostici: string
+  ): void {
+
+    if ( tipoPronostici === 'E') {
+      this.listaStagioni = stagioniEx;
+    } else {
+      this.listaStagioni = stagioniLf;
+  }
+
+}
 
 }

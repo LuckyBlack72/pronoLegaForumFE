@@ -185,6 +185,17 @@ export interface AnagraficaCompetizioniSettimanali {
   punti_lista?: number;
 }
 
+export interface AnagraficaCompetizioniSettimanaliExcel {
+  id?: number;
+  stagione?: number;
+  settimana?: number;
+  pronostici?: string;
+  valori_pronostici?: string;
+  date_competizione?: DatePronostici[];
+  numero_pronostici?: number;
+  punti_esatti?: number;
+  punti_lista?: number;
+}
 export interface PronosticiSettimanali {
   id?: number;
   stagione?: number;

@@ -6,7 +6,14 @@ import * as XLSX from 'xlsx';
 import { SessionStorage, SessionStorageService } from 'ngx-store';
 
 // import { DataService } from './dataservice.service';
-import { Pronostici, ExcelRow, ReloadLocalStorageValues, AnagraficaPartecipanti } from '../../models/models';
+import {
+          Pronostici,
+          ExcelRow,
+          ReloadLocalStorageValues,
+          AnagraficaPartecipanti,
+          AnagraficaCompetizioniSettimanali,
+          AnagraficaCompetizioniSettimanaliExcel
+       } from '../../models/models';
 import { Utils } from '../../models/utils';
 import { ApplicationParameter, LogAggiornamenti } from '../../models/models';
 
@@ -230,5 +237,58 @@ export class UtilService {
 
   }
 
+  exportSchedineExcel(schedine: any[]) {
+
+    const schedineExcel: AnagraficaCompetizioniSettimanaliExcel[] = [];
+    let pronoFlat = '';
+    let valoriPronoFlat = '';
+
+    schedine.forEach(function (value) {
+      pronoFlat = '';
+      valoriPronoFlat = '';
+      value.pronostici.forEach(function (prono) {
+        pronoFlat = pronoFlat.concat('[');
+        pronoFlat = pronoFlat.concat(prono);
+        pronoFlat = pronoFlat.concat(']');
+        pronoFlat = pronoFlat.concat(' ');
+      });
+      value.valori_pronostici_classifica.forEach(function (valoriProno) {
+        valoriPronoFlat = valoriPronoFlat.concat('[');
+        valoriPronoFlat = valoriPronoFlat.concat(valoriProno);
+        valoriPronoFlat = valoriPronoFlat.concat(']');
+        valoriPronoFlat = valoriPronoFlat.concat(' ');
+      });
+
+      schedineExcel.push({
+                            id: value.id,
+                            stagione: value.stagione,
+                            settimana: value.settimana,
+                            pronostici: pronoFlat,
+                            valori_pronostici: valoriPronoFlat,
+                            date_competizione: value.date_competizione,
+                            numero_pronostici: value.numero_pronostici,
+                            punti_esatti: value.punti_esatti,
+                            punti_lista: value.punti_lista
+                        });
+    });
+
+    const workbook = XLSX.utils.book_new();
+    const now = new Date();
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      XLSX.utils.json_to_sheet(schedineExcel),
+      'Schedine'
+    );
+
+    XLSX.writeFile(workbook,
+                   'Schedine' +
+                   '_' +
+                   schedineExcel[0].stagione +
+                   '_' +
+                    now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() +
+                    '.xlsx'
+                  ); // scrive il file e di conseguenza te lo fa salvare
+  }
 
 }

@@ -136,7 +136,11 @@ const routes: Routes = [
               }
   },
   { path: 'admin-panel',
-    component: AdminPanelComponent
+    component: AdminPanelComponent,
+    resolve: {
+      listaStagioni: StagioniResolver,
+      listaStagioniLf : StagioniLfResolver
+    }
   }
 ];
 
