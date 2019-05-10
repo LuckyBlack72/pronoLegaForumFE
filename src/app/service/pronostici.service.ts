@@ -17,7 +17,8 @@ import { ValoriPronostici,
         Stagioni,
         ValoriPronosticiClassifica,
         TipoCompetizione,
-        LogAggiornamenti} from '../../models/models';
+        LogAggiornamenti,
+        AnagraficaCompetizioniExportComplete} from '../../models/models';
 
 @Injectable()
 export class PronosticiService {
@@ -53,6 +54,16 @@ export class PronosticiService {
     return this.http.post<AnagraficaCompetizioni[]>(environment.backEndURL + '/classifica/getAnagraficaCompetizioni', postData);
 
   }
+
+  getAnagraficaCompetizioniExport ( stagione: number, tipoPronostici: string ): Observable<AnagraficaCompetizioniExportComplete[]> {
+
+    const postData = { stagione: stagione, tipo_pronostici: tipoPronostici };
+
+    return this.http.post<AnagraficaCompetizioniExportComplete[]>
+          (environment.backEndURL + '/classifica/getAnagraficaCompetizioniExport', postData);
+
+  }
+
 
   getAnagraficaPartecipanti ( searchParameters: FiltroAnagraficaPartecipanti ): Observable<AnagraficaPartecipanti[]> {
 

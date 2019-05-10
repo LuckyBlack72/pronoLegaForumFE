@@ -33,6 +33,8 @@ export class AdminPanelComponent implements OnInit {
   listaStagioni: Stagioni[];
   tipoPronostici: string;
   stagioneSelect: number;
+  tipoPronosticiCompetizioni: string;
+  stagioneSelectCompetizioni: number;
 
   constructor(
                 private deviceDetectorService: DeviceDetectorService,
@@ -54,6 +56,8 @@ export class AdminPanelComponent implements OnInit {
     this.tipoPronostici = 'E';
     this.setComboStagioni(this.listaStagioniEx, this.listaStagioniLf, this.tipoPronostici);
 
+    this.tipoPronosticiCompetizioni = 'E';
+
   }
 
   exportExcelUtenti ():  void {
@@ -72,6 +76,27 @@ export class AdminPanelComponent implements OnInit {
     );
 
   }
+
+  exportExcelCompetizioni ():  void {
+
+    this.pronosticiService.getAnagraficaCompetizioniExport(
+                                                              this.stagioneSelectCompetizioni,
+                                                              this.tipoPronosticiCompetizioni
+                                                          ).subscribe(
+      competizioni => {
+        this.utilService.exportCompetizioniExcel(competizioni);
+      }
+      ,
+      error => Swal({
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        title: 'Errore Recupero dati',
+        type: 'error'
+      })
+    );
+
+  }
+
 
   exportExcelSchedine ():  void {
 
@@ -96,6 +121,13 @@ export class AdminPanelComponent implements OnInit {
     this.stagioneSelect = null;
 
   }
+
+  changeTipoPronosticiCompetizioni() {
+
+    this.stagioneSelectCompetizioni = null;
+
+  }
+
 
   setComboStagioni(
     stagioniEx: Stagioni[],

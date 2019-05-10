@@ -12,7 +12,10 @@ import {
           ReloadLocalStorageValues,
           AnagraficaPartecipanti,
           AnagraficaCompetizioniSettimanali,
-          AnagraficaCompetizioniSettimanaliExcel
+          AnagraficaCompetizioniSettimanaliExcel,
+          AnagraficaCompetizioni,
+          AnagraficaCompetizioniExport,
+          AnagraficaCompetizioniExportComplete
        } from '../../models/models';
 import { Utils } from '../../models/utils';
 import { ApplicationParameter, LogAggiornamenti } from '../../models/models';
@@ -289,6 +292,64 @@ export class UtilService {
                     now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() +
                     '.xlsx'
                   ); // scrive il file e di conseguenza te lo fa salvare
+  }
+
+  exportCompetizioniExcel(competizioni: AnagraficaCompetizioniExportComplete[]) {
+
+    const workbook = XLSX.utils.book_new();
+    const now = new Date();
+
+    const competizioniExcel: AnagraficaCompetizioniExport[] = [];
+    let anniFlat = '';
+    let valoriPronoFlat = '';
+
+    competizioni.forEach(function (value) {
+      anniFlat = '';
+      valoriPronoFlat = '';
+      value.anni_competizione.forEach(function (anno) {
+        anniFlat = anniFlat.concat('[');
+        anniFlat = anniFlat.concat(anno.toString());
+        anniFlat = anniFlat.concat(']');
+        anniFlat = anniFlat.concat(' ');
+      });
+
+      value.valori_pronostici.forEach(function (prono) {
+        valoriPronoFlat = valoriPronoFlat.concat('[');
+        valoriPronoFlat = valoriPronoFlat.concat(prono.toString());
+        valoriPronoFlat = valoriPronoFlat.concat(']');
+        valoriPronoFlat = valoriPronoFlat.concat(' ');
+      });
+
+      competizioniExcel.push({
+                                id: value.id,
+                                competizione: value.competizione,
+                                nome_pronostico: value.nome_pronostico,
+                                anni_competizione: anniFlat,
+                                punti_esatti: value.punti_esatti,
+                                punti_lista: value.punti_lista,
+                                numero_pronostici: value.numero_pronostici,
+                                pronostici_inseriti: value.pronostici_inseriti,
+                                logo: value.logo,
+                                tipo_competizione: value.tipo_competizione,
+                                tipo_pronostici: value.tipo_pronostici,
+                                date_competizione: value.date_competizione,
+                                valori_pronostici: valoriPronoFlat
+                            });
+    });
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      XLSX.utils.json_to_sheet(competizioniExcel),
+      'Competizioni'
+    );
+
+    XLSX.writeFile(workbook,
+                   'Competizioni' +
+                   '_' +
+                    now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() +
+                    '.xlsx'
+                  ); // scrive il file e di conseguenza te lo fa salvare
+
   }
 
 }

@@ -12,18 +12,27 @@ export class AppComponent {
 
   // per caricare lo spinner sulla navigazione tra pagine
   showLoadingIndicator = true;
-  constructor ( private router: Router, private spinner: NgxSpinnerService) {
-    this.router.events.subscribe((routerEvent: Event) => {
-      if ( routerEvent instanceof NavigationStart ) {
-        // this.showLoadingIndicator = true;
-        this.spinner.show();
-      }
-      if ( routerEvent instanceof NavigationEnd ) {
-        // this.showLoadingIndicator = false;
-        this.spinner.hide();
-      }
-    });
-  }
+  constructor (
+                private router: Router,
+                private spinner: NgxSpinnerService
+              ) {
+                  this.router.events.subscribe((routerEvent: Event) => {
+
+                    if ( routerEvent instanceof NavigationStart ) {
+
+                        this.spinner.show();
+                        // this.showLoadingIndicator = true;
+                    }
+
+                    if ( routerEvent instanceof NavigationEnd ) {
+
+                        // this.showLoadingIndicator = false;
+                        this.spinner.hide();
+                    }
+
+                  });
+
+                }
   // per caricare lo spinner sulla navigazione tra pagine
 
 }

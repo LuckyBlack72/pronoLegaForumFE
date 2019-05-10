@@ -2,63 +2,113 @@
 
 <!-- Desktop -->
 <div *ngIf="isDesktopDevice" class="container-fluid">
+  
+  <div class="row">&nbsp;</div>
+  
   <div class="row">
   
     <div class="col-md-1"></div>
-    
-    <div class="col-md-2">
-      <button  
-        class="mat-button"
-        mat-raised-button color="primary"
-        (click)="exportExcelUtenti()" 
-        title="Export Excel Utenti"
-      >
-        Export Excel Utenti
-      </button>   
-    </div>   
 
-    <div class="col-md-8">
-      
-      <div class="form-group">
+    <div class="col-md-10">
+
+      <mat-tab-group>
         
-        <mat-radio-group
-          [(ngModel)]="tipoPronostici" 
-          (change)="changeTipoPronostici()"
-        >
-          <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
-          <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
-        </mat-radio-group>
-      
-        &nbsp;&nbsp;
-      
-        <mat-form-field>
-          <mat-select 
-            #st id="st"
-            placeholder="Stagione"
-            [(ngModel)]="stagioneSelect"
+        <mat-tab label="Export Utenti">
+          <br>
+          <button  
+            class="mat-button"
+            mat-raised-button color="primary"
+            (click)="exportExcelUtenti()" 
+            title="Export Excel Utenti"
           >
-            <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
-            <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioni" [value]="stagione.stagione">{{ stagione.stagione }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        &nbsp;&nbsp;
-      
-        <button  
-          class="mat-button"
-          mat-raised-button color="warn"
-          (click)="exportExcelSchedine()" 
-          title="Export Excel Schedine"
-        >
-          Export Excel Schedine
-        </button>   
+            Export Excel Utenti
+          </button>   
+        </mat-tab>
 
-      </div>
+        <mat-tab label="Export Competizioni">
+          <br>
+          <div class="form-group">
+    
+            <mat-radio-group
+              [(ngModel)]="tipoPronosticiCompetizioni" 
+              (change)="changeTipoPronosticiCompetizioni()"
+            >
+              <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+              <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+            </mat-radio-group>
+        
+            &nbsp;&nbsp;
+        
+            <mat-form-field>
+              <mat-select 
+                #st id="st"
+                placeholder="Stagione"
+                [(ngModel)]="stagioneSelectCompetizioni"
+              >
+                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioni" [value]="stagione.stagione">{{ stagione.stagione }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            &nbsp;&nbsp;
+        
+            <button  
+              class="mat-button"
+              mat-raised-button color="accent"
+              (click)="exportExcelCompetizioni()" 
+              title="Export Excel Competizioni"
+            >
+              Export Excel Competizioni
+            </button>   
+          </div>
+    
+        </mat-tab>
+
+        <mat-tab label="Export Schedine">
+          <br>
+          <div class="form-group">
+      
+            <mat-radio-group
+              [(ngModel)]="tipoPronostici" 
+              (change)="changeTipoPronostici()"
+            >
+              <mat-radio-button class="mat-body-1" value="E">Esterni &nbsp;&nbsp;&nbsp;</mat-radio-button>  
+              <mat-radio-button class="mat-body-1" value="L">Lega Forum &nbsp;&nbsp;&nbsp;</mat-radio-button>
+            </mat-radio-group>
+        
+            &nbsp;&nbsp;
+        
+            <mat-form-field>
+              <mat-select 
+                #st id="st"
+                placeholder="Stagione"
+                [(ngModel)]="stagioneSelect"
+              >
+                <mat-option class="mat-body-1" value="0">Nessuna</mat-option>
+                <mat-option class="mat-body-1" *ngFor="let stagione of listaStagioni" [value]="stagione.stagione">{{ stagione.stagione }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            &nbsp;&nbsp;
+        
+            <button  
+              class="mat-button"
+              mat-raised-button color="warn"
+              (click)="exportExcelSchedine()" 
+              title="Export Excel Schedine"
+            >
+              Export Excel Schedine
+            </button>   
+          </div>
+        </mat-tab>
+      </mat-tab-group>      
 
     </div>
 
     <div class="col-md-1"></div>
   
   </div>
+
 </div>
 
 <!-- Tablet e Mobile -->

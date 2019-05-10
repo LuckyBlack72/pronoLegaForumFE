@@ -35,6 +35,38 @@ export interface AnagraficaCompetizioni {
   date_competizione?: DatePronostici[];
 }
 
+export interface AnagraficaCompetizioniExport {
+  id?: number;
+  competizione?: string;
+  nome_pronostico?: string;
+  anni_competizione?: string;
+  punti_esatti?: number;
+  punti_lista?: number;
+  numero_pronostici?: number;
+  pronostici_inseriti?: number;
+  logo?: string;
+  tipo_competizione?: string;
+  tipo_pronostici?: string;
+  date_competizione?: DatePronostici[];
+  valori_pronostici?: string;
+}
+
+export interface AnagraficaCompetizioniExportComplete {
+  id?: number;
+  competizione?: string;
+  nome_pronostico?: string;
+  anni_competizione?: number[];
+  punti_esatti?: number;
+  punti_lista?: number;
+  numero_pronostici?: number;
+  pronostici_inseriti?: number;
+  logo?: string;
+  tipo_competizione?: string;
+  tipo_pronostici?: string;
+  date_competizione?: DatePronostici[];
+  valori_pronostici?: string[];
+}
+
 export interface AnagraficaCompetizioniGrouped {
   group?: string;
   competizioni?: AnagraficaCompetizioni[];
