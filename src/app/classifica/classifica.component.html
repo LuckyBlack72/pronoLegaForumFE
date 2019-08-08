@@ -56,7 +56,12 @@
         matSortDisableClear        
       >
 
-        <ng-container *ngFor="let columnName of displayedColumns" matColumnDef="{{columnName}}" >
+        <ng-container 
+          *ngFor="let columnName of displayedColumns" 
+          matColumnDef="{{columnName}}" 
+          [sticky]="columnName==='Nickname'"
+          [stickyEnd]="columnName==='Totale'"          
+          >
           <mat-header-cell *matHeaderCellDef mat-sort-header>{{buildHeaderTableName(columnName)}}</mat-header-cell>
           <mat-cell *matCellDef="let element">{{element[columnName]}}</mat-cell>
         </ng-container>

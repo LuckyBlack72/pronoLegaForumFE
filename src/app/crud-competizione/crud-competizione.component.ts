@@ -141,9 +141,12 @@ export class CrudCompetizioneComponent implements OnInit {
     this.createUpdateViewCompetizione = 'C';
     this.fillCompetizioneData = false;
 
-    const stagione = parseInt(this.utils.getStagione().substring(0, 4), 10);
+    const stagione = this.utils.getStagioneCorrente();
+    const annoCorrente = +new Date(Date.now()).getFullYear();
     this.listaStagioniCompetizione.push(stagione);
-    this.listaStagioniCompetizione.push((stagione + 1));
+    if ( stagione !== annoCorrente ) {
+      this.listaStagioniCompetizione.push((stagione + 1));
+    }
 
   }
 
