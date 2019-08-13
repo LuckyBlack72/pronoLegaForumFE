@@ -184,6 +184,11 @@ export class CrudCompetizioneComponent implements OnInit {
         for (let x = 0; x < this.competizioni.length; x++) {
           if (this.competizioni[x].id === this.idCompetizioneToEdit) {
             this.competizioneToSave = this.competizioni[x];
+            this.competizioneToSave.date_competizione =
+            this.crudCompetizioneService.SplitDateCompetizioneStringIntoArray(this.competizioneToSave.date_competizione.toString(), false);
+console.log('********************************');
+console.log(this.competizioneToSave);
+console.log('********************************');
             this.buildleagueListCombo(
               this.competizioneToSave.tipo_pronostici,
               'ALL',
@@ -390,13 +395,21 @@ console.log(this.lega);
   saveData(): void {
 
     this.competizioneToSave.nome_pronostico = this.lega.value;
+    let lName = '';
 
     for (let i = 0; i < this.leagueList.length; i++) {
       if ( this.lega.value === this.leagueList[i].value) {
         if (this.competizioneToSave.tipo_competizione === 'SCO') {
-          this.lega.name = 'Capo Cannoniere ' + this.leagueList[i].name;
+          lName = this.leagueList[i].name;
+          if ( lName.startsWith('Capo Cannoniere ') ) {
+            this.lega.name = this.leagueList[i].name;
+            break;
+          }
         } else {
-          this.lega.name = this.leagueList[i].name;
+          if ( !lName.startsWith('Capo Cannoniere ') ) {
+            this.lega.name = this.leagueList[i].name;
+            break;
+          }
         }
       }
     }
@@ -414,6 +427,10 @@ console.log(this.lega);
         this.competizioneToSave.anni_competizione.push(this.stagioneCompetizione);
         this.competizioneToSave.date_competizione.push(this.date_competizione);
       }
+
+      console.log('xxxxxxxxxxxxxxxx');
+      console.log(this.competizioneToSave);
+      console.log('xxxxxxxxxxxxxxxx');
 
       this.crudCompetizioneService.saveAnagraficaCompetizione(this.competizioneToSave, this.dataSourceValoriPronostici.data).subscribe(
         data => {
