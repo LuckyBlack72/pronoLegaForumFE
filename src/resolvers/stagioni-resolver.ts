@@ -60,7 +60,7 @@ export class StagioniResolver implements Resolve<Stagioni[]> {
         state: RouterStateSnapshot,
     ): Observable<Stagioni[]> {
 
-        if (state.url === '/classifica') {
+        if (state.url === '/classifica' || state.url === '/statistiche' ) {
 
             return this.pronosticiService.getStagioni();
 

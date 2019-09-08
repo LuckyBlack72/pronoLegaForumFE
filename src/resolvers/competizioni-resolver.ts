@@ -81,7 +81,17 @@ export class CompetizioniResolver implements Resolve<AnagraficaCompetizioni[]> {
     state: RouterStateSnapshot
     ): Observable<AnagraficaCompetizioni[]> {
 
-        return this.pronosticiService.getAnagraficaCompetizioni(parseInt(this.utils.getStagione().substring(0, 4), 10));
+
+        if ( state.url === '/statistiche' ) {
+
+            return this.pronosticiService.getAnagraficaCompetizioni(0);
+
+        } else {
+
+            // return this.pronosticiService.getAnagraficaCompetizioni(parseInt(this.utils.getStagione().substring(0, 4), 10));
+            return this.pronosticiService.getAnagraficaCompetizioni(this.utils.getStagioneCorrente());
+
+        }
 
     }
 
