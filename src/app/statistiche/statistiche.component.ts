@@ -215,11 +215,14 @@ export class StatisticheComponent implements OnInit {
 
     let element: {[x: string]: any} = {};
     const retVal: any[] = [];
+
+    const scelteTotaliFormat = scelteTotali < 10 ? '0' + scelteTotali : scelteTotali;
+
     for (let i = 0; i < valori.length; i++) {
       element['Pronostico'] = valori[i];
       element['Scelte'] = scelte[i] < 10
-                        ? '0' + scelte[i] + '/' + scelteTotali
-                        : scelte[i] + '/' + scelteTotali;
+                        ? '0' + scelte[i] + '/' + scelteTotaliFormat
+                        : scelte[i] + '/' + scelteTotaliFormat;
       element['Percentuale'] = (( scelte[i] / scelteTotali ) * 100).toFixed(2);
       retVal.push(element);
       element = {};
